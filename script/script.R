@@ -1510,7 +1510,7 @@ plotR <-  ggplot() +
   scale_y_log10() +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
-  ggtitle("R-Thiopental") +
+  ggtitle("f  R-Thiopental") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   scale_color_manual("", values=c('grey60','grey60','grey60','grey60','grey60','grey60')) +
@@ -1561,12 +1561,12 @@ plot_art <- ggplot() +
   geom_line(data=out_all,aes(x=time, y=Cplasma, linetype=Method, color=Method)) +
   geom_point(data=out_reduced,aes(x=time, y=Cplasma, shape=Method),size=2, stroke=0.6) +
   geom_point(data = df, aes(time, conc), size=2.5) +
-  geom_errorbar(data = df, aes(time, ymin = pmax(conc-(max_sd-conc),0), ymax = max_sd)) +
+  geom_errorbar(data = df, aes(time, ymin = pmax(conc-(max_sd-conc),0), ymax = max_sd), width=.1) +
   xlim(0,16.2) +
   ylim(0,0.35) +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
-  ggtitle("f  Artemether") +
+  ggtitle("g  Artemether") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   scale_color_manual("", values=c('grey60','grey60','grey60','grey60','grey60','grey60')) +
@@ -1596,6 +1596,9 @@ fig6 <- grid.arrange(plot_met, plot_vori, plot_nif, plot_dig, plot_oflo, ncol=2,
 
 figS2 <- grid.arrange(plot_caf, plot_alf, plot_mid, plot_nev, plotS, plot_art, ncol=2, nrow=3) 
 #ggsave(file="../deliv/figure/figS2.png", figS2, width=8, height=12)
+
+figS2_new <- grid.arrange(plot_caf, plot_alf, plot_mid, plot_nev, plotS, plotR, plot_art, ncol=2, nrow=4) 
+#ggsave(file="../deliv/figure/figS2_new.png", figS2_new, width=8, height=16)
 
 #########################################################################################################
 #########################################################################################################
@@ -1685,43 +1688,44 @@ fig7b <- ggplot() +
                      labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
+  #scale_y_log10(limits = c(1e-4,1e5)) +
   ylim(-27,26) +
   xlab("") +
   ylab("Residual error") +
   ggtitle("b  AUC error") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
-
+fig7b
 
 ### Half-life
 fig7c <- ggplot() +
-  geom_point(data=pk_met, aes(x=1, y=hlerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_caf, aes(x=2, y=hlerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_vori, aes(x=4, y=hlerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_alf, aes(x=5, y=hlerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_nev, aes(x=6, y=hlerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_mid, aes(x=7, y=hlerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_thio_S, aes(x=9, y=hlerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_thio_R, aes(x=10, y=hlerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_nif, aes(x=11, y=hlerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_dig, aes(x=13, y=hlerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_art, aes(x=14, y=hlerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_oflo, aes(x=16, y=hlerror, shape=Method),size=size, stroke=stroke) +
-  geom_abline(intercept = 0, slope = 0) +
+  geom_point(data=pk_met, aes(x=1, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_caf, aes(x=2, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_vori, aes(x=4, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_alf, aes(x=5, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_nev, aes(x=6, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_mid, aes(x=7, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_thio_S, aes(x=9, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_thio_R, aes(x=10, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_nif, aes(x=11, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_dig, aes(x=13, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_art, aes(x=14, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_oflo, aes(x=16, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+  #geom_abline(intercept = 0, slope = 0) +
   scale_x_continuous(breaks=c(1,2,4,5,6,7,9,10,11,13,14,16),
                      labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
-  ylim(-100,100) +
+  scale_y_log10(limits = c(1e-2,1e5)) +
+  #ylim(-100,100) +
   xlab("") +
-  ylab("Residual error") +
+  ylab("Log of absolute residual error") +
   ggtitle("c  Half-life error") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
-# Note: Nevirapine hlerror includes -390.156 and 301.722
 
 fig7 <- grid.arrange(fig7a, fig7b, fig7c, ncol=3, nrow=1)
-#ggsave(file="../deliv/figure/fig7.png", fig7, width=8, height=6)
+ggsave(file="../deliv/figure/fig7_test.png", fig7, width=8, height=6)
 
 
 ### Generate table (drugs in the rows, columns of RMSE, AUC, and half-life error)

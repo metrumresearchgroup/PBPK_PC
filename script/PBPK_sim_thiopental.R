@@ -149,19 +149,19 @@ rel_rmse <- c(rmse_PT,rmse_Berez,rmse_RR,rmse_Schmitt,rmse_pksim)
 
 #---------------------
 # Calculate AUC for each curve
-auc_obs <- round(pk.calc.auc(df$conc,df$time, interval=c(df$time[1],last(df$time))), digits=3)
+auc_obs <- pk.calc.auc(df$conc,df$time, interval=c(df$time[1],last(df$time)))
 auc_PT <- pk.calc.auc(out1$Cplasma,out1$time,interval=c(df$time[1],last(df$time)))
 auc_Berez <-pk.calc.auc(out2$Cplasma,out2$time,interval=c(df$time[1],last(df$time)))
 auc_RR <- pk.calc.auc(out3$Cplasma,out3$time,interval=c(df$time[1],last(df$time)))
 auc_Schmitt <- pk.calc.auc(out4$Cplasma,out4$time,interval=c(df$time[1],last(df$time)))
 auc_pksim <- pk.calc.auc(out5$Cplasma,out5$time,interval=c(df$time[1],last(df$time)))
 
-auc_all <- round(c(auc_PT,auc_Berez,auc_RR,auc_Schmitt,auc_pksim), digits=3)
+auc_all <- c(auc_PT,auc_Berez,auc_RR,auc_Schmitt,auc_pksim)
 
-auc_error <- round(auc_obs - auc_all, digits=3)
+auc_error <- auc_obs - auc_all
 
 # # Combine in data frame
-auc_thio <- round(cbind(auc_obs,auc_all,auc_error), digits=3)
+auc_thio <- cbind(auc_obs,auc_all,auc_error)
 
 
 #---------------------
@@ -174,9 +174,9 @@ hl_Schmitt <- pk.calc.half.life(out4$Cplasma,out4$time)
 hl_pksim <- pk.calc.half.life(out5$Cplasma,out5$time)
 
 
-hl_all <- round(c(hl_PT$half.life,hl_Berez$half.life,hl_RR$half.life,hl_Schmitt$half.life,hl_pksim$half.life), digits=3)
+hl_all <- c(hl_PT$half.life,hl_Berez$half.life,hl_RR$half.life,hl_Schmitt$half.life,hl_pksim$half.life)
 
-hl_error <- round(hl_obs$half.life - hl_all, digits=3)
+hl_error <- hl_obs$half.life - hl_all
 
 pk_thio <- cbind(rel_rmse,auc_thio,hl_obs$half.life,hl_all,hl_error)
 colnames(pk_thio) <- c("RelRMSE","AUCobs","AUCpred", "AUCerror", "hlobs", "hlpred", "hlerror")
@@ -203,19 +203,19 @@ rel_rmse <- c(rmse_PT,rmse_Berez,rmse_RR,rmse_Schmitt,rmse_pksim)
 
 #---------------------
 # Calculate AUC for each curve
-auc_obs <- round(pk.calc.auc(df_R$conc,df_R$time, interval=c(df_R$time[1],last(df_R$time))), digits=3)
+auc_obs <- pk.calc.auc(df_R$conc,df_R$time, interval=c(df_R$time[1],last(df_R$time)))
 auc_PT <- pk.calc.auc(out1_R$Cplasma,out1$time,interval=c(df_R$time[1],last(df_R$time)))
 auc_Berez <-pk.calc.auc(out2_R$Cplasma,out2$time,interval=c(df_R$time[1],last(df_R$time)))
 auc_RR <- pk.calc.auc(out3_R$Cplasma,out3$time,interval=c(df_R$time[1],last(df_R$time)))
 auc_Schmitt <- pk.calc.auc(out4_R$Cplasma,out4$time,interval=c(df_R$time[1],last(df_R$time)))
 auc_pksim <- pk.calc.auc(out5_R$Cplasma,out5$time,interval=c(df_R$time[1],last(df_R$time)))
 
-auc_all <- round(c(auc_PT,auc_Berez,auc_RR,auc_Schmitt,auc_pksim), digits=3)
+auc_all <- c(auc_PT,auc_Berez,auc_RR,auc_Schmitt,auc_pksim)
 
-auc_error <- round(auc_obs - auc_all, digits=3)
+auc_error <- auc_obs - auc_all
 
 # # Combine in data frame
-auc_thio <- round(cbind(auc_obs,auc_all,auc_error), digits=3)
+auc_thio <- cbind(auc_obs,auc_all,auc_error)
 
 
 #---------------------
@@ -228,9 +228,9 @@ hl_Schmitt <- pk.calc.half.life(out4_R$Cplasma,out4$time)
 hl_pksim <- pk.calc.half.life(out5_R$Cplasma,out5$time)
 
 
-hl_all <- round(c(hl_PT$half.life,hl_Berez$half.life,hl_RR$half.life,hl_Schmitt$half.life,hl_pksim$half.life), digits=3)
+hl_all <- c(hl_PT$half.life,hl_Berez$half.life,hl_RR$half.life,hl_Schmitt$half.life,hl_pksim$half.life)
 
-hl_error <- round(hl_obs$half.life - hl_all, digits=3)
+hl_error <- hl_obs$half.life - hl_all
 
 pk_thio <- cbind(rel_rmse,auc_thio,hl_obs$half.life,hl_all,hl_error)
 colnames(pk_thio) <- c("RelRMSE","AUCobs","AUCpred", "AUCerror", "hlobs", "hlpred", "hlerror")

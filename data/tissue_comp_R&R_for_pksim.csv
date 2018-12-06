@@ -1,0 +1,15 @@
+tissue,f_lipids,f_proteins,f_water
+Bone,0.017,0.150,0.446
+Brain,0.039,0.089,0.782
+Adipose,0.853,0.12,0.15
+Heart,0.014,0.317,0.731
+Kidney,0.012,0.267,0.776
+Stomach,0.038,0.299,0.757
+Small Intestine,0.038,0.299,0.757
+Large Intestine,0.038,0.299,0.757
+Liver,0.014,0.247,0.734
+Lung,0.022,0.380,0.782
+Muscle,0.01,0.123,0.748
+Pancreas,0.041,0.12,0.78
+Skin,0.06,0.373,0.673
+Spleen,0.0077,0.304,0.786

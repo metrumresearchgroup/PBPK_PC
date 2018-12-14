@@ -7,10 +7,10 @@ mod <- mread("../model/voriPBPK_Adult")
 df <- read.csv("../data/obs_voriconazole.csv")
 
 # Unified tissue composition with coefficient of variation
-dat_uni_cv <- read.csv("../data/unified_tissue_comp_error.csv")  
+dat_uni_cv <- read.csv("../data/unified_tissue_comp_cv.csv")  
 dat_uni <- read.csv("../data/unified_tissue_comp.csv")
 
-# Number of simulated patients (use 1000 to make figure, but fewer during de-bugging)
+# Number of simulated patients
 num_patients <- 1000 
 
 # Drug-related parameters (will sample for logP, pKa, fup, and BP)
@@ -116,19 +116,19 @@ for (j in 1:num_patients){
 
   # Run PBPK model predictions to generate range of predictions for each method
   out1 <- outFun(Kps1) %>%
-    mutate(Method = "Poulin and Theil") %>%
+    mutate(Method = "PT") %>%
     mutate(ID = j)
   out2 <- outFun(Kps2) %>%
-    mutate(Method = "Berezhkovskiy") %>%
+    mutate(Method = "Berez") %>%
     mutate(ID = j)
   out3 <- outFun(Kps3) %>%
-    mutate(Method = "Rodgers and Rowland") %>%
+    mutate(Method = "RR") %>%
     mutate(ID = j)
   out4 <- outFun(Kps4) %>%
     mutate(Method = "Schmitt") %>%
     mutate(ID = j)
   out5 <- outFun(Kps5) %>%
-    mutate(Method = "PK-Sim Standard") %>%
+    mutate(Method = "PK-Sim") %>%
     mutate(ID = j)
   
   # Row-bind the predictions for each patient using each method
@@ -156,7 +156,7 @@ pred_PT <- ggplot() +
   ylim(-0.1,8) +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
-  ggtitle("a    Poulin and Theil") +
+  ggtitle("a    PT") +
   scale_color_manual(values=c('grey60')) +
   th6 
 
@@ -172,7 +172,7 @@ pred_Berez <- ggplot() +
   ylim(-0.1,8) +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
-  ggtitle("b    Berezhkovskiy") +
+  ggtitle("b    Berez") +
   scale_color_manual(values=c('grey60')) +
   th6 
 
@@ -188,7 +188,7 @@ pred_RR <- ggplot() +
   ylim(-0.1,8) +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
-  ggtitle("c    Rodgers and Rowland") +
+  ggtitle("c    RR") +
   scale_color_manual(values=c('grey60')) +
   th6
 
@@ -220,7 +220,7 @@ pred_pksim <- ggplot() +
   ylim(-0.1,8) +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
-  ggtitle("e    PK-Sim Standard") + 
+  ggtitle("e    PK-Sim") + 
   scale_color_manual(values=c('grey60')) +
   th6
 
@@ -230,4 +230,4 @@ pred_pksim <- ggplot() +
 # bound of the prediction interval for these methods.
 
 fig6 <- grid.arrange(pred_PT, pred_Berez, pred_RR, pred_Schmitt, pred_pksim, ncol=2, nrow=3)
-#ggsave(file="../deliv/figure/fig6_test_no_mean.jpg", fig6, width=8, height=12)
+#ggsave(file="../deliv/figure/fig8_new.jpg", fig6, width=8, height=12)

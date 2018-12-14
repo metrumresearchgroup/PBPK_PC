@@ -47,15 +47,15 @@ outFun <- function(pars){
 }
 
 out1 <- outFun(pars1) %>%
-  mutate(Method = "Poulin and Theil")
+  mutate(Method = "PT")
 out2 <- outFun(pars2) %>%
-  mutate(Method = "Berezhkovskiy")
+  mutate(Method = "Berez")
 out3 <- outFun(pars3) %>%
-  mutate(Method = "Rodgers and Rowland")
+  mutate(Method = "RR")
 out4 <- outFun(pars4) %>%
   mutate(Method = "Schmitt")
 out5 <- outFun(pars5) %>%
-  mutate(Method = "PK-Sim Standard")
+  mutate(Method = "PK-Sim")
 
 # Bind all outputs into one matrix
 out_all_S <- rbind(out1,out2,out3,out4,out5)
@@ -88,15 +88,15 @@ pars4_R <- c(Kps4, list(CLhepatic=CLhepatic))
 pars5_R <- c(Kps5, list(CLhepatic=CLhepatic))
 
 out1_R <- outFun(pars1_R) %>%
-  mutate(Method = "Poulin and Theil")
+  mutate(Method = "PT")
 out2_R <- outFun(pars2_R) %>%
-  mutate(Method = "Berezhkovskiy")
+  mutate(Method = "Berez")
 out3_R <- outFun(pars3_R) %>%
-  mutate(Method = "Rodgers and Rowland")
+  mutate(Method = "RR")
 out4_R <- outFun(pars4_R) %>%
   mutate(Method = "Schmitt")
 out5_R <- outFun(pars5_R) %>%
-  mutate(Method = "PK-Sim Standard")
+  mutate(Method = "PK-Sim")
 
 # Bind all outputs into one matrix
 out_all_R <- rbind(out1_R,out2_R,out3_R,out4_R,out5_R)
@@ -180,7 +180,7 @@ hl_error <- hl_obs$half.life - hl_all
 
 pk_thio <- cbind(rel_rmse,auc_thio,hl_obs$half.life,hl_all,hl_error)
 colnames(pk_thio) <- c("RelRMSE","AUCobs","AUCpred", "AUCerror", "hlobs", "hlpred", "hlerror")
-pk_thio <- mutate(as.data.frame(pk_thio), Method=c("Poulin and Theil", "Berezhkovskiy", "Rodgers and Rowland", "Schmitt", "PK-Sim Standard"))
+pk_thio <- mutate(as.data.frame(pk_thio), Method=c("PT", "Berez", "RR", "Schmitt", "PK-Sim"))
 
 # Store the PK info
 pk_thio_S <- pk_thio %>% mutate(Type="Acid")
@@ -234,7 +234,7 @@ hl_error <- hl_obs$half.life - hl_all
 
 pk_thio <- cbind(rel_rmse,auc_thio,hl_obs$half.life,hl_all,hl_error)
 colnames(pk_thio) <- c("RelRMSE","AUCobs","AUCpred", "AUCerror", "hlobs", "hlpred", "hlerror")
-pk_thio <- mutate(as.data.frame(pk_thio), Method=c("Poulin and Theil", "Berezhkovskiy", "Rodgers and Rowland", "Schmitt", "PK-Sim Standard"))
+pk_thio <- mutate(as.data.frame(pk_thio), Method=c("PT", "Berez", "RR", "Schmitt", "PK-Sim"))
 
 # Store the PK info
 pk_thio_R <- pk_thio %>% mutate(Type="Acid")

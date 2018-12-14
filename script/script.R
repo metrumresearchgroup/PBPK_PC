@@ -30,15 +30,14 @@ dat_Schmitt_rep <- read.csv("../data/tissue_comp_Schmitt.csv")   # data reported
 dat_Schmitt <- read.csv("../data/PKSim_tissue_comp_Schmitt.csv") # data used by PK-Sim for Schmitt method
 dat_pksim <- read.csv("../data/PKSim_tissue_comp_pksim.csv")     # data used by PK-Sim for PK-Sim Standard method
 
-dat_PT_RR <- read.csv("../data/tissue_comp_R&R_for_P&T.csv")     # data reported by R&R converted to use in P&T method
-dat_pksim_RR <- read.csv("../data/tissue_comp_R&R_for_pksim.csv")# data reported by R&R convereted to use in PK-Sim method
-dat_Schmitt_RR <- read.csv("../data/tissue_comp_R&R_for_Schmitt.csv")# data reported by R&R convereted to use in Schmitt method
+dat_PT_RR <- read.csv("../data/tissue_comp_R&R_for_P&T.csv")          # data reported by R&R converted to use in P&T method
+dat_pksim_RR <- read.csv("../data/tissue_comp_R&R_for_pksim.csv")     # data reported by R&R convereted to use in PK-Sim method
+dat_Schmitt_RR <- read.csv("../data/tissue_comp_R&R_for_Schmitt.csv") # data reported by R&R convereted to use in Schmitt method
 
 # Set functions 
 filter <- dplyr::filter
 mutate <- dplyr::mutate
 select <- dplyr::select
-
 
 # Set figure default themes
 # Theme 1 used for Fig. 2, 3 and 4
@@ -80,7 +79,6 @@ th7 <- theme(panel.grid.major = element_blank(), panel.grid.minor = element_blan
 # Define location of Pearson correlation coef. on every plot (fraction of maximum x and y value f plot)
 pcc_x <- 0.75
 pcc_y <- 0.35
-
 
 ## Poulin and Theil figure ##
 
@@ -148,7 +146,7 @@ fig2a <- ggplot() +
   ylim(0,max(drug_all_PT[1:2])) +
   xlab("Predicted Vss") +
   ylab("Reported Vss") +
-  ggtitle("a    Poulin and Theil") + 
+  ggtitle("a    PT") + 
   th1 +
   geom_text(aes(x=max(drug_all_PT[1:2])*pcc_x, y=max(drug_all_PT[1:2])*pcc_y, label=corr_coeff_PT), parse=TRUE)
 
@@ -203,7 +201,7 @@ fig2b <- ggplot() +
   ylim(0,max(drug_all_Berez[1:2])) +
   xlab("Predicted Kp") +
   ylab("Reported Kp (PK-Sim)") +
-  ggtitle("b    Berezhkovskiy") + 
+  ggtitle("b    Berez") + 
   th1 +
   geom_text(aes(x=max(drug_all_Berez[1:2])*pcc_x, y=max(drug_all_Berez[1:2])*pcc_y, label=corr_coeff_Berez), parse=TRUE)
 
@@ -278,7 +276,7 @@ fig2c <- ggplot() +
   ylim(0,max(drug_all_RR[1:2])) +
   xlab("Predicted Kpu") +
   ylab("Reported Kpu") +
-  ggtitle("c    Rodgers and Rowland") + 
+  ggtitle("c    RR") + 
   th1 +
   geom_text(aes(x=max(drug_all_RR[1:2])*pcc_x, y=max(drug_all_RR[1:2])*pcc_y, label=corr_coeff_RR), parse=TRUE)
 
@@ -396,13 +394,13 @@ fig2e <- ggplot() +
   ylim(0,max(drug_all_pksim[1:2])) +
   xlab("Predicted Kp") +
   ylab("Reported Kp (PK-Sim)") +
-  ggtitle("e    PK-Sim Standard") + 
+  ggtitle("e    PK-Sim") + 
   th1 +
   geom_text(aes(x=max(drug_all_pksim[1:2])*pcc_x, y=max(drug_all_pksim[1:2])*pcc_y, label=corr_coeff_pksim), parse=TRUE)
 
 
 fig2 <- grid.arrange(fig2a, fig2b, fig2c, fig2d, fig2e, ncol=2, nrow=3)
-#ggsave(file="../deliv/figure/fig2.png", fig2, width=8, height=12)
+#ggsave(file="../deliv/figure/fig2_new.png", fig2, width=8, height=12)
 
 #########################################################################################################
 #########################################################################################################
@@ -497,7 +495,7 @@ fig3a <- ggplot() +
   ylim(0,max(drug_all_PT[1:2])) +
   xlab("Predicted Kp (R&R tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
-  ggtitle("a    Poulin and Theil with swap") +
+  ggtitle("a    PT with RR tissue comp.") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_PT[1:2])*pcc_x, y=max(drug_all_PT[1:2])*pcc_y, label=corr_coeff_PT), parse=TRUE)
@@ -579,7 +577,7 @@ fig3b <- ggplot() +
   ylim(0,max(drug_all_Berez[1:2])) +
   xlab("Predicted Kp (R&R tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
-  ggtitle("b    Berezhkovskiy with swap") +
+  ggtitle("b    Berez with swap") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_Berez[1:2])*pcc_x, y=max(drug_all_Berez[1:2])*pcc_y, label=corr_coeff_Berez), parse=TRUE)
@@ -746,7 +744,7 @@ fig3d <- ggplot() +
   ylim(0,max(drug_all_pksim[1:2])) +
   xlab("Predicted Kp (R&R tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
-  ggtitle("d    PK-Sim Standard with swap") +
+  ggtitle("d    PK-Sim with swap") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_pksim[1:2])*pcc_x, y=max(drug_all_pksim[1:2])*pcc_y, label=corr_coeff_pksim), parse=TRUE)
@@ -863,7 +861,7 @@ fig4a <- ggplot() +
   ylim(0,max(drug_all_PT[1:2])) +
   xlab("Predicted Kp (unified tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
-  ggtitle("a    Poulin and Theil") +
+  ggtitle("a    PT") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_PT[1:2])*pcc_x, y=max(drug_all_PT[1:2])*pcc_y, label=corr_coeff_PT), parse=TRUE)
@@ -931,7 +929,7 @@ fig4b <- ggplot() +
   ylim(0,max(drug_all_Berez[1:2])) +
   xlab("Predicted Kp (unified tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
-  ggtitle("b    Berezhkovskiy") +
+  ggtitle("b    Berez") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_Berez[1:2])*pcc_x, y=max(drug_all_Berez[1:2])*pcc_y, label=corr_coeff_Berez), parse=TRUE)
@@ -998,7 +996,7 @@ fig4c <- ggplot() +
   ylim(0,max(drug_all_RR[1:2])) +
   xlab("Predicted Kp (unified tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
-  ggtitle("c   Rodgers and Rowland") +
+  ggtitle("c   RR") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_RR[1:2])*pcc_x, y=max(drug_all_RR[1:2])*pcc_y, label=corr_coeff_RR), parse=TRUE)
@@ -1128,14 +1126,14 @@ fig4e <- ggplot() +
   ylim(0,max(drug_all_pksim[1:2])) +
   xlab("Predicted Kp (unified tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
-  ggtitle("e   PK-Sim Standard") +
+  ggtitle("e   PK-Sim") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_pksim[1:2])*pcc_x, y=max(drug_all_pksim[1:2])*pcc_y, label=corr_coeff_pksim), parse=TRUE)
 
 
 fig4 <- grid.arrange(fig4a, fig4b, fig4c, fig4d, fig4e, ncol=2, nrow=3)
-#ggsave(file="../deliv/figure/fig4.png", fig4, width=8, height=12)
+#ggsave(file="../deliv/figure/fig4_new.png", fig4, width=8, height=12)
 
 #########################################################################################################
 #########################################################################################################
@@ -1162,17 +1160,17 @@ kp_pred_comp <- function(logP, pKa, fup, BP, type, dat_uni){
   
   drug_PT_new <- drug_PT %>%
     as.data.frame() %>%
-    mutate(Method="Poulin and Theil") %>%
+    mutate(Method="PT") %>%
     mutate(Tissue=c(1:11))
   
   drug_Berez_new <- drug_Berez %>%
     as.data.frame() %>%
-    mutate(Method="Berezhkovskiy") %>%
+    mutate(Method="Berez") %>%
     mutate(Tissue=c(1:11))
   
   drug_RR_new <- drug_RR %>%
     as.data.frame() %>%
-    mutate(Method="Rodgers and Rowland") %>%
+    mutate(Method="RR") %>%
     mutate(Tissue=c(1:11))
   
   drug_Schmitt_new <- drug_Schmitt %>%
@@ -1182,7 +1180,7 @@ kp_pred_comp <- function(logP, pKa, fup, BP, type, dat_uni){
   
   drug_pksim_new <- drug_pksim %>%
     as.data.frame() %>%
-    mutate(Method="PK-Sim Standard") %>%
+    mutate(Method="PK-Sim") %>%
     mutate(Tissue=c(1:11))
   
   drug_kp <- rbind(drug_PT_new,drug_Berez_new,drug_RR_new,drug_Schmitt_new,drug_pksim_new)
@@ -1293,7 +1291,7 @@ fig5_thio <- ggplot(data=thio_kp, aes(x=Tissue, y=Kp)) +
   ylim(0,max(thio_kp$Kp)) +
   xlab("Tissue") +
   ylab("Predicted Kp") +
-  ggtitle("e    Thiopental") +
+  ggtitle("e    S-Thiopental") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
@@ -1367,10 +1365,10 @@ fig5_oflo <- ggplot(data=oflo_kp, aes(x=Tissue, y=Kp)) +
 fig5_oflo
 
 fig5 <- grid.arrange(fig5_met, fig5_vori, fig5_nif, fig5_dig, fig5_oflo, ncol=2, nrow=3)
-#ggsave(file="../deliv/figure/fig5.png", fig5, width=8, height=12)
+#ggsave(file="../deliv/figure/fig5_new.png", fig5, width=8, height=12)
 
 figS1 <- grid.arrange(fig5_caf, fig5_alf, fig5_mid, fig5_nev, fig5_thio, fig5_art, ncol=2, nrow=3)
-#ggsave(file="../deliv/figure/figS1.png", figS1, width=8, height=12)
+#ggsave(file="../deliv/figure/figS1_new.png", figS1, width=8, height=12)
 
 #########################################################################################################
 #########################################################################################################
@@ -1592,13 +1590,13 @@ plot_oflo <- ggplot() +
 
 
 fig6 <- grid.arrange(plot_met, plot_vori, plot_nif, plot_dig, plot_oflo, ncol=2, nrow=3)
-#ggsave(file="../deliv/figure/fig6.png", fig6, width=8, height=12)
+#ggsave(file="../deliv/figure/fig6_new.png", fig6, width=8, height=12)
 
 figS2 <- grid.arrange(plot_caf, plot_alf, plot_mid, plot_nev, plotS, plot_art, ncol=2, nrow=3) 
 #ggsave(file="../deliv/figure/figS2.png", figS2, width=8, height=12)
 
 figS2_new <- grid.arrange(plot_caf, plot_alf, plot_mid, plot_nev, plotS, plotR, plot_art, ncol=2, nrow=4) 
-#ggsave(file="../deliv/figure/figS2_new.png", figS2_new, width=8, height=16)
+#ggsave(file="../deliv/figure/figS2_newer.png", figS2_new, width=8, height=16)
 
 #########################################################################################################
 #########################################################################################################
@@ -1660,7 +1658,7 @@ fig7a <- ggplot() +
                      labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
-  ylim(0,16.5) +
+  ylim(0,18) +
   #ylim(0,2) +
   xlab("") +
   ylab("Relative RMSE") +
@@ -1784,9 +1782,9 @@ pk_oflo_mod <- c(pk_oflo$RelRMSE,pk_oflo$AUCerror,pk_oflo$hlerror) %>%
 
 pk_mod <- rbind(pk_met_mod, pk_caf_mod, pk_vori_mod, pk_alf_mod, pk_nev_mod, pk_mid_mod, 
                 pk_thio_S_mod, pk_thio_R_mod, pk_nif_mod, pk_dig_mod, pk_art_mod, pk_oflo_mod) %>%
-  'colnames<-'(c("P&T","Berez","R&R","Schmitt","PK-Sim",
-                 "P&T","Berez","R&R","Schmitt","PK-Sim",
-                 "P&T","Berez","R&R","Schmitt","PK-Sim"))
+  'colnames<-'(c("PT","Berez","RR","Schmitt","PK-Sim",
+                 "PT","Berez","RR","Schmitt","PK-Sim",
+                 "PT","Berez","RR","Schmitt","PK-Sim"))
 
 table1 <- kable(pk_mod,"html") %>%
   kable_styling(full_width=F) %>%

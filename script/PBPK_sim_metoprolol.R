@@ -32,15 +32,15 @@ outFun <- function(pars){
 }
 
 out1 <- outFun(Kps1) %>%
-  mutate(Method = "Poulin and Theil")
+  mutate(Method = "PT")
 out2 <- outFun(Kps2) %>%
-  mutate(Method = "Berezhkovskiy")
+  mutate(Method = "Berez")
 out3 <- outFun(Kps3) %>%
-  mutate(Method = "Rodgers and Rowland")
+  mutate(Method = "RR")
 out4 <- outFun(Kps4) %>%
   mutate(Method = "Schmitt")
 out5 <- outFun(Kps5) %>%
-  mutate(Method = "PK-Sim Standard")
+  mutate(Method = "PK-Sim")
 
 # Bind all outputs into one matrix
 out_all <- rbind(out1,out2,out3,out4,out5)
@@ -131,7 +131,7 @@ hl_error <- hl_obs$half.life - hl_all
 
 pk_met <- cbind(rel_rmse,auc_met,hl_obs$half.life,hl_all,hl_error)
 colnames(pk_met) <- c("RelRMSE","AUCobs","AUCpred", "AUCerror", "hlobs", "hlpred", "hlerror")
-pk_met <- mutate(as.data.frame(pk_met), Method=c("Poulin and Theil", "Berezhkovskiy", "Rodgers and Rowland", "Schmitt", "PK-Sim Standard"))
+pk_met <- mutate(as.data.frame(pk_met), Method=c("PT", "Berez", "RR", "Schmitt", "PK-Sim"))
 
 # Store the PK info
 pk_met <- pk_met %>% mutate(Type="Strong base")

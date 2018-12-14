@@ -54,15 +54,15 @@ outFun <- function(pars){
 }
 
 out1 <- outFun(pars1) %>%
-  mutate(Method = "Poulin and Theil")
+  mutate(Method = "PT")
 out2 <- outFun(pars2) %>%
-  mutate(Method = "Berezhkovskiy")
+  mutate(Method = "Berez")
 out3 <- outFun(pars3) %>%
-  mutate(Method = "Rodgers and Rowland")
+  mutate(Method = "RR")
 out4 <- outFun(pars4) %>%
   mutate(Method = "Schmitt")
 out5 <- outFun(pars5) %>%
-  mutate(Method = "PK-Sim Standard")
+  mutate(Method = "PK-Sim")
 
 # Bind all outputs into one matrix
 out_all <- rbind(out1,out2,out3,out4,out5,out5)
@@ -151,6 +151,6 @@ hl_art <- cbind(hl_obs$half.life,hl_all,hl_error)
 # Combine PK info in data frame and store as csv file
 pk_art <- cbind(rel_rmse,auc_art,hl_art)
 colnames(pk_art) <- c("RelRMSE","AUCobs","AUCpred", "AUCerror", "hlobs", "hlpred", "hlerror")
-pk_art <- mutate(as.data.frame(pk_art), Method=c("Poulin and Theil", "Berezhkovskiy", "Rodgers and Rowland", "Schmitt", "PK-Sim Standard"))
+pk_art <- mutate(as.data.frame(pk_art), Method=c("PT", "Berez", "RR", "Schmitt", "PK-Sim"))
 
 pk_art <- pk_art %>% mutate(Type="Neutral")

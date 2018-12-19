@@ -90,7 +90,7 @@ pred_PT_a <- c(calcVss_PT(0.46, 9.38, 1, BP=1, type=2, dat_PT),
                calcVss_PT(2.85, 7.45, 0.112, BP=1, type=2, dat_PT), 
                calcVss_PT(-0.26, 7.4, 0.044, BP=1, type=2, dat_PT), 
                calcVss_PT(6.97, 10.6, 0.115, BP=0.55, type=2, dat_PT))
-rep_PT_a <- c(0.63,0.5,0.56,2.87, 0.32,5.53)  # reported predicted
+rep_PT_a <- c(0.63,0.5,0.56,2.87, 0.32,5.53)  
 acid <- data.frame(pred = unlist(pred_PT_a),rep_pred = rep_PT_a) %>%
   mutate(Drug_class = "Acid")
 
@@ -493,8 +493,8 @@ fig3a <- ggplot() +
   geom_abline(intercept = 0, slope = 1) +
   xlim(0,max(drug_all_PT[1:2])) +
   ylim(0,max(drug_all_PT[1:2])) +
-  xlab("Predicted Kp (R&R tissue composition)") +
-  ylab("Predicted Kp (reported tissue composition)") +
+  xlab("Predicted Kp (RR tissue comp.)") +
+  ylab("Predicted Kp (reported tissue comp.)") +
   ggtitle("a    PT with RR tissue comp.") +
   theme(legend.title =  element_blank()) +
   th1 +
@@ -575,9 +575,9 @@ fig3b <- ggplot() +
   geom_abline(intercept = 0, slope = 1) +
   xlim(0,max(drug_all_Berez[1:2])) +
   ylim(0,max(drug_all_Berez[1:2])) +
-  xlab("Predicted Kp (R&R tissue composition)") +
-  ylab("Predicted Kp (reported tissue composition)") +
-  ggtitle("b    Berez with swap") +
+  xlab("Predicted Kp (RR tissue comp.)") +
+  ylab("Predicted Kp (reported tissue comp.)") +
+  ggtitle("b    Berez with RR tissue comp.") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_Berez[1:2])*pcc_x, y=max(drug_all_Berez[1:2])*pcc_y, label=corr_coeff_Berez), parse=TRUE)
@@ -659,9 +659,9 @@ fig3c <- ggplot() +
   geom_abline(intercept = 0, slope = 1) +
   xlim(0,max(drug_all_Schmitt[1:2])) +
   ylim(0,max(drug_all_Schmitt[1:2])) +
-  xlab("Predicted Kp (R&R tissue composition)") +
-  ylab("Predicted Kp (reported tissue composition)") +
-  ggtitle("c    Schmitt with swap") +
+  xlab("Predicted Kp (RR tissue comp.)") +
+  ylab("Predicted Kp (reported tissue comp.)") +
+  ggtitle("c    Schmitt with RR tissue comp.") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_Schmitt[1:2])*pcc_x, y=max(drug_all_Schmitt[1:2])*pcc_y, label=corr_coeff_Schmitt), parse=TRUE)
@@ -742,16 +742,16 @@ fig3d <- ggplot() +
   geom_abline(intercept = 0, slope = 1) +
   xlim(0,max(drug_all_pksim[1:2])) +
   ylim(0,max(drug_all_pksim[1:2])) +
-  xlab("Predicted Kp (R&R tissue composition)") +
-  ylab("Predicted Kp (reported tissue composition)") +
-  ggtitle("d    PK-Sim with swap") +
+  xlab("Predicted Kp (RR tissue comp.)") +
+  ylab("Predicted Kp (reported tissue comp.") +
+  ggtitle("d    PK-Sim with RR tissue comp.") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_pksim[1:2])*pcc_x, y=max(drug_all_pksim[1:2])*pcc_y, label=corr_coeff_pksim), parse=TRUE)
 
 
 fig3 <- grid.arrange(fig3a, fig3b, fig3c, fig3d, ncol=2, nrow=2)
-#ggsave(file="../deliv/figure/fig3.png", fig3, width=8, height=8)
+ggsave(file="../deliv/figure/fig3.png", fig3, width=8, height=8)
 
 #########################################################################################################
 #########################################################################################################

@@ -24,15 +24,15 @@ source("getPartitionCoeff.R")
 # Load physiological data
 dat_uni <- read.csv("../data/unified_tissue_comp.csv")           # unified tissue composition
 dat_PT <- read.csv("../data/tissue_comp_P&T.csv")                # data reported by Poulin and Theil
-dat_Berez <- read.csv("../data/PKSim_tissue_comp_PT_Berez.csv")  # data used by PK-Sim for P&T and Berez. methods
+dat_Berez <- read.csv("../data/PKSim_tissue_comp_PT_Berez.csv")  # data used by PK-Sim for PT and Berez methods
 dat_RR <- read.csv("../data/tissue_comp_R&R.csv")                # data reported by Rodgers and Rowland
 dat_Schmitt_rep <- read.csv("../data/tissue_comp_Schmitt.csv")   # data reported by Schmitt
 dat_Schmitt <- read.csv("../data/PKSim_tissue_comp_Schmitt.csv") # data used by PK-Sim for Schmitt method
-dat_pksim <- read.csv("../data/PKSim_tissue_comp_pksim.csv")     # data used by PK-Sim for PK-Sim Standard method
+dat_pksim <- read.csv("../data/PKSim_tissue_comp_pksim.csv")     # data used by PK-Sim for PK-Sim method
 
-dat_PT_RR <- read.csv("../data/tissue_comp_R&R_for_P&T.csv")          # data reported by R&R converted to use in P&T method
-dat_pksim_RR <- read.csv("../data/tissue_comp_R&R_for_pksim.csv")     # data reported by R&R convereted to use in PK-Sim method
-dat_Schmitt_RR <- read.csv("../data/tissue_comp_R&R_for_Schmitt.csv") # data reported by R&R convereted to use in Schmitt method
+dat_PT_RR <- read.csv("../data/tissue_comp_R&R_for_P&T.csv")          # data reported by R&R formatted to use with PT method
+dat_pksim_RR <- read.csv("../data/tissue_comp_R&R_for_pksim.csv")     # data reported by R&R formatted to use with PK-Sim method
+dat_Schmitt_RR <- read.csv("../data/tissue_comp_R&R_for_Schmitt.csv") # data reported by R&R formatted to use with Schmitt method
 
 # Set functions 
 filter <- dplyr::filter
@@ -764,8 +764,8 @@ ggsave(file="../deliv/figure/fig3.png", fig3, width=8, height=8)
 # General function to calculate Kp values for tissues in both unified and reported physiologies
 drug_pred <- function(logP, pKa, fup, BP, type, dat_uni, dat_method, method){
   if(method=="P&T"){
-    uni <- calcKp_PT(logP, pKa, fup, BP, type, dat_uni)     #prediction using unified tissue composition
-    pred <- calcKp_PT(logP, pKa, fup, BP, type, dat_method) #prediction using reported tissue composition
+    uni <- calcKp_PT(logP, pKa, fup, BP, type, dat_uni)        #prediction using unified tissue composition
+    pred <- calcKp_PT(logP, pKa, fup, BP, type, dat_method)    #prediction using reported tissue composition
     pred <- c(pred[1:3], pred[5:6], pred[4], pred[7:9], pred[11], pred[10])
   }
   else if(method=="Berezhkovskiy"){
@@ -774,24 +774,23 @@ drug_pred <- function(logP, pKa, fup, BP, type, dat_uni, dat_method, method){
     pred <- c(pred[1:3], pred[5:6], pred[4], pred[7:9], pred[11], pred[10])
   }
   else if(method=="R&R"){
-    uni <- calcKp_RR(logP, pKa, fup, BP, type, dat_uni)     #prediction using unified tissue composition
-    pred <- calcKp_RR(logP, pKa, fup, BP, type, dat_method) #prediction using reported tissue composition
+    uni <- calcKp_RR(logP, pKa, fup, BP, type, dat_uni)        #prediction using unified tissue composition
+    pred <- calcKp_RR(logP, pKa, fup, BP, type, dat_method)    #prediction using reported tissue composition
     pred <- c(pred[1:3],pred[5:6],pred[4],pred[7:9],pred[11:12])
   }
   else if(method=="Schmitt"){
-    uni <- calcKp_Schmitt(logP, pKa, fup, type, dat_uni)      #prediction using unified tissue composition
-    pred <- calcKp_Schmitt(logP, pKa, fup, type, dat_method)  #prediction using PK-Sim reported tissue composition
-    #pred <- c(pred[1:3], pred[5:6], pred[4], pred[7:11])
+    uni <- calcKp_Schmitt(logP, pKa, fup, type, dat_uni)       #prediction using unified tissue composition
+    pred <- calcKp_Schmitt(logP, pKa, fup, type, dat_method)   #prediction using PK-Sim reported tissue composition
     pred <- c(pred[3], pred[1:2], pred[4:6], pred[9:11], pred[13:14])
   }
   else if(method=="Schmitt2"){
-    uni <- calcKp_Schmitt(logP, pKa, fup, type, dat_uni)      #prediction using unified tissue composition
-    pred <- calcKp_Schmitt(logP, pKa, fup, type, dat_method)  #prediction using reported tissue composition
+    uni <- calcKp_Schmitt(logP, pKa, fup, type, dat_uni)       #prediction using unified tissue composition
+    pred <- calcKp_Schmitt(logP, pKa, fup, type, dat_method)   #prediction using reported tissue composition
     pred <- c(pred[1:3], pred[5:6], pred[4],pred[7:11])
   }
   else if(method=="PK-Sim"){
-    uni <- calcKp_pksim(logP, fup, dat_uni)     #prediction using unified tissue composition
-    pred <- calcKp_pksim(logP, fup, dat_method) #prediction using reported tissue composition
+    uni <- calcKp_pksim(logP, fup, dat_uni)                    #prediction using unified tissue composition
+    pred <- calcKp_pksim(logP, fup, dat_method)                #prediction using reported tissue composition
     pred <- c(pred[3], pred[1:2], pred[4:6], pred[9:11], pred[13:14])
   }
   drug_vals <- data.frame(uni_pred = unlist(uni),pred = unlist(pred))
@@ -936,7 +935,6 @@ fig4b <- ggplot() +
 
 
 # Rodgers and Rowland method
-
 # uni output order: adipose, bone, brain, heart, kidney, gut, liver, lung, muscle, skin, spleen
 # pred output order: adipose, bone, brain, gut, heart, kidney liver, lung, muscle, pancreas, skin, spleen, thymus
 
@@ -1202,7 +1200,6 @@ fig5_met <- ggplot(data=met_kp, aes(x=Tissue, y=Kp)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
   th5
-fig5_met
 
 # Caffeine
 caf_kp <- kp_pred_comp(-0.07, 10.4, 0.681, BP=0.98, type=3, dat_uni)
@@ -1217,7 +1214,6 @@ fig5_caf <- ggplot(data=caf_kp, aes(x=Tissue, y=Kp)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
   th5
-fig5_caf
 
 
 ### Weak Bases ###
@@ -1234,7 +1230,6 @@ fig5_vori <- ggplot(data=vori_kp, aes(x=Tissue, y=Kp)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
   th5
-fig5_vori
 
 # Alfentanil
 alf_kp <- kp_pred_comp(2.2, 6.5, 0.11, BP=0.63, type=3, dat_uni)
@@ -1264,7 +1259,6 @@ fig5_mid <- ggplot(data=mid_kp, aes(x=Tissue, y=Kp)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
   th5
-fig5_mid
 
 # Nevirapine
 nev_kp <- kp_pred_comp(1.93, 2.8, 0.4, BP=1.04, type=3, dat_uni)
@@ -1279,7 +1273,6 @@ fig5_nev <- ggplot(data=nev_kp, aes(x=Tissue, y=Kp)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
   th5
-fig5_nev
 
 
 ### Acid ###
@@ -1296,7 +1289,6 @@ fig5_thio <- ggplot(data=thio_kp, aes(x=Tissue, y=Kp)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
   th5
-fig5_thio
 
 # Nifedipine
 nif_kp <- kp_pred_comp(2.2, 3.93, 0.04, BP=0.73, type=2, dat_uni)
@@ -1311,9 +1303,6 @@ fig5_nif <- ggplot(data=nif_kp, aes(x=Tissue, y=Kp)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
   th5
-fig5_nif
-
- 
 
 
 ### Neutral ###
@@ -1330,7 +1319,6 @@ fig5_dig <- ggplot(data=dig_kp, aes(x=Tissue, y=Kp)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
   th5
-fig5_dig
 
 # Artemether
 art_kp <- kp_pred_comp(3.28, 0, 0.046, BP=0.8, type=1, dat_uni)
@@ -1345,7 +1333,6 @@ fig5_art <- ggplot(data=art_kp, aes(x=Tissue, y=Kp)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
   th5
-fig5_art
 
 
 ### Zwitterion ###
@@ -1362,7 +1349,6 @@ fig5_oflo <- ggplot(data=oflo_kp, aes(x=Tissue, y=Kp)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
   th5 
-fig5_oflo
 
 fig5 <- grid.arrange(fig5_met, fig5_vori, fig5_nif, fig5_dig, fig5_oflo, ncol=2, nrow=3)
 #ggsave(file="../deliv/figure/fig5_new.png", fig5, width=8, height=12)
@@ -1482,8 +1468,6 @@ plot_nev <- ggplot() +
   th6
 
 
-
-
 ### Acids ###
 # Thiopental
 source("PBPK_sim_thiopental.R")
@@ -1544,7 +1528,6 @@ plot_dig <- ggplot() +
   xlim(0,6.12) +
   scale_y_log10() +
   xlab("Time (h)") +
-  #ylab("Plasma concentration (mg/L)") +
   ylab("Percentage dose/L") +
   ggtitle("d  Digoxin") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
@@ -1592,7 +1575,7 @@ plot_oflo <- ggplot() +
 fig6 <- grid.arrange(plot_met, plot_vori, plot_nif, plot_dig, plot_oflo, ncol=2, nrow=3)
 #ggsave(file="../deliv/figure/fig6_new.png", fig6, width=8, height=12)
 
-figS2 <- grid.arrange(plot_caf, plot_alf, plot_mid, plot_nev, plotS, plot_art, ncol=2, nrow=3) 
+#figS2 <- grid.arrange(plot_caf, plot_alf, plot_mid, plot_nev, plotS, plot_art, ncol=2, nrow=3) 
 #ggsave(file="../deliv/figure/figS2.png", figS2, width=8, height=12)
 
 figS2_new <- grid.arrange(plot_caf, plot_alf, plot_mid, plot_nev, plotS, plotR, plot_art, ncol=2, nrow=4) 
@@ -1659,7 +1642,6 @@ fig7a <- ggplot() +
                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
   ylim(0,18) +
-  #ylim(0,2) +
   xlab("") +
   ylab("Relative RMSE") +
   ggtitle("a  Relative RMSE") +
@@ -1686,7 +1668,6 @@ fig7b <- ggplot() +
                      labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
-  #scale_y_log10(limits = c(1e-4,1e5)) +
   ylim(-27,26) +
   xlab("") +
   ylab("Residual error") +
@@ -1709,13 +1690,11 @@ fig7c <- ggplot() +
   geom_point(data=pk_dig, aes(x=13, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
   geom_point(data=pk_art, aes(x=14, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
   geom_point(data=pk_oflo, aes(x=16, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-  #geom_abline(intercept = 0, slope = 0) +
   scale_x_continuous(breaks=c(1,2,4,5,6,7,9,10,11,13,14,16),
                      labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
   scale_y_log10(limits = c(1e-2,1e5)) +
-  #ylim(-100,100) +
   xlab("") +
   ylab("Log of absolute residual error") +
   ggtitle("c  Half-life error") +
@@ -1723,7 +1702,7 @@ fig7c <- ggplot() +
   th7
 
 fig7 <- grid.arrange(fig7a, fig7b, fig7c, ncol=3, nrow=1)
-ggsave(file="../deliv/figure/fig7_test.png", fig7, width=8, height=6)
+#ggsave(file="../deliv/figure/fig7_test.png", fig7, width=8, height=6)
 
 
 ### Generate table (drugs in the rows, columns of RMSE, AUC, and half-life error)

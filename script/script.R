@@ -1676,7 +1676,7 @@ fig7b <- ggplot() +
   th7
 fig7b
 
-### Half-life
+### Half-life (semi-log plot)
 fig7c <- ggplot() +
   geom_point(data=pk_met, aes(x=1, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
   geom_point(data=pk_caf, aes(x=2, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
@@ -1702,7 +1702,38 @@ fig7c <- ggplot() +
   th7
 
 fig7 <- grid.arrange(fig7a, fig7b, fig7c, ncol=3, nrow=1)
-#ggsave(file="../deliv/figure/fig7_test.png", fig7, width=8, height=6)
+#ggsave(file="../deliv/figure/fig7.png", fig7_no_log, width=8, height=6)
+
+### Half-life
+# fig7c_no_log <- ggplot() +
+#   geom_point(data=pk_met, aes(x=1, y=hlerror, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_caf, aes(x=2, y=hlerror, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_vori, aes(x=4, y=hlerror, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_alf, aes(x=5, y=hlerror, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_nev, aes(x=6, y=hlerror, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_mid, aes(x=7, y=hlerror, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_thio_S, aes(x=9, y=hlerror, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_thio_R, aes(x=10, y=hlerror, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_nif, aes(x=11, y=hlerror, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_dig, aes(x=13, y=hlerror, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_art, aes(x=14, y=hlerror, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_oflo, aes(x=16, y=hlerror, shape=Method),size=size, stroke=stroke) +
+#   geom_abline(intercept = 0, slope = 0) +
+#   scale_x_continuous(breaks=c(1,2,4,5,6,7,9,10,11,13,14,16),
+#                      labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
+#                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
+#                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
+#   ylim(-80,80) +
+#   xlab("") +
+#   ylab("Residual error") +
+#   ggtitle("c  Half-life error") +
+#   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
+#   th7
+# 
+# fig7_no_log <- grid.arrange(fig7a, fig7b, fig7c_no_log, ncol=3, nrow=1)
+# ggsave(file="../deliv/figure/fig7_no_log.png", fig7_no_log, width=8, height=6)
+
+
 
 
 ### Generate table (drugs in the rows, columns of RMSE, AUC, and half-life error)

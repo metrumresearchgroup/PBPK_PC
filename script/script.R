@@ -1193,7 +1193,7 @@ fig5_met <- ggplot(data=met_kp, aes(x=Tissue, y=Kp)) +
   geom_point(data=met_kp, aes(x=Tissue, y=Kp, shape=Method),size=2.5, stroke=0.5) +
   scale_x_continuous(breaks=c(1,2,3,4,5,6,7,8,9,10,11),labels = c("Adipose","Bone","Brain","Heart","Kidney","Gut","Liver","Lung","Muscle","Skin","Spleen")) +
   ylim(0,max(met_kp$Kp)) +
-  xlab("") +
+  xlab("Tissue") +
   ylab("Predicted Kp") +
   ggtitle("a    Metoprolol") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +

@@ -751,7 +751,7 @@ fig3d <- ggplot() +
 
 
 fig3 <- grid.arrange(fig3a, fig3b, fig3c, fig3d, ncol=2, nrow=2)
-ggsave(file="../deliv/figure/fig3.png", fig3, width=8, height=8)
+#ggsave(file="../deliv/figure/fig3.png", fig3, width=8, height=8)
 
 #########################################################################################################
 #########################################################################################################
@@ -1641,7 +1641,9 @@ fig7a <- ggplot() +
                      labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
-  ylim(0,18) +
+  #ylim(0,18) + #Using error
+  #ylim(0, 1500) +
+  scale_y_log10(limits = c(1e-1,1e6)) +
   xlab("") +
   ylab("Relative RMSE") +
   ggtitle("a  Relative RMSE") +
@@ -1663,12 +1665,14 @@ fig7b <- ggplot() +
   geom_point(data=pk_dig, aes(x=13, y=AUCerror, shape=Method),size=size, stroke=stroke) +
   geom_point(data=pk_art, aes(x=14, y=AUCerror, shape=Method),size=size, stroke=stroke) +
   geom_point(data=pk_oflo, aes(x=16, y=AUCerror, shape=Method),size=size, stroke=stroke) +
-  geom_abline(intercept = 0, slope = 0) +
+  #geom_abline(intercept = 0, slope = 0) + # Using error
   scale_x_continuous(breaks=c(1,2,4,5,6,7,9,10,11,13,14,16),
                      labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
-  ylim(-27,26) +
+  #ylim(-27,26) + #Using error
+  #ylim(0, 4200) +
+  scale_y_log10(limits = c(1e-1,1e6)) +
   xlab("") +
   ylab("Residual error") +
   ggtitle("b  AUC error") +
@@ -1694,15 +1698,16 @@ fig7c <- ggplot() +
                      labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
-  scale_y_log10(limits = c(1e-2,1e5)) +
+  scale_y_log10(limits = c(1e-1,1e6)) +
   xlab("") +
   ylab("Log of absolute residual error") +
   ggtitle("c  Half-life error") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
+fig7c
 
 fig7 <- grid.arrange(fig7a, fig7b, fig7c, ncol=3, nrow=1)
-#ggsave(file="../deliv/figure/fig7.png", fig7_no_log, width=8, height=6)
+ggsave(file="../deliv/figure/fig7_new_error.png", fig7, width=8, height=6)
 
 ### Half-life
 # fig7c_no_log <- ggplot() +

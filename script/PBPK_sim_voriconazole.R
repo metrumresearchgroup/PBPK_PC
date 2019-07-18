@@ -94,7 +94,7 @@ rmse_RR <- rmse(out3_new$Cplasma,df$conc)
 rmse_Schmitt <- rmse(out4_new$Cplasma,df$conc)
 rmse_pksim <- rmse(out5_new$Cplasma,df$conc)
 
-rel_rmse <- c(rmse_PT,rmse_Berez,rmse_RR,rmse_Schmitt,rmse_pksim)
+rel_rmse <- c(rmse_PT,rmse_Berez,rmse_RR,rmse_Schmitt,rmse_pksim)*100
 
 
 #---------------------
@@ -109,7 +109,11 @@ auc_pksim <- pk.calc.auc(out5$Cplasma,out5$time,interval=c(sample[1],last(sample
 
 auc_all <- c(auc_PT,auc_Berez,auc_RR,auc_Schmitt,auc_pksim)
 
-auc_error <- auc_obs - auc_all
+# Error
+#auc_error <- auc_obs - auc_all
+
+# Relative error
+auc_error <- (abs(auc_obs - auc_all)/auc_obs)*100
 
 # # Combine in data frame
 auc_vori <- cbind(auc_obs,auc_all,auc_error)
@@ -127,7 +131,11 @@ hl_pksim <- pk.calc.half.life(out5$Cplasma,out5$time)
 
 hl_all <- c(hl_PT$half.life,hl_Berez$half.life,hl_RR$half.life,hl_Schmitt$half.life,hl_pksim$half.life)
 
-hl_error <- hl_obs$half.life - hl_all
+# Error
+#hl_error <- hl_obs$half.life - hl_all
+
+# Relative error
+hl_error <- (abs(hl_obs$half.life - hl_all)/hl_obs$half.life)*100
 
 
 pk_vori <- cbind(rel_rmse,auc_vori,hl_obs$half.life,hl_all,hl_error)

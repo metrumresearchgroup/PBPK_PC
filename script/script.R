@@ -1796,12 +1796,26 @@ pk_oflo_mod <- c(pk_oflo$RelRMSE,pk_oflo$AUCerror,pk_oflo$hlerror) %>%
   'rownames<-'("Ofloxacin")
 
 pk_mod <- rbind(pk_met_mod, pk_caf_mod, pk_vori_mod, pk_alf_mod, pk_nev_mod, pk_mid_mod, 
-                pk_thio_S_mod, pk_thio_R_mod, pk_nif_mod, pk_dig_mod, pk_art_mod, pk_oflo_mod) %>%
-  'colnames<-'(c("PT","Berez","RR","Schmitt","PK-Sim",
-                 "PT","Berez","RR","Schmitt","PK-Sim",
-                 "PT","Berez","RR","Schmitt","PK-Sim"))
+                pk_thio_S_mod, pk_thio_R_mod, pk_nif_mod, pk_dig_mod, pk_art_mod, pk_oflo_mod)
 
-table1 <- kable(pk_mod,"html") %>%
+# pk_mod <- rbind(pk_met_mod, pk_caf_mod, pk_vori_mod, pk_alf_mod, pk_nev_mod, pk_mid_mod, 
+#                 pk_thio_S_mod, pk_thio_R_mod, pk_nif_mod, pk_dig_mod, pk_art_mod, pk_oflo_mod) %>%
+#   'colnames<-'(c("PT","Berez","RR","Schmitt","PK-Sim",
+#                  "PT","Berez","RR","Schmitt","PK-Sim",
+#                  "PT","Berez","RR","Schmitt","PK-Sim"))
+
+# Include row of average values for each method (over all drugs)
+pk_avg <-  colMeans(pk_mod) %>%
+  t() %>%
+  round(digits=3) %>%
+  'rownames<-'("Mean")
+
+pk_mod_all <- rbind(pk_mod, pk_avg) %>%
+   'colnames<-'(c("PT","Berez","RR","Schmitt","PK-Sim",
+                  "PT","Berez","RR","Schmitt","PK-Sim",
+                  "PT","Berez","RR","Schmitt","PK-Sim"))
+
+table1 <- kable(pk_mod_all,"html") %>%
   kable_styling(full_width=F) %>%
   add_header_above(c("","Relative RMSE"=5,"AUC error"=5, "Half-life error"=5)) %>%
   group_rows("Strong bases", 1, 2) %>%

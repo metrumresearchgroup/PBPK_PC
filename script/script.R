@@ -1645,7 +1645,7 @@ fig7a <- ggplot() +
   #ylim(0, 1500) +
   scale_y_log10(limits = c(1e-1,1e6)) +
   xlab("") +
-  ylab("Relative RMSE") +
+  ylab("Log of percent RMSE") +
   ggtitle("a  Relative RMSE") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
@@ -1674,7 +1674,7 @@ fig7b <- ggplot() +
   #ylim(0, 4200) +
   scale_y_log10(limits = c(1e-1,1e6)) +
   xlab("") +
-  ylab("Residual error") +
+  ylab("Log of percent error") +
   ggtitle("b  AUC error") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
@@ -1700,14 +1700,14 @@ fig7c <- ggplot() +
                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
   scale_y_log10(limits = c(1e-1,1e6)) +
   xlab("") +
-  ylab("Log of absolute residual error") +
+  ylab("Log of percent error") +
   ggtitle("c  Half-life error") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
 fig7c
 
 fig7 <- grid.arrange(fig7a, fig7b, fig7c, ncol=3, nrow=1)
-ggsave(file="../deliv/figure/fig7_new_error.png", fig7, width=8, height=6)
+ggsave(file="../deliv/figure/fig7_new_error_new_lab.png", fig7, width=8, height=6)
 
 ### Half-life
 # fig7c_no_log <- ggplot() +
@@ -1817,7 +1817,7 @@ pk_mod_all <- rbind(pk_mod, pk_avg) %>%
 
 table1 <- kable(pk_mod_all,"html") %>%
   kable_styling(full_width=F) %>%
-  add_header_above(c("","Relative RMSE"=5,"AUC error"=5, "Half-life error"=5)) %>%
+  add_header_above(c("","Relative percent RMSE"=5,"AUC percent error"=5, "Half-life percent error"=5)) %>%
   group_rows("Strong bases", 1, 2) %>%
   group_rows("Weak bases", 3, 6) %>%
   group_rows("Acids", 7, 9) %>%

@@ -24,7 +24,7 @@ Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_u
 Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_uni)
 Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_uni)
 
-e <- ev(amt = 10, cmt = "D", ii = 6, addl = 50)
+e <- ev(amt = 10, cmt = "D", ii = 6, addl = 8)
 
 outFun <- function(pars){
   out <- as.data.frame(out <- mod %>%

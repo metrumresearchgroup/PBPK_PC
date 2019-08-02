@@ -400,7 +400,7 @@ fig2e <- ggplot() +
 
 
 fig2 <- grid.arrange(fig2a, fig2b, fig2c, fig2d, fig2e, ncol=2, nrow=3)
-#ggsave(file="../deliv/figure/fig2_new.png", fig2, width=8, height=12)
+#ggsave(file="../deliv/figure/fig2.png", fig2, width=8, height=12)
 
 #########################################################################################################
 #########################################################################################################
@@ -1131,7 +1131,7 @@ fig4e <- ggplot() +
 
 
 fig4 <- grid.arrange(fig4a, fig4b, fig4c, fig4d, fig4e, ncol=2, nrow=3)
-#ggsave(file="../deliv/figure/fig4_new.png", fig4, width=8, height=12)
+#ggsave(file="../deliv/figure/fig4.png", fig4, width=8, height=12)
 
 #########################################################################################################
 #########################################################################################################
@@ -1351,10 +1351,10 @@ fig5_oflo <- ggplot(data=oflo_kp, aes(x=Tissue, y=Kp)) +
   th5 
 
 fig5 <- grid.arrange(fig5_met, fig5_vori, fig5_nif, fig5_dig, fig5_oflo, ncol=2, nrow=3)
-#ggsave(file="../deliv/figure/fig5_new.png", fig5, width=8, height=12)
+#ggsave(file="../deliv/figure/fig5.png", fig5, width=8, height=12)
 
 figS1 <- grid.arrange(fig5_caf, fig5_alf, fig5_mid, fig5_nev, fig5_thio, fig5_art, ncol=2, nrow=3)
-#ggsave(file="../deliv/figure/figS1_new.png", figS1, width=8, height=12)
+#ggsave(file="../deliv/figure/figS1.png", figS1, width=8, height=12)
 
 #########################################################################################################
 #########################################################################################################
@@ -1573,13 +1573,10 @@ plot_oflo <- ggplot() +
 
 
 fig6 <- grid.arrange(plot_met, plot_vori, plot_nif, plot_dig, plot_oflo, ncol=2, nrow=3)
-#ggsave(file="../deliv/figure/fig6_new.png", fig6, width=8, height=12)
+#ggsave(file="../deliv/figure/fig6.png", fig6, width=8, height=12)
 
-#figS2 <- grid.arrange(plot_caf, plot_alf, plot_mid, plot_nev, plotS, plot_art, ncol=2, nrow=3) 
-#ggsave(file="../deliv/figure/figS2.png", figS2, width=8, height=12)
-
-figS2_new <- grid.arrange(plot_caf, plot_alf, plot_mid, plot_nev, plotS, plotR, plot_art, ncol=2, nrow=4) 
-#ggsave(file="../deliv/figure/figS2_newer.png", figS2_new, width=8, height=16)
+figS2 <- grid.arrange(plot_caf, plot_alf, plot_mid, plot_nev, plotS, plotR, plot_art, ncol=2, nrow=4) 
+#ggsave(file="../deliv/figure/figS2.png", figS2, width=8, height=16)
 
 #########################################################################################################
 #########################################################################################################
@@ -1645,8 +1642,8 @@ fig7a <- ggplot() +
   #ylim(0, 1500) +
   scale_y_log10(limits = c(1e-1,1e6)) +
   xlab("") +
-  ylab("Log of percent RMSE") +
-  ggtitle("a  Relative RMSE") +
+  ylab("Percent error") +
+  ggtitle("a  RMSE") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
 fig7a
@@ -1674,7 +1671,7 @@ fig7b <- ggplot() +
   #ylim(0, 4200) +
   scale_y_log10(limits = c(1e-1,1e6)) +
   xlab("") +
-  ylab("Log of percent error") +
+  ylab("Percent error") +
   ggtitle("b  AUC error") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
@@ -1700,14 +1697,14 @@ fig7c <- ggplot() +
                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
   scale_y_log10(limits = c(1e-1,1e6)) +
   xlab("") +
-  ylab("Log of percent error") +
+  ylab("Percent error") +
   ggtitle("c  Half-life error") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
 fig7c
 
 fig7 <- grid.arrange(fig7a, fig7b, fig7c, ncol=3, nrow=1)
-ggsave(file="../deliv/figure/fig7_new_error_new_lab.png", fig7, width=8, height=6)
+#ggsave(file="../deliv/figure/fig7.png", fig7, width=8, height=6)
 
 ### Half-life
 # fig7c_no_log <- ggplot() +

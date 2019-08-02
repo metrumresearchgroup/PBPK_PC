@@ -11,6 +11,7 @@ library(gridExtra)
 library(PKNCA)
 library(msm)
 library(kableExtra)
+source("sig.R")
 source("CalcKp_P&T.R")
 source("CalcKp_R&R.R")
 source("CalcKpu_R&R.R")
@@ -1740,56 +1741,56 @@ fig7 <- grid.arrange(fig7a, fig7b, fig7c, ncol=3, nrow=1)
 
 ### Generate table (drugs in the rows, columns of RMSE, AUC, and half-life error)
 pk_met_mod <- c(pk_met$RelRMSE,pk_met$AUCerror,pk_met$hlerror) %>%
+  sig() %>%
   t() %>%
-  round(digits=3) %>%
   'rownames<-'("Metoprolol")
 pk_caf_mod <- c(pk_caf$RelRMSE,pk_caf$AUCerror,pk_caf$hlerror) %>%
+  sig() %>%
   t() %>%
-  round(digits=3) %>%
   'rownames<-'("Caffeine")
 
 pk_vori_mod <- c(pk_vori$RelRMSE,pk_vori$AUCerror,pk_vori$hlerror) %>%
+  sig() %>%
   t() %>%
-  round(digits=3) %>%
   'rownames<-'("Voriconazole")
 pk_alf_mod <- c(pk_alf$RelRMSE,pk_alf$AUCerror,pk_alf$hlerror) %>%
+  sig() %>%
   t() %>%
-  round(digits=3) %>%
   'rownames<-'("Alfentanil")
 pk_nev_mod <- c(pk_nev$RelRMSE,pk_nev$AUCerror,pk_nev$hlerror) %>%
+  sig() %>%
   t() %>%
-  round(digits=3) %>%
   'rownames<-'("Nevirapine")
 pk_mid_mod <- c(pk_mid$RelRMSE,pk_mid$AUCerror,pk_mid$hlerror) %>%
+  sig() %>%
   t() %>%
-  round(digits=3) %>%
   'rownames<-'("Midazolam")
 
 pk_thio_S_mod <- c(pk_thio_S$RelRMSE,pk_thio_S$AUCerror,pk_thio_S$hlerror) %>%
+  sig() %>%
   t() %>%
-  round(digits=3) %>%
   'rownames<-'("S-Thiopental")
 pk_thio_R_mod <- c(pk_thio_R$RelRMSE,pk_thio_R$AUCerror,pk_thio_R$hlerror) %>%
+  sig() %>%
   t() %>%
-  round(digits=3) %>%
   'rownames<-'("R-Thiopental")
 pk_nif_mod <- c(pk_nif$RelRMSE,pk_nif$AUCerror,pk_nif$hlerror) %>%
+  sig() %>%
   t() %>%
-  round(digits=3) %>%
   'rownames<-'("Nifedipine")
 
 pk_dig_mod <- c(pk_dig$RelRMSE,pk_dig$AUCerror,pk_dig$hlerror) %>%
+  sig() %>%
   t() %>%
-  round(digits=3) %>%
   'rownames<-'("Digoxin")
 pk_art_mod <- c(pk_art$RelRMSE,pk_art$AUCerror,pk_art$hlerror) %>%
+  sig() %>%
   t() %>%
-  round(digits=3) %>%
   'rownames<-'("Artemether")
 
 pk_oflo_mod <- c(pk_oflo$RelRMSE,pk_oflo$AUCerror,pk_oflo$hlerror) %>%
+  sig() %>%
   t() %>%
-  round(digits=3) %>%
   'rownames<-'("Ofloxacin")
 
 pk_mod <- rbind(pk_met_mod, pk_caf_mod, pk_vori_mod, pk_alf_mod, pk_nev_mod, pk_mid_mod, 
@@ -1802,9 +1803,16 @@ pk_mod <- rbind(pk_met_mod, pk_caf_mod, pk_vori_mod, pk_alf_mod, pk_nev_mod, pk_
 #                  "PT","Berez","RR","Schmitt","PK-Sim"))
 
 # Include row of average values for each method (over all drugs)
-pk_avg <-  colMeans(pk_mod) %>%
+pk_mod_avg <- rbind(c(pk_met$RelRMSE,pk_met$AUCerror,pk_met$hlerror), c(pk_caf$RelRMSE,pk_caf$AUCerror,pk_caf$hlerror),
+                    c(pk_vori$RelRMSE,pk_vori$AUCerror,pk_vori$hlerror), c(pk_alf$RelRMSE,pk_alf$AUCerror,pk_alf$hlerror),
+                    c(pk_nev$RelRMSE,pk_nev$AUCerror,pk_nev$hlerror), c(pk_mid$RelRMSE,pk_mid$AUCerror,pk_mid$hlerror),
+                    c(pk_thio_S$RelRMSE,pk_thio_S$AUCerror,pk_thio_S$hlerror), c(pk_thio_R$RelRMSE,pk_thio_R$AUCerror,pk_thio_R$hlerror),
+                    c(pk_nif$RelRMSE,pk_nif$AUCerror,pk_nif$hlerror), c(pk_dig$RelRMSE,pk_dig$AUCerror,pk_dig$hlerror),
+                    c(pk_art$RelRMSE,pk_art$AUCerror,pk_art$hlerror), c(pk_oflo$RelRMSE,pk_oflo$AUCerror,pk_oflo$hlerror))
+
+pk_avg <-  colMeans(pk_mod_avg) %>%
+  sig() %>%
   t() %>%
-  round(digits=3) %>%
   'rownames<-'("Mean")
 
 pk_mod_all <- rbind(pk_mod, pk_avg) %>%

@@ -162,7 +162,7 @@ for (j in 1:num_patients){
 
 # Calculate the percent coefficient of variation for AUC and Cmax values for each method
 CV_calc <- function(x){
-  CV <- (sd(x) / mean(x))*100
+  CV <- sig((sd(x) / mean(x))*100)
   return(CV)
 }
 CV_PT <- c(CV_calc(PK_PT[,1]), CV_calc(PK_PT[,2]))
@@ -172,7 +172,6 @@ CV_Schmitt <- c(CV_calc(PK_Schmitt[,1]), CV_calc(PK_Schmitt[,2]))
 CV_pksim <- c(CV_calc(PK_pksim[,1]), CV_calc(PK_pksim[,2]))
 
 CV_all <- rbind(CV_PT, CV_Berez, CV_RR, CV_Schmitt, CV_pksim) %>%
-  round(digits=3) %>%
   'colnames<-' (c("AUC CV", "Cmax CV")) %>%
   'rownames<-' (c("PT", "Berez", "RR", "Schmitt", "pksim"))
   

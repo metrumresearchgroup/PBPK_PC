@@ -859,7 +859,7 @@ fig4a <- ggplot() +
   geom_abline(intercept = 0, slope = 1) +
   xlim(0,max(drug_all_PT[1:2])) +
   ylim(0,max(drug_all_PT[1:2])) +
-  xlab("Predicted Kp (unified tissue composition)") +
+  xlab("Predicted Kp (standardized tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
   ggtitle("a    PT") +
   theme(legend.title =  element_blank()) +
@@ -927,7 +927,7 @@ fig4b <- ggplot() +
   geom_abline(intercept = 0, slope = 1) +
   xlim(0,max(drug_all_Berez[1:2])) +
   ylim(0,max(drug_all_Berez[1:2])) +
-  xlab("Predicted Kp (unified tissue composition)") +
+  xlab("Predicted Kp (standardized tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
   ggtitle("b    Berez") +
   theme(legend.title =  element_blank()) +
@@ -993,7 +993,7 @@ fig4c <- ggplot() +
   geom_abline(intercept = 0, slope = 1) +
   xlim(0,max(drug_all_RR[1:2])) +
   ylim(0,max(drug_all_RR[1:2])) +
-  xlab("Predicted Kp (unified tissue composition)") +
+  xlab("Predicted Kp (standardized tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
   ggtitle("c   RR") +
   theme(legend.title =  element_blank()) +
@@ -1058,7 +1058,7 @@ fig4d <- ggplot() +
   geom_abline(intercept = 0, slope = 1) +
   xlim(0,max(drug_all_schmitt[1:2])) +
   ylim(0,max(drug_all_schmitt[1:2])) +
-  xlab("Predicted Kp (unified tissue composition)") +
+  xlab("Predicted Kp (standardized tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
   ggtitle("d   Schmitt") +
   theme(legend.title =  element_blank()) +
@@ -1123,7 +1123,7 @@ fig4e <- ggplot() +
   geom_abline(intercept = 0, slope = 1) +
   xlim(0,max(drug_all_pksim[1:2])) +
   ylim(0,max(drug_all_pksim[1:2])) +
-  xlab("Predicted Kp (unified tissue composition)") +
+  xlab("Predicted Kp (standardized tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
   ggtitle("e   PK-Sim") +
   theme(legend.title =  element_blank()) +

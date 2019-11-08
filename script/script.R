@@ -41,6 +41,7 @@ mutate <- dplyr::mutate
 select <- dplyr::select
 
 # Set figure default themes
+#, hjust = 0.5
 # Theme 1 used for Fig. 2, 3 and 4
 th1 <- theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
              panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size = 10),
@@ -497,6 +498,7 @@ fig3a <- ggplot() +
   xlab("Predicted Kp (RR tissue comp.)") +
   ylab("Predicted Kp (reported tissue comp.)") +
   ggtitle("a    PT with RR tissue comp.") +
+  #ggtitle("PT with RR tissue comp.") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_PT[1:2])*pcc_x, y=max(drug_all_PT[1:2])*pcc_y, label=corr_coeff_PT), parse=TRUE)
@@ -579,6 +581,7 @@ fig3b <- ggplot() +
   xlab("Predicted Kp (RR tissue comp.)") +
   ylab("Predicted Kp (reported tissue comp.)") +
   ggtitle("b    Berez with RR tissue comp.") +
+  #ggtitle("Berez with RR tissue comp.") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_Berez[1:2])*pcc_x, y=max(drug_all_Berez[1:2])*pcc_y, label=corr_coeff_Berez), parse=TRUE)
@@ -663,6 +666,7 @@ fig3c <- ggplot() +
   xlab("Predicted Kp (RR tissue comp.)") +
   ylab("Predicted Kp (reported tissue comp.)") +
   ggtitle("c    Schmitt with RR tissue comp.") +
+  #ggtitle("Schmitt with RR tissue comp.") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_Schmitt[1:2])*pcc_x, y=max(drug_all_Schmitt[1:2])*pcc_y, label=corr_coeff_Schmitt), parse=TRUE)
@@ -746,6 +750,7 @@ fig3d <- ggplot() +
   xlab("Predicted Kp (RR tissue comp.)") +
   ylab("Predicted Kp (reported tissue comp.") +
   ggtitle("d    PK-Sim with RR tissue comp.") +
+  #ggtitle("PK-Sim with RR tissue comp.") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_pksim[1:2])*pcc_x, y=max(drug_all_pksim[1:2])*pcc_y, label=corr_coeff_pksim), parse=TRUE)
@@ -860,8 +865,10 @@ fig4a <- ggplot() +
   xlim(0,max(drug_all_PT[1:2])) +
   ylim(0,max(drug_all_PT[1:2])) +
   xlab("Predicted Kp (standardized tissue composition)") +
+  #xlab("Predicted Kp (unified tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
   ggtitle("a    PT") +
+  #ggtitle("PT") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_PT[1:2])*pcc_x, y=max(drug_all_PT[1:2])*pcc_y, label=corr_coeff_PT), parse=TRUE)
@@ -928,8 +935,10 @@ fig4b <- ggplot() +
   xlim(0,max(drug_all_Berez[1:2])) +
   ylim(0,max(drug_all_Berez[1:2])) +
   xlab("Predicted Kp (standardized tissue composition)") +
+  #xlab("Predicted Kp (unified tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
   ggtitle("b    Berez") +
+  #ggtitle("Berez") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_Berez[1:2])*pcc_x, y=max(drug_all_Berez[1:2])*pcc_y, label=corr_coeff_Berez), parse=TRUE)
@@ -994,8 +1003,10 @@ fig4c <- ggplot() +
   xlim(0,max(drug_all_RR[1:2])) +
   ylim(0,max(drug_all_RR[1:2])) +
   xlab("Predicted Kp (standardized tissue composition)") +
+  #xlab("Predicted Kp (unified tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
   ggtitle("c   RR") +
+  #ggtitle("RR") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_RR[1:2])*pcc_x, y=max(drug_all_RR[1:2])*pcc_y, label=corr_coeff_RR), parse=TRUE)
@@ -1059,8 +1070,10 @@ fig4d <- ggplot() +
   xlim(0,max(drug_all_schmitt[1:2])) +
   ylim(0,max(drug_all_schmitt[1:2])) +
   xlab("Predicted Kp (standardized tissue composition)") +
+  #xlab("Predicted Kp (unified tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
   ggtitle("d   Schmitt") +
+  #ggtitle("Schmitt") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_schmitt[1:2])*pcc_x, y=max(drug_all_schmitt[1:2])*pcc_y, label=corr_coeff_Schmitt), parse=TRUE)
@@ -1124,8 +1137,10 @@ fig4e <- ggplot() +
   xlim(0,max(drug_all_pksim[1:2])) +
   ylim(0,max(drug_all_pksim[1:2])) +
   xlab("Predicted Kp (standardized tissue composition)") +
+  #xlab("Predicted Kp (unified tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
   ggtitle("e   PK-Sim") +
+  #ggtitle("PK-Sim") +
   theme(legend.title =  element_blank()) +
   th1 +
   geom_text(aes(x=max(drug_all_pksim[1:2])*pcc_x, y=max(drug_all_pksim[1:2])*pcc_y, label=corr_coeff_pksim), parse=TRUE)
@@ -1133,6 +1148,9 @@ fig4e <- ggplot() +
 
 fig4 <- grid.arrange(fig4a, fig4b, fig4c, fig4d, fig4e, ncol=2, nrow=3)
 #ggsave(file="../deliv/figure/fig4.png", fig4, width=8, height=12)
+
+#fig4_test <- grid.arrange(fig4a, fig4b, fig4c, fig4d, fig4e, ncol=5, nrow=1)
+#ggsave(file="../deliv/figure/fig4_test.pdf", fig4_test, width=20, height=4)
 
 #########################################################################################################
 #########################################################################################################
@@ -1379,6 +1397,7 @@ plot_met <- ggplot() +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
   ggtitle("a  Metoprolol") +
+  #ggtitle("Metoprolol") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   scale_color_manual("", values=c('grey60','grey60','grey60','grey60','grey60','grey60')) +
@@ -1414,6 +1433,7 @@ plot_vori <- ggplot() +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
   ggtitle("b  Voriconazole") +
+  #ggtitle("Voriconazole") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   scale_color_manual("", values=c('grey60','grey60','grey60','grey60','grey60','grey60')) +
@@ -1513,6 +1533,7 @@ plot_nif <- ggplot() +
   xlab("Time (h)") +
   ylab("Plasma concentraction (mg/L)") +
   ggtitle("c  Nifedipine") +
+  #ggtitle("Nifedipine") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   scale_color_manual("", values=c('grey60','grey60','grey60','grey60','grey60','grey60')) +
@@ -1531,6 +1552,7 @@ plot_dig <- ggplot() +
   xlab("Time (h)") +
   ylab("Percentage dose/L") +
   ggtitle("d  Digoxin") +
+  #ggtitle("Digoxin") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   scale_color_manual("", values=c('grey60','grey60','grey60','grey60','grey60','grey60')) +
@@ -1567,6 +1589,7 @@ plot_oflo <- ggplot() +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
   ggtitle("e  Ofloxacin") +
+  #ggtitle("Ofloxacin") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   scale_color_manual("", values=c('grey60','grey60','grey60','grey60','grey60','grey60')) +
@@ -1575,6 +1598,9 @@ plot_oflo <- ggplot() +
 
 fig6 <- grid.arrange(plot_met, plot_vori, plot_nif, plot_dig, plot_oflo, ncol=2, nrow=3)
 #ggsave(file="../deliv/figure/fig6.png", fig6, width=8, height=12)
+
+#fig6_test <- grid.arrange(plot_met, plot_vori, plot_nif, plot_dig, plot_oflo, ncol=5, nrow=1)
+#ggsave(file="../deliv/figure/fig6_poster_test.pdf", fig6_test, width=20, height=4)
 
 figS2 <- grid.arrange(plot_caf, plot_alf, plot_mid, plot_nev, plotS, plotR, plot_art, ncol=2, nrow=4) 
 #ggsave(file="../deliv/figure/figS2.png", figS2, width=8, height=16)
@@ -1645,6 +1671,7 @@ fig7a <- ggplot() +
   xlab("") +
   ylab("Percent error") +
   ggtitle("a  RMSE") +
+  #ggtitle("RMSE") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
 fig7a
@@ -1674,6 +1701,7 @@ fig7b <- ggplot() +
   xlab("") +
   ylab("Percent error") +
   ggtitle("b  AUC error") +
+  #ggtitle("AUC error") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
 fig7b
@@ -1700,12 +1728,14 @@ fig7c <- ggplot() +
   xlab("") +
   ylab("Percent error") +
   ggtitle("c  Half-life error") +
+  #ggtitle("Half-life error") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
 fig7c
 
 fig7 <- grid.arrange(fig7a, fig7b, fig7c, ncol=3, nrow=1)
-#ggsave(file="../deliv/figure/fig7.png", fig7, width=8, height=6)
+ggsave(file="../deliv/figure/fig7.png", fig7, width=8, height=6)
+#ggsave(file="../deliv/figure/fig7_poster_new.pdf", fig7, width=8, height=8)
 
 ### Half-life
 # fig7c_no_log <- ggplot() +
@@ -1828,9 +1858,3 @@ table1 <- kable(pk_mod_all,"html") %>%
   group_rows("Acids", 7, 9) %>%
   group_rows("Neutrals", 10, 11) %>%
   group_rows("Zwitterion", 12, 12) 
-
-
-#########################################################################################################
-#########################################################################################################
-
-

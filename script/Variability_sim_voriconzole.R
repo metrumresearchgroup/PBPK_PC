@@ -159,6 +159,13 @@ for (j in 1:num_patients){
 # write.csv(Cplasma_all, file = "../data/Cplasma_all.csv")
 # write.csv(PK_all, file = "../data/PK_all.csv")
 
+# Call output of simulation that is used for the paper
+# PK_all <- read.csv("../data/PK_all.csv")
+# PK_PT <- PK_all[,2:3]
+# PK_Berez <- PK_all[,4:5]
+# PK_RR <- PK_all[,6:7]
+# PK_Schmitt <- PK_all[,8:9]
+# PK_pksim <- PK_all[,10:11]
 
 # Calculate the percent coefficient of variation for AUC and Cmax values for each method
 CV_calc <- function(x){
@@ -216,6 +223,7 @@ pred_PT <- ggplot() +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
   ggtitle("a    PT") +
+  #ggtitle("PT") +
   th6
 
 pred_Berez <- ggplot() +
@@ -227,6 +235,7 @@ pred_Berez <- ggplot() +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
   ggtitle("b    Berez") +
+  #ggtitle("Berez") +
   th6
 
 pred_RR <- ggplot() +
@@ -238,6 +247,7 @@ pred_RR <- ggplot() +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
   ggtitle("c    RR") +
+  #ggtitle("RR") +
   scale_color_manual(values=c('grey60')) +
   th6
 
@@ -251,6 +261,7 @@ pred_Schmitt <- ggplot() +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
   ggtitle("d    Schmitt") +
+  #ggtitle("Schmitt") +
   scale_color_manual(values=c('grey60')) +
   th6
 
@@ -264,6 +275,7 @@ pred_pksim <- ggplot() +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
   ggtitle("e    PK-Sim") +
+  #ggtitle("PK-Sim") +
   scale_color_manual(values=c('grey60')) +
   th6
 

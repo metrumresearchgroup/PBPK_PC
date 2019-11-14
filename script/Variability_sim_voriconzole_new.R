@@ -1,6 +1,29 @@
 ######################################### Voriconazole - weak base ###################################
+# Clear environment
+rm(list=ls())
 
-# Reference: 
+# Load libraries
+.libPaths("lib")
+library(dplyr)
+library(ggplot2)
+library(mrgsolve)
+library(gridExtra)
+library(PKNCA)
+library(msm)
+library(kableExtra)
+source("sig.R")
+source("CalcKp_P&T.R")
+source("CalcKp_R&R.R")
+source("CalcKpu_R&R.R")
+source("CalcKp_Berez.R")
+source("CalcKp_Schmitt.R")
+source("CalcKp_pksim.R")
+
+# Set functions 
+filter <- dplyr::filter
+mutate <- dplyr::mutate
+select <- dplyr::select
+
 # Compile model
 mod <- mread("../model/voriPBPK_Adult")
 
@@ -13,13 +36,19 @@ dat_uni_cv <- read.csv("../data/unified_tissue_comp_cv.csv")
 dat_uni <- read.csv("../data/unified_tissue_comp.csv")
 
 # Number of simulated individuals (500)
-num_ind <- 5
+num_ind <- 50
 
 # Number of replicates 500)
-num_replicates <- 5
+num_replicates <- 50
 
 # Total number of simulations
 num_sim <- num_ind*num_replicates
+
+# Track replication number and ID number for each simulation
+rep_number <- rep(c(1:num_replicates), each=num_ind)
+ind_number <- rep(c(1:num_ind), times=num_replicates)
+
+set.seed(2891)
 
 # Drug-related parameters (will sample for logP, pKa, fup, and BP)
 type <- 3  # base
@@ -40,10 +69,7 @@ outFun <- function(pars){
   return(out)
 }
 
-
 dat_uni_samp <- dat_uni # replace values in the unified tissue composition data frame with sampled values
-
-
 
 # Store PK parameters (AUC and Cmax)
 # PK_PT <- matrix(0,num_ind, 2)
@@ -65,50 +91,26 @@ fup_samp <- runif(num_replicates, min=fup/2, max=fup+fup/2)
 BP_samp <- runif(num_replicates, min=BP/2, max=BP+BP/2)
 
 
-# Define function to calculate the 10th/90th percentiles and 95% prediction intervals
-quant_calc <- function(Cplasma, PI, time_all){
-  # Re-shape Cplasma so columns correspond to simulation time points
-  Cplasma_all <- matrix(Cplasma, nrow = num_ind, ncol = length(time_all), byrow = TRUE)
-  if (PI==90){
-    quant <- (matrix(0, length(time_all), 1)) %>%
-            as.data.frame() 
-    for (i in 1:length(time_all)){
-      quant[i,] <- quantile(Cplasma_all[,i], probs=0.9)
-    } 
-  } else if (PI==10){
-      quant <- (matrix(0, length(time_all), 1)) %>%
-                as.data.frame() 
-      for (i in 1:length(time_all)){
-       quant[i,] <- quantile(Cplasma_all[,i], probs=0.1)
-      } 
-  } else if (PI==95){
-      quant <- matrix(0, length(time_all), 2) %>%
-        'colnames<-' (c("lower_b", "upper_b")) %>%
-        as.data.frame()
-      for (i in 1:length(time_all)){
-        quant[i,] <- quantile(Cplasma_all[,i], probs=c(0.025,0.975))
-       } 
-  }
-  return(quant)
-}
+# Create empty data frames to store simulation results
+out_PT <- data.frame(ID=double(),RP=double(),time=double(),LUNG=double(),ADIPOSE=double(),BONE=double(),BRAIN=double(),
+                     HEART=double(),KIDNEY=double(),MUSCLE=double(),SKIN=double(),LIVER=double(),SPLEEN=double(),
+                     GUT=double(),ART=double(),VEN=double(),D=double(),PANCREAS=double(),REST=double(),
+                     Cplasma=double(),Cvenous=double(),Method=character())
+out_Berez <- out_PT
+out_RR <- out_PT  
+out_Schmitt <- out_PT
+out_pksim <- out_PT
 
 
-for (k in 1:num_replicates){
+
+for (k in 1:num_sim){
   
-  print(k) #track progress through the simulation
+  # print(k) #track progress through the simulation
   
-  # Create empty data frames to store simulation results
-  out_PT <- data.frame(ID=double(),RP=double(),time=double(),LUNG=double(),ADIPOSE=double(),BONE=double(),BRAIN=double(),
-                       HEART=double(),KIDNEY=double(),MUSCLE=double(),SKIN=double(),LIVER=double(),SPLEEN=double(),
-                       GUT=double(),ART=double(),VEN=double(),D=double(),PANCREAS=double(),REST=double(),
-                       Cplasma=double(),Cvenous=double(),Method=character())
-  out_Berez <- out_PT
-  out_RR <- out_PT  
-  out_Schmitt <- out_PT
-  out_pksim <- out_PT
+  # Identify the replicate and individual for each simulation
+  rep <- rep_number[k]; 
+  ind <- ind_number[k];
   
-  
-  for (j in 1:num_ind){
     
     # Sample tissue composition values from a truncated normal distribution with mean given in the unified_tissue_comp.csv file
     # and standard deviation calculated from the coefficient of variation reported by Ruark et al. (2014)
@@ -157,33 +159,33 @@ for (k in 1:num_replicates){
     )
     
     # Calculate Kp values for sampled parameters
-    Kps1 <- pcoeffs(logP=logP_samp[k], pKa=pKa_samp[k], fup=fup_samp[k], BP=BP_samp[k], type=type, pred="P&T", dat=dat_uni_samp)
-    Kps2 <- pcoeffs(logP=logP_samp[k], pKa=pKa_samp[k], fup=fup_samp[k], BP=BP_samp[k], type=type, pred="Berez", dat=dat_uni_samp)
-    Kps3 <- pcoeffs(logP=logP_samp[k], pKa=pKa_samp[k], fup=fup_samp[k], BP=BP_samp[k], type=type, pred="R&R", dat=dat_uni_samp)
-    Kps4 <- pcoeffs(logP=logP_samp[k], pKa=pKa_samp[k], fup=fup_samp[k], BP=BP_samp[k], pred="Schmitt", dat=dat_uni_samp)
-    Kps5 <- pcoeffs(logP=logP_samp[k], pKa=pKa_samp[k], fup=fup_samp[k], BP=BP_samp[k], pred="pksim", dat=dat_uni_samp)
-    
+    Kps1 <- pcoeffs(logP=logP_samp[rep], pKa=pKa_samp[rep], fup=fup_samp[rep], BP=BP_samp[rep], type=type, pred="P&T", dat=dat_uni_samp)
+    Kps2 <- pcoeffs(logP=logP_samp[rep], pKa=pKa_samp[rep], fup=fup_samp[rep], BP=BP_samp[rep], type=type, pred="Berez", dat=dat_uni_samp)
+    Kps3 <- pcoeffs(logP=logP_samp[rep], pKa=pKa_samp[rep], fup=fup_samp[rep], BP=BP_samp[rep], type=type, pred="R&R", dat=dat_uni_samp)
+    Kps4 <- pcoeffs(logP=logP_samp[rep], pKa=pKa_samp[rep], fup=fup_samp[rep], BP=BP_samp[rep], pred="Schmitt", dat=dat_uni_samp)
+    Kps5 <- pcoeffs(logP=logP_samp[rep], pKa=pKa_samp[rep], fup=fup_samp[rep], BP=BP_samp[rep], pred="pksim", dat=dat_uni_samp)
+  
     # Run PBPK model to generate predictions for each method
     out1 <- outFun(Kps1) %>%
       mutate(Method = "PT") %>%
-      mutate(ID = j) %>%
-      mutate(RP = k)
+      mutate(ID = ind) %>%
+      mutate(RP = rep)
     out2 <- outFun(Kps2) %>%
       mutate(Method = "Berez") %>%
-      mutate(ID = j) %>%
-      mutate(RP = k)
+      mutate(ID = ind) %>%
+      mutate(RP = rep)
     out3 <- outFun(Kps3) %>%
       mutate(Method = "RR") %>%
-      mutate(ID = j) %>%
-      mutate(RP = k)
+      mutate(ID = ind) %>%
+      mutate(RP = rep)
     out4 <- outFun(Kps4) %>%
       mutate(Method = "Schmitt") %>%
-      mutate(ID = j) %>%
-      mutate(RP = k)
+      mutate(ID = ind) %>%
+      mutate(RP = rep)
     out5 <- outFun(Kps5) %>%
       mutate(Method = "PK-Sim") %>%
-      mutate(ID = j) %>%
-      mutate(RP = k)
+      mutate(ID = ind) %>%
+      mutate(RP = rep)
     
     # Row-bind the predictions for each patient using each method
     out_PT <- rbind(out_PT, out1)
@@ -191,135 +193,72 @@ for (k in 1:num_replicates){
     out_RR <- rbind(out_RR, out3)
     out_Schmitt <- rbind(out_Schmitt, out4)
     out_pksim <- rbind(out_pksim, out5)
-    
+}
+
+# Store output of simulation
+#vori_all <- rbind(out_PT,out_Berez,out_RR,out_Schmitt,out_pksim)
+#write.csv(vori_all, file = "../data/vori_all.csv")
+
+# Read in output of simulation (50x50 scheme)
+vori_all <- read.csv("../data/vori_all.csv")
+
+out_PT <- vori_all %>%
+  filter(Method == "PT")
+out_Berez <- vori_all %>%
+  filter(Method == "Berez")
+out_RR <- vori_all %>%
+  filter(Method == "RR")
+out_Schmitt <- vori_all %>%
+  filter(Method == "Schmitt")
+out_pksim <- vori_all %>%
+  filter(Method == "PK-Sim")
+
+
+# Define function to calculate the 10th/90th percentiles and 95% prediction intervals
+med <- function(x) as.numeric(quantile(x, 0.5))
+lo1 <- function(x) as.numeric(quantile(x, 0.025))
+hi1 <- function(x) as.numeric(quantile(x, 0.975))
+lo2 <- function(x) as.numeric(quantile(x, 0.1))
+hi2 <- function(x) as.numeric(quantile(x, 0.9))
+
+
+calc_stat <- function(output){
+  out_stat <- output %>%
+    # summarize first across individuals, get average conc for each subject at each timepoint
+    group_by(RP, time) %>%
+    mutate(med = med(Cplasma),
+           lo = lo2(Cplasma),
+           hi = hi2(Cplasma)) %>%
+    ungroup() %>%
+    # now get summary across replicates
+    group_by(time) %>%
+    mutate(medMed = med(med),
+           loMed = lo1(med),
+           hiMed = hi1(med),
+           medLo = med(lo),
+           loLo = lo1(lo),
+           hiLo = hi1(lo),
+           medHi = med(hi),
+           loHi = lo1(hi),
+           hiHi = hi1(hi)) %>%
+    ungroup()
+  return(out_stat)
+}
+
+PT_stat <- calc_stat(out_PT)
+Berez_stat <- calc_stat(out_Berez)
+RR_stat <- calc_stat(out_RR)
+Schmitt_stat <- calc_stat(out_Schmitt)
+pksim_stat <- calc_stat(out_pksim)
+
+
     # Calcuate and record the AUC and Cmax values for each method
     #PK_PT[j,] <- c(pk.calc.auc(out1$Cplasma,out1$time,interval=c(sample[1],last(sample))), max(out1$Cplasma)) 
     #PK_Berez[j,] <- c(pk.calc.auc(out2$Cplasma,out2$time,interval=c(sample[1],last(sample))), max(out2$Cplasma)) 
     #PK_RR[j,] <- c(pk.calc.auc(out3$Cplasma,out3$time,interval=c(sample[1],last(sample))), max(out3$Cplasma)) 
     #PK_Schmitt[j,] <- c(pk.calc.auc(out4$Cplasma,out4$time,interval=c(sample[1],last(sample))), max(out4$Cplasma)) 
     #PK_pksim[j,] <- c(pk.calc.auc(out5$Cplasma,out5$time,interval=c(sample[1],last(sample))), max(out5$Cplasma)) 
-  }
-  
-  # Calculate the median plasma concentration
-  PT_stat <- out_PT %>%
-    group_by(time) %>%
-    mutate(median=median(Cplasma)) 
-  Berez_stat <- out_Berez %>%
-    group_by(time) %>%
-    mutate(median=median(Cplasma)) 
-  RR_stat <- out_RR %>%
-    group_by(time) %>%
-    mutate(median=median(Cplasma)) 
-  Schmitt_stat <- out_Schmitt %>%
-    group_by(time) %>%
-    mutate(median=median(Cplasma)) 
-  pksim_stat <- out_pksim %>%
-    group_by(time) %>%
-    mutate(median=median(Cplasma)) 
-  
-  
-  time_pts <- out_PT$time[1:1001] # time points from the numerical simulation in mrgsolve
-  
-  PT_stat <- PT_stat[1:length(time_pts),] %>%
-    select(RP, Method, time, median)
-  PT_stat["pred_10"] <- quant_calc(out_PT$Cplasma, PI=10, time_pts);
-  PT_stat["pred_90"] <- quant_calc(out_PT$Cplasma, PI=90, time_pts);
-  
-  Berez_stat <- Berez_stat[1:length(time_pts),] %>%
-    select(RP, Method, time, median)
-  Berez_stat["pred_10"] <- quant_calc(out_Berez$Cplasma, PI=10, time_pts);
-  Berez_stat["pred_90"] <- quant_calc(out_Berez$Cplasma, PI=90, time_pts);
-  
-  RR_stat <- RR_stat[1:length(time_pts),] %>%
-    select(RP, Method, time, median)
-  RR_stat["pred_10"] <- quant_calc(out_RR$Cplasma, PI=10, time_pts);
-  RR_stat["pred_90"] <- quant_calc(out_RR$Cplasma, PI=90, time_pts);
-  
-  Schmitt_stat <- Schmitt_stat[1:length(time_pts),] %>%
-    select(RP, Method, time, median)
-  Schmitt_stat["pred_10"] <- quant_calc(out_Schmitt$Cplasma, PI=10, time_pts);
-  Schmitt_stat["pred_90"] <- quant_calc(out_Schmitt$Cplasma, PI=90, time_pts);
-  
-  pksim_stat <- pksim_stat[1:length(time_pts),] %>%
-    select(RP, Method, time, median)
-  pksim_stat["pred_10"] <- quant_calc(out_pksim$Cplasma, PI=10, time_pts);
-  pksim_stat["pred_90"] <- quant_calc(out_pksim$Cplasma, PI=90, time_pts);
-
-  
-  if (k==1){
-    PT_stat_all <- PT_stat;
-    Berez_stat_all <- Berez_stat;
-    RR_stat_all <- RR_stat;
-    Schmitt_stat_all <- Schmitt_stat;
-    pksim_stat_all <- pksim_stat;
-  } else {
-    PT_stat_all <- rbind(PT_stat_all, PT_stat);
-    Berez_stat_all <- rbind(Berez_stat_all, Berez_stat);
-    RR_stat_all <- rbind(RR_stat_all, RR_stat);
-    Schmitt_stat_all <- rbind(Schmitt_stat_all, Schmitt_stat);
-    pksim_stat_all <- rbind(pksim_stat_all, pksim_stat);
-  }
-}
-
-PT_stat_full <- PT_stat_all %>%
-  group_by(time) %>%
-  mutate(median2 = median(median)) %>%
-  mutate(med_10 = median(pred_10)) %>%
-  mutate(med_90 = median(pred_90))
-PT_stat_full_test <- PT_stat_full[1:length(time_pts),] %>%
-  select(Method, time, median2, med_10, med_90) 
-PT_stat_full_test[c("lower_med", "upper_med")] <- quant_calc(PT_stat_all$median, PI=95, time_pts);
-PT_stat_full_test[c("lower_10", "upper_10")] <- quant_calc(PT_stat_all$pred_10, PI=95, time_pts);
-PT_stat_full_test[c("lower_90", "upper_90")] <- quant_calc(PT_stat_all$pred_90, PI=95, time_pts);
-
-
-Berez_stat_full <- Berez_stat_all %>%
-  group_by(time) %>%
-  mutate(median2 = median(median)) %>%
-  mutate(med_10 = median(pred_10)) %>%
-  mutate(med_90 = median(pred_90))
-Berez_stat_full_test <- Berez_stat_full[1:length(time_pts),] %>%
-  select(Method, time, median2, med_10, med_90) 
-Berez_stat_full_test[c("lower_med", "upper_med")] <- quant_calc(Berez_stat_all$median, PI=95, time_pts);
-Berez_stat_full_test[c("lower_10", "upper_10")] <- quant_calc(Berez_stat_all$pred_10, PI=95, time_pts);
-Berez_stat_full_test[c("lower_90", "upper_90")] <- quant_calc(Berez_stat_all$pred_90, PI=95, time_pts);
-
-
-RR_stat_full <- RR_stat_all %>%
-  group_by(time) %>%
-  mutate(median2 = median(median)) %>%
-  mutate(med_10 = median(pred_10)) %>%
-  mutate(med_90 = median(pred_90))
-RR_stat_full_test <- RR_stat_full[1:length(time_pts),] %>%
-  select(Method, time, median2, med_10, med_90) 
-RR_stat_full_test[c("lower_med", "upper_med")] <- quant_calc(RR_stat_all$median, PI=95, time_pts);
-RR_stat_full_test[c("lower_10", "upper_10")] <- quant_calc(RR_stat_all$pred_10, PI=95, time_pts);
-RR_stat_full_test[c("lower_90", "upper_90")] <- quant_calc(RR_stat_all$pred_90, PI=95, time_pts);
-
-
-Schmitt_stat_full <- Schmitt_stat_all %>%
-  group_by(time) %>%
-  mutate(median2 = median(median)) %>%
-  mutate(med_10 = median(pred_10)) %>%
-  mutate(med_90 = median(pred_90))
-Schmitt_stat_full_test <- Schmitt_stat_full[1:length(time_pts),] %>%
-  select(Method, time, median2, med_10, med_90) 
-Schmitt_stat_full_test[c("lower_med", "upper_med")] <- quant_calc(Schmitt_stat_all$median, PI=95, time_pts);
-Schmitt_stat_full_test[c("lower_10", "upper_10")] <- quant_calc(Schmitt_stat_all$pred_10, PI=95, time_pts);
-Schmitt_stat_full_test[c("lower_90", "upper_90")] <- quant_calc(Schmitt_stat_all$pred_90, PI=95, time_pts);
-
-
-pksim_stat_full <- pksim_stat_all %>%
-  group_by(time) %>%
-  mutate(median2 = median(median)) %>%
-  mutate(med_10 = median(pred_10)) %>%
-  mutate(med_90 = median(pred_90))
-pksim_stat_full_test <- pksim_stat_full[1:length(time_pts),] %>%
-  select(Method, time, median2, med_10, med_90) 
-pksim_stat_full_test[c("lower_med", "upper_med")] <- quant_calc(pksim_stat_all$median, PI=95, time_pts);
-pksim_stat_full_test[c("lower_10", "upper_10")] <- quant_calc(pksim_stat_all$pred_10, PI=95, time_pts);
-pksim_stat_full_test[c("lower_90", "upper_90")] <- quant_calc(pksim_stat_all$pred_90, PI=95, time_pts);
-
+  #}
 
 
 ##
@@ -329,14 +268,13 @@ th6 <- theme(panel.grid.major = element_blank(), panel.grid.minor = element_blan
              legend.title = element_blank(), legend.justification=c(1,1), 
              legend.position=c(1,1))
 cols <- c("Median"="black","10%"="red","90%"="blue");
-pred_PT <- 
-  ggplot() +
-  geom_ribbon(data=PT_stat_full_test, aes(x=time, ymax=upper_med, ymin=lower_med, fill="Median")) +
-  geom_ribbon(data=PT_stat_full_test, aes(x=time, ymax=upper_10, ymin=lower_10, fill="10%"), alpha=0.2) +
-  geom_ribbon(data=PT_stat_full_test, aes(x=time, ymax=upper_90, ymin=lower_90, fill="90%"), alpha=0.2) +
-  geom_line(data=PT_stat_full_test, aes(x=time, y=median2), colour="black") +
-  geom_line(data=PT_stat_full_test, aes(x=time, y=med_10), colour="red") +
-  geom_line(data=PT_stat_full_test, aes(x=time, y=med_90), colour="blue") +
+pred_PT <-  ggplot() +
+  geom_ribbon(data=PT_stat[1:1001,], aes(x=time, ymax=hiMed, ymin=loMed, fill="Median")) +
+  geom_ribbon(data=PT_stat[1:1001,], aes(x=time, ymax=hiLo, ymin=loLo, fill="10%"), alpha=0.2) +
+  geom_ribbon(data=PT_stat[1:1001,], aes(x=time, ymax=hiHi, ymin=loHi, fill="90%"), alpha=0.2) +
+  geom_line(data=PT_stat[1:1001,], aes(x=time, y=medMed), colour="black") +
+  geom_line(data=PT_stat[1:1001,], aes(x=time, y=medLo), colour="red") +
+  geom_line(data=PT_stat[1:1001,], aes(x=time, y=medHi), colour="blue") +
   geom_point(data=df, aes(x=time, y=conc), size=2.5) +
   geom_errorbar(data = df, aes(x = time, ymin=conc-sd, ymax=conc+sd), width=0.1) +
   scale_colour_manual("",values=cols) +
@@ -352,12 +290,12 @@ pred_PT <-
 
 pred_Berez <- 
   ggplot() +
-  geom_ribbon(data=Berez_stat_full_test, aes(x=time, ymax=upper_med, ymin=lower_med, fill="Median")) +
-  geom_ribbon(data=Berez_stat_full_test, aes(x=time, ymax=upper_10, ymin=lower_10, fill="10%"), alpha=0.2) +
-  geom_ribbon(data=Berez_stat_full_test, aes(x=time, ymax=upper_90, ymin=lower_90, fill="90%"), alpha=0.2) +
-  geom_line(data=Berez_stat_full_test, aes(x=time, y=median2), colour="black") +
-  geom_line(data=Berez_stat_full_test, aes(x=time, y=med_10), colour="red") +
-  geom_line(data=Berez_stat_full_test, aes(x=time, y=med_90), colour="blue") +
+  geom_ribbon(data=Berez_stat[1:1001,], aes(x=time, ymax=hiMed, ymin=loMed, fill="Median")) +
+  geom_ribbon(data=Berez_stat[1:1001,], aes(x=time, ymax=hiLo, ymin=loLo, fill="10%"), alpha=0.2) +
+  geom_ribbon(data=Berez_stat[1:1001,], aes(x=time, ymax=hiHi, ymin=loHi, fill="90%"), alpha=0.2) +
+  geom_line(data=Berez_stat[1:1001,], aes(x=time, y=medMed), colour="black") +
+  geom_line(data=Berez_stat[1:1001,], aes(x=time, y=medLo), colour="red") +
+  geom_line(data=Berez_stat[1:1001,], aes(x=time, y=medHi), colour="blue") +
   geom_point(data=df, aes(x=time, y=conc), size=2.5) +
   geom_errorbar(data = df, aes(x = time, ymin=conc-sd, ymax=conc+sd), width=0.1) +
   scale_colour_manual("",values=cols) +
@@ -373,12 +311,12 @@ pred_Berez <-
 
 pred_RR <- 
   ggplot() +
-  geom_ribbon(data=RR_stat_full_test, aes(x=time, ymax=upper_med, ymin=lower_med, fill="Median")) +
-  geom_ribbon(data=RR_stat_full_test, aes(x=time, ymax=upper_10, ymin=lower_10, fill="10%"), alpha=0.2) +
-  geom_ribbon(data=RR_stat_full_test, aes(x=time, ymax=upper_90, ymin=lower_90, fill="90%"), alpha=0.2) +
-  geom_line(data=RR_stat_full_test, aes(x=time, y=median2), colour="black") +
-  geom_line(data=RR_stat_full_test, aes(x=time, y=med_10), colour="red") +
-  geom_line(data=RR_stat_full_test, aes(x=time, y=med_90), colour="blue") +
+  geom_ribbon(data=RR_stat[1:1001,], aes(x=time, ymax=hiMed, ymin=loMed, fill="Median")) +
+  geom_ribbon(data=RR_stat[1:1001,], aes(x=time, ymax=hiLo, ymin=loLo, fill="10%"), alpha=0.2) +
+  geom_ribbon(data=RR_stat[1:1001,], aes(x=time, ymax=hiHi, ymin=loHi, fill="90%"), alpha=0.2) +
+  geom_line(data=RR_stat[1:1001,], aes(x=time, y=medMed), colour="black") +
+  geom_line(data=RR_stat[1:1001,], aes(x=time, y=medLo), colour="red") +
+  geom_line(data=RR_stat[1:1001,], aes(x=time, y=medHi), colour="blue") +
   geom_point(data=df, aes(x=time, y=conc), size=2.5) +
   geom_errorbar(data = df, aes(x = time, ymin=conc-sd, ymax=conc+sd), width=0.1) +
   scale_colour_manual("",values=cols) +
@@ -394,12 +332,12 @@ pred_RR <-
 
 pred_Schmitt <- 
   ggplot() +
-  geom_ribbon(data=Schmitt_stat_full_test, aes(x=time, ymax=upper_med, ymin=lower_med, fill="Median")) +
-  geom_ribbon(data=Schmitt_stat_full_test, aes(x=time, ymax=upper_10, ymin=lower_10, fill="10%"), alpha=0.2) +
-  geom_ribbon(data=Schmitt_stat_full_test, aes(x=time, ymax=upper_90, ymin=lower_90, fill="90%"), alpha=0.2) +
-  geom_line(data=Schmitt_stat_full_test, aes(x=time, y=median2), colour="black") +
-  geom_line(data=Schmitt_stat_full_test, aes(x=time, y=med_10), colour="red") +
-  geom_line(data=Schmitt_stat_full_test, aes(x=time, y=med_90), colour="blue") +
+  geom_ribbon(data=Schmitt_stat[1:1001,], aes(x=time, ymax=hiMed, ymin=loMed, fill="Median")) +
+  geom_ribbon(data=Schmitt_stat[1:1001,], aes(x=time, ymax=hiLo, ymin=loLo, fill="10%"), alpha=0.2) +
+  geom_ribbon(data=Schmitt_stat[1:1001,], aes(x=time, ymax=hiHi, ymin=loHi, fill="90%"), alpha=0.2) +
+  geom_line(data=Schmitt_stat[1:1001,], aes(x=time, y=medMed), colour="black") +
+  geom_line(data=Schmitt_stat[1:1001,], aes(x=time, y=medLo), colour="red") +
+  geom_line(data=Schmitt_stat[1:1001,], aes(x=time, y=medHi), colour="blue") +
   geom_point(data=df, aes(x=time, y=conc), size=2.5) +
   geom_errorbar(data = df, aes(x = time, ymin=conc-sd, ymax=conc+sd), width=0.1) +
   scale_colour_manual("",values=cols) +
@@ -415,12 +353,12 @@ pred_Schmitt <-
 
 pred_pksim <- 
   ggplot() +
-  geom_ribbon(data=pksim_stat_full_test, aes(x=time, ymax=upper_med, ymin=lower_med, fill="Median")) +
-  geom_ribbon(data=pksim_stat_full_test, aes(x=time, ymax=upper_10, ymin=lower_10, fill="10%"), alpha=0.2) +
-  geom_ribbon(data=pksim_stat_full_test, aes(x=time, ymax=upper_90, ymin=lower_90, fill="90%"), alpha=0.2) +
-  geom_line(data=pksim_stat_full_test, aes(x=time, y=median2), colour="black") +
-  geom_line(data=pksim_stat_full_test, aes(x=time, y=med_10), colour="red") +
-  geom_line(data=pksim_stat_full_test, aes(x=time, y=med_90), colour="blue") +
+  geom_ribbon(data=pksim_stat[1:1001,], aes(x=time, ymax=hiMed, ymin=loMed, fill="Median")) +
+  geom_ribbon(data=pksim_stat[1:1001,], aes(x=time, ymax=hiLo, ymin=loLo, fill="10%"), alpha=0.2) +
+  geom_ribbon(data=pksim_stat[1:1001,], aes(x=time, ymax=hiHi, ymin=loHi, fill="90%"), alpha=0.2) +
+  geom_line(data=pksim_stat[1:1001,], aes(x=time, y=medMed), colour="black") +
+  geom_line(data=pksim_stat[1:1001,], aes(x=time, y=medLo), colour="red") +
+  geom_line(data=pksim_stat[1:1001,], aes(x=time, y=medHi), colour="blue") +
   geom_point(data=df, aes(x=time, y=conc), size=2.5) +
   geom_errorbar(data = df, aes(x = time, ymin=conc-sd, ymax=conc+sd), width=0.1) +
   scale_colour_manual("",values=cols) +
@@ -434,8 +372,8 @@ pred_pksim <-
   ggtitle("e   PK-Sim") +
   th6 
 
-#fig8_new <- grid.arrange(pred_PT, pred_Berez, pred_RR, pred_Schmitt, pred_pksim, ncol=2, nrow=3)
-#ggsave(file="../deliv/figure/fig8_new.jpg", fig8_new, width=8, height=12)
+fig8_new <- grid.arrange(pred_PT, pred_Berez, pred_RR, pred_Schmitt, pred_pksim, ncol=2, nrow=3)
+ggsave(file="../deliv/figure/fig8_new_test.jpg", fig8_new, width=8, height=12)
 
 
 

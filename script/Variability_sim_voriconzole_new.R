@@ -202,19 +202,42 @@ for (k in 1:num_sim){
 #write.csv(vori_reduc, file = "../data/vori_reduc.csv")
 
 # Read in output of simulation (50x50 scheme)
-vori_reduc <- read.csv("../data/vori_reduc.csv")
+# vori_reduc <- read.csv("../data/vori_reduc.csv")
+# out_PT <- vori_reduc %>%
+#   filter(Method == "PT")
+# out_Berez <- vori_reduc %>%
+#   filter(Method == "Berez")
+# out_RR <- vori_reduc %>%
+#   filter(Method == "RR")
+# out_Schmitt <- vori_reduc %>%
+#   filter(Method == "Schmitt")
+# out_pksim <- vori_reduc %>%
+#   filter(Method == "PK-Sim")
 
 
-out_PT <- vori_reduc %>%
-  filter(Method == "PT")
-out_Berez <- vori_reduc %>%
-  filter(Method == "Berez")
-out_RR <- vori_reduc %>%
-  filter(Method == "RR")
-out_Schmitt <- vori_reduc %>%
-  filter(Method == "Schmitt")
-out_pksim <- vori_reduc %>%
-  filter(Method == "PK-Sim")
+# Save the outputs from each method separately (file size issues)
+out_PT <- out_PT %>%
+  select(ID, time, Cplasma, Method, RP)
+out_Berez <- out_Berez %>%
+  select(ID, time, Cplasma, Method, RP)
+out_RR <- out_RR %>%
+  select(ID, time, Cplasma, Method, RP)
+out_Schmitt <- out_Schmitt %>%
+  select(ID, time, Cplasma, Method, RP)
+out_pksim <- out_pksim %>%
+  select(ID, time, Cplasma, Method, RP)
+write.csv(out_PT, file = "../data/vori_PT.csv")
+write.csv(out_Berez, file = "../data/vori_Berez.csv")
+write.csv(out_RR, file = "../data/vori_RR.csv")
+write.csv(out_Schmitt, file = "../data/vori_Schmitt.csv")
+write.csv(out_pksim, file = "../data/vori_pksim.csv")
+
+# Read in output of simulation
+out_PT <- read.csv("../data/vori_PT.csv")
+out_Berez <- read.csv("../data/vori_Berez.csv")
+out_RR <- read.csv("../data/vori_RR.csv")
+out_Schmitt <- read.csv("../data/vori_Schmitt.csv")
+out_pksim <- read.csv("../data/vori_pksim.csv")
 
 
 # Define function to calculate the 10th/90th percentiles and 95% prediction intervals
@@ -377,7 +400,6 @@ pred_pksim <-
 
 fig8_new <- grid.arrange(pred_PT, pred_Berez, pred_RR, pred_Schmitt, pred_pksim, ncol=2, nrow=3)
 ggsave(file="../deliv/figure/fig8_new_test.jpg", fig8_new, width=8, height=12)
-
 
 
 

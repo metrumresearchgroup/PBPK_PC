@@ -197,20 +197,23 @@ for (k in 1:num_sim){
 
 # Store output of simulation
 #vori_all <- rbind(out_PT,out_Berez,out_RR,out_Schmitt,out_pksim)
-#write.csv(vori_all, file = "../data/vori_all.csv")
+#vori_reduc <- vori_all %>%
+#  select(ID, time, Cplasma, Method, RP)
+#write.csv(vori_reduc, file = "../data/vori_reduc.csv")
 
 # Read in output of simulation (50x50 scheme)
-vori_all <- read.csv("../data/vori_all.csv")
+vori_reduc <- read.csv("../data/vori_reduc.csv")
 
-out_PT <- vori_all %>%
+
+out_PT <- vori_reduc %>%
   filter(Method == "PT")
-out_Berez <- vori_all %>%
+out_Berez <- vori_reduc %>%
   filter(Method == "Berez")
-out_RR <- vori_all %>%
+out_RR <- vori_reduc %>%
   filter(Method == "RR")
-out_Schmitt <- vori_all %>%
+out_Schmitt <- vori_reduc %>%
   filter(Method == "Schmitt")
-out_pksim <- vori_all %>%
+out_pksim <- vori_reduc %>%
   filter(Method == "PK-Sim")
 
 

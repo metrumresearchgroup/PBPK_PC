@@ -1605,20 +1605,6 @@ fig6 <- grid.arrange(plot_met, plot_vori, plot_nif, plot_dig, plot_oflo, ncol=2,
 figS2 <- grid.arrange(plot_caf, plot_alf, plot_mid, plot_nev, plotS, plotR, plot_art, ncol=2, nrow=4) 
 #ggsave(file="../deliv/figure/figS2.png", figS2, width=8, height=16)
 
-#########################################################################################################
-#########################################################################################################
-
-#########################################################################################################
-######################################## CHUNK 6: Figure 8 ##############################################
-#########################################################################################################
-## This figure shows prediction ranges for representative drugs after incorporating inter-individual 
-## variability and uncertainty in physiological and drug-related parameters, respectively
-
-# Voriconazole
-source("Variability_sim_voriconazole.R")
-fig8 <- grid.arrange(pred_PT, pred_Berez, pred_RR, pred_Schmitt, pred_pksim, ncol=2, nrow=3)
-#ggsave(file="../deliv/figure/fig8.png", fig8, width=8, height=12)
-
 
 #########################################################################################################
 #########################################################################################################

@@ -148,7 +148,7 @@ fig2a <- ggplot() +
   ylim(0,max(drug_all_PT[1:2])) +
   xlab("Predicted Vss") +
   ylab("Reported Vss") +
-  ggtitle("a    PT") + 
+  ggtitle("A    PT") + 
   th1 +
   geom_text(aes(x=max(drug_all_PT[1:2])*pcc_x, y=max(drug_all_PT[1:2])*pcc_y, label=corr_coeff_PT), parse=TRUE)
 
@@ -203,7 +203,7 @@ fig2b <- ggplot() +
   ylim(0,max(drug_all_Berez[1:2])) +
   xlab("Predicted Kp") +
   ylab("Reported Kp (PK-Sim)") +
-  ggtitle("b    Berez") + 
+  ggtitle("B    Berez") + 
   th1 +
   geom_text(aes(x=max(drug_all_Berez[1:2])*pcc_x, y=max(drug_all_Berez[1:2])*pcc_y, label=corr_coeff_Berez), parse=TRUE)
 
@@ -278,7 +278,7 @@ fig2c <- ggplot() +
   ylim(0,max(drug_all_RR[1:2])) +
   xlab("Predicted Kpu") +
   ylab("Reported Kpu") +
-  ggtitle("c    RR") + 
+  ggtitle("C    RR") + 
   th1 +
   geom_text(aes(x=max(drug_all_RR[1:2])*pcc_x, y=max(drug_all_RR[1:2])*pcc_y, label=corr_coeff_RR), parse=TRUE)
 
@@ -340,7 +340,7 @@ fig2d <- ggplot() +
   ylim(0,max(drug_all_Schmitt[1:2])) +
   xlab("Predicted Kp") +
   ylab("Reported Kp (PK-Sim)") +
-  ggtitle("d    Schmitt") + 
+  ggtitle("D    Schmitt") + 
   th1 +
   geom_text(aes(x=max(drug_all_Schmitt[1:2])*pcc_x, y=max(drug_all_Schmitt[1:2])*pcc_y, label=corr_coeff_Schmitt), parse=TRUE)
 
@@ -396,7 +396,7 @@ fig2e <- ggplot() +
   ylim(0,max(drug_all_pksim[1:2])) +
   xlab("Predicted Kp") +
   ylab("Reported Kp (PK-Sim)") +
-  ggtitle("e    PK-Sim") + 
+  ggtitle("E    PK-Sim") + 
   th1 +
   geom_text(aes(x=max(drug_all_pksim[1:2])*pcc_x, y=max(drug_all_pksim[1:2])*pcc_y, label=corr_coeff_pksim), parse=TRUE)
 
@@ -497,7 +497,7 @@ fig3a <- ggplot() +
   ylim(0,max(drug_all_PT[1:2])) +
   xlab("Predicted Kp (RR tissue comp.)") +
   ylab("Predicted Kp (reported tissue comp.)") +
-  ggtitle("a    PT with RR tissue comp.") +
+  ggtitle("A    PT with RR tissue comp.") +
   #ggtitle("PT with RR tissue comp.") +
   theme(legend.title =  element_blank()) +
   th1 +
@@ -580,7 +580,7 @@ fig3b <- ggplot() +
   ylim(0,max(drug_all_Berez[1:2])) +
   xlab("Predicted Kp (RR tissue comp.)") +
   ylab("Predicted Kp (reported tissue comp.)") +
-  ggtitle("b    Berez with RR tissue comp.") +
+  ggtitle("B    Berez with RR tissue comp.") +
   #ggtitle("Berez with RR tissue comp.") +
   theme(legend.title =  element_blank()) +
   th1 +
@@ -665,7 +665,7 @@ fig3c <- ggplot() +
   ylim(0,max(drug_all_Schmitt[1:2])) +
   xlab("Predicted Kp (RR tissue comp.)") +
   ylab("Predicted Kp (reported tissue comp.)") +
-  ggtitle("c    Schmitt with RR tissue comp.") +
+  ggtitle("C    Schmitt with RR tissue comp.") +
   #ggtitle("Schmitt with RR tissue comp.") +
   theme(legend.title =  element_blank()) +
   th1 +
@@ -749,7 +749,7 @@ fig3d <- ggplot() +
   ylim(0,max(drug_all_pksim[1:2])) +
   xlab("Predicted Kp (RR tissue comp.)") +
   ylab("Predicted Kp (reported tissue comp.") +
-  ggtitle("d    PK-Sim with RR tissue comp.") +
+  ggtitle("D    PK-Sim with RR tissue comp.") +
   #ggtitle("PK-Sim with RR tissue comp.") +
   theme(legend.title =  element_blank()) +
   th1 +
@@ -867,7 +867,7 @@ fig4a <- ggplot() +
   xlab("Predicted Kp (standardized tissue composition)") +
   #xlab("Predicted Kp (unified tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
-  ggtitle("a    PT") +
+  ggtitle("A    PT") +
   #ggtitle("PT") +
   theme(legend.title =  element_blank()) +
   th1 +
@@ -937,7 +937,7 @@ fig4b <- ggplot() +
   xlab("Predicted Kp (standardized tissue composition)") +
   #xlab("Predicted Kp (unified tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
-  ggtitle("b    Berez") +
+  ggtitle("B    Berez") +
   #ggtitle("Berez") +
   theme(legend.title =  element_blank()) +
   th1 +
@@ -1005,7 +1005,7 @@ fig4c <- ggplot() +
   xlab("Predicted Kp (standardized tissue composition)") +
   #xlab("Predicted Kp (unified tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
-  ggtitle("c   RR") +
+  ggtitle("C   RR") +
   #ggtitle("RR") +
   theme(legend.title =  element_blank()) +
   th1 +
@@ -1072,7 +1072,7 @@ fig4d <- ggplot() +
   xlab("Predicted Kp (standardized tissue composition)") +
   #xlab("Predicted Kp (unified tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
-  ggtitle("d   Schmitt") +
+  ggtitle("D   Schmitt") +
   #ggtitle("Schmitt") +
   theme(legend.title =  element_blank()) +
   th1 +
@@ -1139,7 +1139,7 @@ fig4e <- ggplot() +
   xlab("Predicted Kp (standardized tissue composition)") +
   #xlab("Predicted Kp (unified tissue composition)") +
   ylab("Predicted Kp (reported tissue composition)") +
-  ggtitle("e   PK-Sim") +
+  ggtitle("E   PK-Sim") +
   #ggtitle("PK-Sim") +
   theme(legend.title =  element_blank()) +
   th1 +
@@ -1214,7 +1214,7 @@ fig5_met <- ggplot(data=met_kp, aes(x=Tissue, y=Kp)) +
   ylim(0,max(met_kp$Kp)) +
   xlab("Tissue") +
   ylab("Predicted Kp") +
-  ggtitle("a    Metoprolol") +
+  ggtitle("A    Metoprolol") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
@@ -1228,7 +1228,7 @@ fig5_caf <- ggplot(data=caf_kp, aes(x=Tissue, y=Kp)) +
   ylim(0,max(caf_kp$Kp)) +
   xlab("") +
   ylab("Predicted Kp") +
-  ggtitle("a    Caffeine") +
+  ggtitle("A    Caffeine") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
@@ -1244,7 +1244,7 @@ fig5_vori <- ggplot(data=vori_kp, aes(x=Tissue, y=Kp)) +
   ylim(0,max(vori_kp$Kp)) +
   xlab("Tissue") +
   ylab("Predicted Kp") +
-  ggtitle("b    Voriconazole") +
+  ggtitle("B    Voriconazole") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
@@ -1258,7 +1258,7 @@ fig5_alf <- ggplot(data=alf_kp, aes(x=Tissue, y=Kp)) +
   ylim(0,max(alf_kp$Kp)) +
   xlab("Tissue") +
   ylab("Predicted Kp") +
-  ggtitle("b    Alfentanil") +
+  ggtitle("B    Alfentanil") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
@@ -1273,7 +1273,7 @@ fig5_mid <- ggplot(data=mid_kp, aes(x=Tissue, y=Kp)) +
   ylim(0,max(mid_kp$Kp)) +
   xlab("Tissue") +
   ylab("Predicted Kp") +
-  ggtitle("c    Midazolam") +
+  ggtitle("C    Midazolam") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
@@ -1287,7 +1287,7 @@ fig5_nev <- ggplot(data=nev_kp, aes(x=Tissue, y=Kp)) +
   ylim(0,max(nev_kp$Kp)) +
   xlab("Tissue") +
   ylab("Predicted Kp") +
-  ggtitle("d    Nevirapine") +
+  ggtitle("D    Nevirapine") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
@@ -1303,7 +1303,7 @@ fig5_thio <- ggplot(data=thio_kp, aes(x=Tissue, y=Kp)) +
   ylim(0,max(thio_kp$Kp)) +
   xlab("Tissue") +
   ylab("Predicted Kp") +
-  ggtitle("e    S-Thiopental") +
+  ggtitle("E    S-Thiopental") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
@@ -1317,7 +1317,7 @@ fig5_nif <- ggplot(data=nif_kp, aes(x=Tissue, y=Kp)) +
   ylim(0,max(nif_kp$Kp)) +
   xlab("Tissue") +
   ylab("Predicted Kp") +
-  ggtitle("c    Nifedipine") +
+  ggtitle("C    Nifedipine") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
@@ -1333,7 +1333,7 @@ fig5_dig <- ggplot(data=dig_kp, aes(x=Tissue, y=Kp)) +
   ylim(0,max(dig_kp$Kp)) +
   xlab("Tissue") +
   ylab("Predicted Kp") +
-  ggtitle("d    Digoxin") +
+  ggtitle("D    Digoxin") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
@@ -1347,7 +1347,7 @@ fig5_art <- ggplot(data=art_kp, aes(x=Tissue, y=Kp)) +
   ylim(0,max(art_kp$Kp)) +
   xlab("Tissue") +
   ylab("Predicted Kp") +
-  ggtitle("f    Artemether") +
+  ggtitle("F    Artemether") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
@@ -1363,7 +1363,7 @@ fig5_oflo <- ggplot(data=oflo_kp, aes(x=Tissue, y=Kp)) +
   ylim(0,max(oflo_kp$Kp)+1.4) +
   xlab("Tissue") +
   ylab("Predicted Kp") +
-  ggtitle("e    Ofloxacin") +
+  ggtitle("E    Ofloxacin") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
@@ -1396,7 +1396,7 @@ plot_met <- ggplot() +
   scale_y_log10() +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
-  ggtitle("a  Metoprolol") +
+  ggtitle("A  Metoprolol") +
   #ggtitle("Metoprolol") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
@@ -1414,7 +1414,7 @@ plot_caf <- ggplot() +
   xlim(-0.1,24.1) +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
-  ggtitle("a  Caffeine") +
+  ggtitle("A  Caffeine") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   scale_color_manual("", values=c('grey60','grey60','grey60','grey60','grey60','grey60')) +
@@ -1432,7 +1432,7 @@ plot_vori <- ggplot() +
   xlim(-0.1,10.1) +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
-  ggtitle("b  Voriconazole") +
+  ggtitle("B  Voriconazole") +
   #ggtitle("Voriconazole") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
@@ -1450,7 +1450,7 @@ plot_alf <- ggplot() +
   scale_y_log10() +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
-  ggtitle("b  Alfentanil") +
+  ggtitle("B  Alfentanil") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   scale_color_manual("", values=c('grey60','grey60','grey60','grey60','grey60','grey60')) +
@@ -1466,7 +1466,7 @@ plot_mid <- ggplot() +
   xlim(0,6.1) +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
-  ggtitle("c  Midazolam") +
+  ggtitle("C  Midazolam") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   scale_color_manual("", values=c('grey60','grey60','grey60','grey60','grey60','grey60')) +
@@ -1482,7 +1482,7 @@ plot_nev <- ggplot() +
   #ylim(0,350) +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
-  ggtitle("d  Nevirapine") +
+  ggtitle("D  Nevirapine") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   scale_color_manual("", values=c('grey60','grey60','grey60','grey60','grey60','grey60')) +
@@ -1500,7 +1500,7 @@ plotS <-  ggplot() +
   scale_y_log10() +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
-  ggtitle("e  S-Thiopental") +
+  ggtitle("E  S-Thiopental") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   scale_color_manual("", values=c('grey60','grey60','grey60','grey60','grey60','grey60')) +
@@ -1513,7 +1513,7 @@ plotR <-  ggplot() +
   scale_y_log10() +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
-  ggtitle("f  R-Thiopental") +
+  ggtitle("F  R-Thiopental") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   scale_color_manual("", values=c('grey60','grey60','grey60','grey60','grey60','grey60')) +
@@ -1532,7 +1532,7 @@ plot_nif <- ggplot() +
   ylim(0,1.65) +
   xlab("Time (h)") +
   ylab("Plasma concentraction (mg/L)") +
-  ggtitle("c  Nifedipine") +
+  ggtitle("C  Nifedipine") +
   #ggtitle("Nifedipine") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
@@ -1551,7 +1551,7 @@ plot_dig <- ggplot() +
   scale_y_log10() +
   xlab("Time (h)") +
   ylab("Percentage dose/L") +
-  ggtitle("d  Digoxin") +
+  ggtitle("D  Digoxin") +
   #ggtitle("Digoxin") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
@@ -1570,7 +1570,7 @@ plot_art <- ggplot() +
   ylim(0,0.35) +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
-  ggtitle("g  Artemether") +
+  ggtitle("G  Artemether") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   scale_color_manual("", values=c('grey60','grey60','grey60','grey60','grey60','grey60')) +
@@ -1588,7 +1588,7 @@ plot_oflo <- ggplot() +
   xlim(0,25) + 
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
-  ggtitle("e  Ofloxacin") +
+  ggtitle("E  Ofloxacin") +
   #ggtitle("Ofloxacin") +
   scale_linetype_manual("", values=c(1,1,1,1,1,1,1)) +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
@@ -1604,20 +1604,6 @@ fig6 <- grid.arrange(plot_met, plot_vori, plot_nif, plot_dig, plot_oflo, ncol=2,
 
 figS2 <- grid.arrange(plot_caf, plot_alf, plot_mid, plot_nev, plotS, plotR, plot_art, ncol=2, nrow=4) 
 #ggsave(file="../deliv/figure/figS2.png", figS2, width=8, height=16)
-
-#########################################################################################################
-#########################################################################################################
-
-#########################################################################################################
-######################################## CHUNK 6: Figure 8 ##############################################
-#########################################################################################################
-## This figure shows prediction ranges for representative drugs after incorporating inter-individual 
-## variability and uncertainty in physiological and drug-related parameters, respectively
-
-# Voriconazole
-source("Variability_sim_voriconazole.R")
-fig8 <- grid.arrange(pred_PT, pred_Berez, pred_RR, pred_Schmitt, pred_pksim, ncol=2, nrow=3)
-#ggsave(file="../deliv/figure/fig8.png", fig8, width=8, height=12)
 
 
 #########################################################################################################
@@ -1670,7 +1656,7 @@ fig7a <- ggplot() +
   scale_y_log10(limits = c(1e-1,1e6)) +
   xlab("") +
   ylab("Percent error") +
-  ggtitle("a  RMSE") +
+  ggtitle("A  RMSE") +
   #ggtitle("RMSE") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
@@ -1700,7 +1686,7 @@ fig7b <- ggplot() +
   scale_y_log10(limits = c(1e-1,1e6)) +
   xlab("") +
   ylab("Percent error") +
-  ggtitle("b  AUC error") +
+  ggtitle("B  AUC error") +
   #ggtitle("AUC error") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
@@ -1727,14 +1713,14 @@ fig7c <- ggplot() +
   scale_y_log10(limits = c(1e-1,1e6)) +
   xlab("") +
   ylab("Percent error") +
-  ggtitle("c  Half-life error") +
+  ggtitle("C  Half-life error") +
   #ggtitle("Half-life error") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
 fig7c
 
 fig7 <- grid.arrange(fig7a, fig7b, fig7c, ncol=3, nrow=1)
-ggsave(file="../deliv/figure/fig7.png", fig7, width=8, height=6)
+#ggsave(file="../deliv/figure/fig7.png", fig7, width=8, height=6)
 #ggsave(file="../deliv/figure/fig7_poster_new.pdf", fig7, width=8, height=8)
 
 ### Half-life

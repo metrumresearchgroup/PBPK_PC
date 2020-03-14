@@ -11,6 +11,7 @@ library(gridExtra)
 library(PKNCA)
 library(msm)
 library(kableExtra)
+library(cowplot)
 source("sig.R")
 source("CalcKp_P&T.R")
 source("CalcKp_R&R.R")
@@ -1411,6 +1412,7 @@ plot_caf <- ggplot() +
   geom_point(data=out_reduced,aes(x=time, y=Cplasma, shape=Method),size=2, stroke=0.6) +
   geom_point(data=df, aes(x=time, y=conc), size=2) +
   geom_errorbar(data=df, aes(x=time, ymin=pmax(conc-(sd_max-conc),0), ymax=sd_max), width=.1) +
+  scale_y_log10() +
   xlim(-0.1,24.1) +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
@@ -1429,6 +1431,7 @@ plot_vori <- ggplot() +
   geom_point(data=out_reduced,aes(x=time, y=Cplasma, shape=Method),size=2, stroke=0.6) +
   geom_point(data=df, aes(x=time, y=conc), size=2.5) +
   geom_errorbar(data = df, aes(x = time, ymin=conc-sd, ymax=conc+sd), width=0.1) +
+  scale_y_log10() +
   xlim(-0.1,10.1) +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
@@ -1463,6 +1466,7 @@ plot_mid <- ggplot() +
   geom_point(data=out_reduced,aes(x=time, y=Cplasma, shape=Method),size=2, stroke=0.5) +
   geom_point(data=df, aes(x=time, y=conc), size=2.5) +
   geom_errorbar(data = df, aes(x = time, ymin = conc-(max_sd-conc), ymax = max_sd), width=.1) +
+  scale_y_log10() +
   xlim(0,6.1) +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
@@ -1478,6 +1482,7 @@ plot_nev <- ggplot() +
   geom_line(data=out_all,aes(x=time, y=Cplasma, linetype=Method, color=Method)) +
   geom_point(data=out_reduced,aes(x=time, y=Cplasma, shape=Method),size=2, stroke=0.6) +
   geom_point(data = df, aes(time, conc), size=2.5) +
+  scale_y_log10() +
   xlim(0,100) +
   #ylim(0,350) +
   xlab("Time (h)") +
@@ -1528,8 +1533,9 @@ plot_nif <- ggplot() +
   geom_point(data=out_reduced,aes(x=time, y=Cplasma, shape=Method),size=2, stroke=0.6) +
   geom_point(data = df, aes(time, conc), size=2.5) +
   geom_errorbar(data = df, aes(time, ymin = conc-(max_sd-conc), ymax = max_sd), width=.1) +
+  scale_y_continuous(trans = "log10") +
   xlim(0,5.7) +
-  ylim(0,1.65) +
+  #ylim(0,1.65) +
   xlab("Time (h)") +
   ylab("Plasma concentraction (mg/L)") +
   ggtitle("C  Nifedipine") +
@@ -1567,7 +1573,8 @@ plot_art <- ggplot() +
   geom_point(data = df, aes(time, conc), size=2.5) +
   geom_errorbar(data = df, aes(time, ymin = pmax(conc-(max_sd-conc),0), ymax = max_sd), width=.1) +
   xlim(0,16.2) +
-  ylim(0,0.35) +
+  #ylim(0,0.35) +
+  scale_y_continuous(trans = "log10") +
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
   ggtitle("G  Artemether") +
@@ -1585,6 +1592,7 @@ plot_oflo <- ggplot() +
   geom_point(data=out_reduced,aes(x=time, y=Cplasma, shape=Method),size=2, stroke=0.6) +
   geom_point(data=df, aes(x=time, y=conc), size=2.5) +
   geom_errorbar(data=df, aes(x=time, ymin=conc-(sd_max-conc), ymax=sd_max), width=.1) +
+  scale_y_continuous(trans = "log10") +
   xlim(0,25) + 
   xlab("Time (h)") +
   ylab("Plasma concentration (mg/L)") +
@@ -1595,14 +1603,43 @@ plot_oflo <- ggplot() +
   scale_color_manual("", values=c('grey60','grey60','grey60','grey60','grey60','grey60')) +
   th6
 
+legend_fig6 <- get_legend(
+  # create some space to the left of the legend
+  plot_met + theme(legend.position = "top",
+                   legend.justification = "center")
+)
 
-fig6 <- grid.arrange(plot_met, plot_vori, plot_nif, plot_dig, plot_oflo, ncol=2, nrow=3)
+fig6 <- plot_grid(plot_met + theme(legend.position = "none"), 
+                     plot_vori + theme(legend.position = "none"),
+                     plot_nif + theme(legend.position = "none"),
+                     plot_dig + theme(legend.position = "none"),
+                     plot_oflo + theme(legend.position = "none"), 
+                     ncol=3, nrow=2)
+
+fig6 <- plot_grid(legend_fig6, fig6, ncol = 1, rel_heights = c(.1, 1))
+fig6
 #ggsave(file="../deliv/figure/fig6.png", fig6, width=8, height=12)
 
 #fig6_test <- grid.arrange(plot_met, plot_vori, plot_nif, plot_dig, plot_oflo, ncol=5, nrow=1)
 #ggsave(file="../deliv/figure/fig6_poster_test.pdf", fig6_test, width=20, height=4)
 
-figS2 <- grid.arrange(plot_caf, plot_alf, plot_mid, plot_nev, plotS, plotR, plot_art, ncol=2, nrow=4) 
+legend_figS2 <- get_legend(
+  # create some space to the left of the legend
+  plot_caf + theme(legend.position = "top",
+                   legend.justification = "center")
+)
+
+figS2 <- plot_grid(plot_caf + theme(legend.position = "none"), 
+                     plot_alf + theme(legend.position = "none"),
+                     plot_mid + theme(legend.position = "none"),
+                     plot_nev + theme(legend.position = "none"),
+                     plotS + theme(legend.position = "none"),
+                     plotR + theme(legend.position = "none"),
+                     plot_art + theme(legend.position = "none"),
+                     ncol=3, nrow=3)
+
+figS2 <- plot_grid(legend_figS2, figS2, ncol = 1, rel_heights = c(.1, 1)) 
+figS2
 #ggsave(file="../deliv/figure/figS2.png", figS2, width=8, height=16)
 
 
@@ -1656,44 +1693,15 @@ fig7a <- ggplot() +
   scale_y_log10(limits = c(1e-1,1e6)) +
   xlab("") +
   ylab("Percent error") +
-  ggtitle("A  RMSE") +
+  ggtitle("RMSE") +
   #ggtitle("RMSE") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
 fig7a
 
-### AUC error
-fig7b <- ggplot() +
-  geom_point(data=pk_met, aes(x=1, y=AUCerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_caf, aes(x=2, y=AUCerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_vori, aes(x=4, y=AUCerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_alf, aes(x=5, y=AUCerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_nev, aes(x=6, y=AUCerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_mid, aes(x=7, y=AUCerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_thio_S, aes(x=9, y=AUCerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_thio_R, aes(x=10, y=AUCerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_nif, aes(x=11, y=AUCerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_dig, aes(x=13, y=AUCerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_art, aes(x=14, y=AUCerror, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_oflo, aes(x=16, y=AUCerror, shape=Method),size=size, stroke=stroke) +
-  #geom_abline(intercept = 0, slope = 0) + # Using error
-  scale_x_continuous(breaks=c(1,2,4,5,6,7,9,10,11,13,14,16),
-                     labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
-                                "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
-                                "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
-  #ylim(-27,26) + #Using error
-  #ylim(0, 4200) +
-  scale_y_log10(limits = c(1e-1,1e6)) +
-  xlab("") +
-  ylab("Percent error") +
-  ggtitle("B  AUC error") +
-  #ggtitle("AUC error") +
-  scale_shape_manual("", values=c(0,2,3,4,5,8)) +
-  th7
-fig7b
 
 ### Half-life (semi-log plot)
-fig7c <- ggplot() +
+fig7b <- ggplot() +
   geom_point(data=pk_met, aes(x=1, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
   geom_point(data=pk_caf, aes(x=2, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
   geom_point(data=pk_vori, aes(x=4, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
@@ -1713,13 +1721,13 @@ fig7c <- ggplot() +
   scale_y_log10(limits = c(1e-1,1e6)) +
   xlab("") +
   ylab("Percent error") +
-  ggtitle("C  Half-life error") +
+  ggtitle("Half-life error") +
   #ggtitle("Half-life error") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
-fig7c
+fig7b
 
-fig7 <- grid.arrange(fig7a, fig7b, fig7c, ncol=3, nrow=1)
+fig7 <- plot_grid(fig7a, fig7b, ncol=2, nrow=1, labels=c("A","B"))
 #ggsave(file="../deliv/figure/fig7.png", fig7, width=8, height=6)
 #ggsave(file="../deliv/figure/fig7_poster_new.pdf", fig7, width=8, height=8)
 
@@ -1756,55 +1764,55 @@ fig7 <- grid.arrange(fig7a, fig7b, fig7c, ncol=3, nrow=1)
 
 
 ### Generate table (drugs in the rows, columns of RMSE, AUC, and half-life error)
-pk_met_mod <- c(pk_met$RelRMSE,pk_met$AUCerror,pk_met$hlerror) %>%
+pk_met_mod <- c(pk_met$RelRMSE,pk_met$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Metoprolol")
-pk_caf_mod <- c(pk_caf$RelRMSE,pk_caf$AUCerror,pk_caf$hlerror) %>%
+pk_caf_mod <- c(pk_caf$RelRMSE,pk_caf$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Caffeine")
 
-pk_vori_mod <- c(pk_vori$RelRMSE,pk_vori$AUCerror,pk_vori$hlerror) %>%
+pk_vori_mod <- c(pk_vori$RelRMSE,pk_vori$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Voriconazole")
-pk_alf_mod <- c(pk_alf$RelRMSE,pk_alf$AUCerror,pk_alf$hlerror) %>%
+pk_alf_mod <- c(pk_alf$RelRMSE,pk_alf$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Alfentanil")
-pk_nev_mod <- c(pk_nev$RelRMSE,pk_nev$AUCerror,pk_nev$hlerror) %>%
+pk_nev_mod <- c(pk_nev$RelRMSE,pk_nev$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Nevirapine")
-pk_mid_mod <- c(pk_mid$RelRMSE,pk_mid$AUCerror,pk_mid$hlerror) %>%
+pk_mid_mod <- c(pk_mid$RelRMSE,pk_mid$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Midazolam")
 
-pk_thio_S_mod <- c(pk_thio_S$RelRMSE,pk_thio_S$AUCerror,pk_thio_S$hlerror) %>%
+pk_thio_S_mod <- c(pk_thio_S$RelRMSE,pk_thio_S$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("S-Thiopental")
-pk_thio_R_mod <- c(pk_thio_R$RelRMSE,pk_thio_R$AUCerror,pk_thio_R$hlerror) %>%
+pk_thio_R_mod <- c(pk_thio_R$RelRMSE,pk_thio_R$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("R-Thiopental")
-pk_nif_mod <- c(pk_nif$RelRMSE,pk_nif$AUCerror,pk_nif$hlerror) %>%
+pk_nif_mod <- c(pk_nif$RelRMSE,pk_nif$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Nifedipine")
 
-pk_dig_mod <- c(pk_dig$RelRMSE,pk_dig$AUCerror,pk_dig$hlerror) %>%
+pk_dig_mod <- c(pk_dig$RelRMSE,pk_dig$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Digoxin")
-pk_art_mod <- c(pk_art$RelRMSE,pk_art$AUCerror,pk_art$hlerror) %>%
+pk_art_mod <- c(pk_art$RelRMSE,pk_art$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Artemether")
 
-pk_oflo_mod <- c(pk_oflo$RelRMSE,pk_oflo$AUCerror,pk_oflo$hlerror) %>%
+pk_oflo_mod <- c(pk_oflo$RelRMSE,pk_oflo$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Ofloxacin")
@@ -1819,12 +1827,12 @@ pk_mod <- rbind(pk_met_mod, pk_caf_mod, pk_vori_mod, pk_alf_mod, pk_nev_mod, pk_
 #                  "PT","Berez","RR","Schmitt","PK-Sim"))
 
 # Include row of average values for each method (over all drugs)
-pk_mod_avg <- rbind(c(pk_met$RelRMSE,pk_met$AUCerror,pk_met$hlerror), c(pk_caf$RelRMSE,pk_caf$AUCerror,pk_caf$hlerror),
-                    c(pk_vori$RelRMSE,pk_vori$AUCerror,pk_vori$hlerror), c(pk_alf$RelRMSE,pk_alf$AUCerror,pk_alf$hlerror),
-                    c(pk_nev$RelRMSE,pk_nev$AUCerror,pk_nev$hlerror), c(pk_mid$RelRMSE,pk_mid$AUCerror,pk_mid$hlerror),
-                    c(pk_thio_S$RelRMSE,pk_thio_S$AUCerror,pk_thio_S$hlerror), c(pk_thio_R$RelRMSE,pk_thio_R$AUCerror,pk_thio_R$hlerror),
-                    c(pk_nif$RelRMSE,pk_nif$AUCerror,pk_nif$hlerror), c(pk_dig$RelRMSE,pk_dig$AUCerror,pk_dig$hlerror),
-                    c(pk_art$RelRMSE,pk_art$AUCerror,pk_art$hlerror), c(pk_oflo$RelRMSE,pk_oflo$AUCerror,pk_oflo$hlerror))
+pk_mod_avg <- rbind(c(pk_met$RelRMSE,pk_met$hlerror), c(pk_caf$RelRMSE,pk_caf$hlerror),
+                    c(pk_vori$RelRMSE,pk_vori$hlerror), c(pk_alf$RelRMSE,pk_alf$hlerror),
+                    c(pk_nev$RelRMSE,pk_nev$hlerror), c(pk_mid$RelRMSE,pk_mid$hlerror),
+                    c(pk_thio_S$RelRMSE,pk_thio_S$hlerror), c(pk_thio_R$RelRMSE,pk_thio_R$hlerror),
+                    c(pk_nif$RelRMSE,pk_nif$hlerror), c(pk_dig$RelRMSE,pk_dig$hlerror),
+                    c(pk_art$RelRMSE,pk_art$hlerror), c(pk_oflo$RelRMSE,pk_oflo$hlerror))
 
 pk_avg <-  colMeans(pk_mod_avg) %>%
   sig() %>%
@@ -1833,12 +1841,11 @@ pk_avg <-  colMeans(pk_mod_avg) %>%
 
 pk_mod_all <- rbind(pk_mod, pk_avg) %>%
    'colnames<-'(c("PT","Berez","RR","Schmitt","PK-Sim",
-                  "PT","Berez","RR","Schmitt","PK-Sim",
                   "PT","Berez","RR","Schmitt","PK-Sim"))
 
 table1 <- kable(pk_mod_all,"html") %>%
   kable_styling(full_width=F) %>%
-  add_header_above(c("","Relative percent RMSE"=5,"AUC percent error"=5, "Half-life percent error"=5)) %>%
+  add_header_above(c("","Relative percent RMSE"=5, "Half-life percent error"=5)) %>%
   group_rows("Strong bases", 1, 2) %>%
   group_rows("Weak bases", 3, 6) %>%
   group_rows("Acids", 7, 9) %>%

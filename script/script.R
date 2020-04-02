@@ -1649,7 +1649,7 @@ figS2
 #########################################################################################################
 ######################################## CHUNK 7: Table 1 and Figure 7 ##################################
 #########################################################################################################
-## This table shows the error estimates for PK parameters (AUC and half-life) and RMSE from the model 
+## This table shows the error estimates for half-life and RMSE from the model 
 ## predictions from each drug class representative
 
 source("PBPK_sim_voriconazole.R") # pk_vori
@@ -1763,7 +1763,7 @@ fig7 <- plot_grid(fig7a, fig7b, ncol=2, nrow=1, labels=c("A","B"))
 
 
 
-### Generate table (drugs in the rows, columns of RMSE, AUC, and half-life error)
+### Generate table (drugs in the rows, columns of RMSE and half-life error)
 pk_met_mod <- c(pk_met$RelRMSE,pk_met$hlerror) %>%
   sig() %>%
   t() %>%

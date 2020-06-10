@@ -8,6 +8,8 @@ mod <- mread("../model/metoprololPBPK_Adult")
 # Load data (digited observations and then calculated mean and sd)
 df <- read.csv("../data/obs_metoprolol.csv")
 
+getMetPK <- function(unified = T){
+
 # Calculate Kps
 type <- 3  #base
 logP <- 2.15  
@@ -15,11 +17,19 @@ pKa <- 9.7  #base
 fup <- 0.879
 BP <- 1.52  
 
-Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_uni)
-Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_uni)
-Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_uni)
-Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_uni)
-Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_uni)
+if(unified){
+  Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_uni)
+  Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_uni)
+  Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_uni)
+  Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_uni)
+  Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_uni) 
+}else{
+  Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_PT)
+  Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_Berez)
+  Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_RR)
+  Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_Schmitt_rep)
+  Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_pksim)
+}
 
 outFun <- function(pars){
   out <- as.data.frame(out <- mod %>%
@@ -144,3 +154,7 @@ pk_met <- mutate(as.data.frame(pk_met), Method=c("PT", "Berez", "RR", "Schmitt",
 
 # Store the PK info
 pk_met <- pk_met %>% mutate(Type="Strong base")
+
+return(pk_met)
+
+}

@@ -8,6 +8,8 @@ mod <- mread("../model/midazolamPBPK_Adult")
 # Load data
 df <- read.csv("../data/obs_midazolam.csv")
 
+getMidPK <- function(unified = T){
+
 # Convert output and data to common units: ng/mL -> mg/L
 df <- df %>%
   mutate(conc = conc*(10^-6)*10^3) %>%
@@ -20,11 +22,20 @@ pKa <- 6
 fup <- 0.032
 BP <- 0.664  
 
-Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_uni)
-Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_uni)
-Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_uni)
-Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_uni)
-Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_uni)
+
+if(unified){
+  Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_uni)
+  Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_uni)
+  Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_uni)
+  Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_uni)
+  Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_uni) 
+}else{
+  Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_PT)
+  Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_Berez)
+  Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_RR)
+  Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_Schmitt_rep)
+  Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_pksim)
+}
 
 e <- ev(amt = 2, cmt = "D")
 
@@ -150,4 +161,8 @@ colnames(pk_mid) <- c("RelRMSE","AUCobs","AUCpred", "AUCerror", "hlobs", "hlpred
 pk_mid <- mutate(as.data.frame(pk_mid), Method=c("PT", "Berez", "RR", "Schmitt", "PK-Sim"))
 
 pk_mid <- pk_mid %>% mutate(Type="Acid")
+
+return(pk_mid)
+
+}
 

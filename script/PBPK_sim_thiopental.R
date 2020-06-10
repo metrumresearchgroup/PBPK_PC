@@ -8,6 +8,9 @@ mod <- mread("../model/thiopentalPBPK_Adult")
 
 # Load observed data
 df <- read.csv("../data/obs_thiopental") #S-thiopental
+
+getThiPK <- function(unified = T, config){
+
 #df <- df[order(df$time),] # re-order the data by time
 CLhepatic = 13.8 #S-thiopental
 
@@ -18,11 +21,20 @@ pKa <- 7.5
 fup <- 0.13
 BP <- 1  
 
-Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_uni)
-Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_uni)
-Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_uni)
-Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_uni)
-Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_uni)
+
+if(unified){
+  Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_uni)
+  Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_uni)
+  Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_uni)
+  Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_uni)
+  Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_uni) 
+}else{
+  Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_PT)
+  Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_Berez)
+  Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_RR)
+  Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_Schmitt_rep)
+  Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_pksim)
+}
 
 # New parameter list
 pars1 <- c(Kps1, list(CLhepatic=CLhepatic))
@@ -254,4 +266,12 @@ pk_thio <- mutate(as.data.frame(pk_thio), Method=c("PT", "Berez", "RR", "Schmitt
 
 # Store the PK info
 pk_thio_R <- pk_thio %>% mutate(Type="Acid")
+
+if(config == "R"){
+  return(pk_thio_R) 
+}else{
+  return(pk_thio_S)
+}
+
+}
 

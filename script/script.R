@@ -1653,37 +1653,113 @@ figS2
 ## predictions from each drug class representative
 
 source("PBPK_sim_voriconazole.R") # pk_vori
+pk_vori <- getVorPK(unified = T)
+pk_vori_rep <- getVorPK(unified = F)
 source("PBPK_sim_alfentanil.R")   # pk_alf
+pk_alf <- getAlfPK(unified = T)
+pk_alf_rep <- getAlfPK(unified = F)
 source("PBPK_sim_nevirapine.R")   # pk_nev
+pk_nev <- getNevPK(unified = T)
+pk_nev_rep <- getNevPK(unified = F)
 source("PBPK_sim_midazolam.R")    # pk_mid
+pk_mid <- getMidPK(unified = T)
+pk_mid_rep <- getMidPK(unified = F)
 source("PBPK_sim_metoprolol.R")   # pk_met
+pk_met <- getMetPK(unified = T)
+pk_met_rep <- getMetPK(unified = F)
 source("PBPK_sim_caffeine.R")     # pk_caf
+pk_caf <- getCafPK(unified = T)
+pk_caf_rep <- getCafPK(unified = F)
 source("PBPK_sim_thiopental.R")   # pk_thio_S and pk_thio_R
+pk_thio_S <- getThiPK(unified = T, config = "S")
+pk_thio_S_rep <- getThiPK(unified = F, config = "S")
+pk_thio_R <- getThiPK(unified = T, config = "R")
+pk_thio_R_rep <- getThiPK(unified = F, config = "R")
 source("PBPK_sim_nifedipine.R")   # pk_nif
+pk_nif <- getNifPK(unified = T)
+pk_nif_rep <- getNifPK(unified = F)
 source("PBPK_sim_digoxin.R")      # pk_dig
+pk_dig <- getDigPK(unified = T)
+pk_dig_rep <- getDigPK(unified = F)
 source("PBPK_sim_artemether.R")   # pk_art
+pk_art <- getArtPK(unified = T)
+pk_art_rep <- getArtPK(unified = F)
 source("PBPK_sim_ofloxacin.R")    # pk_oflo
+pk_oflo <- getOflPK(unified = T)
+pk_oflo_rep <- getOflPK(unified = F)
 
-
+pk_alf <- pk_alf %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
+  bind_rows(pk_alf_rep %>% mutate(Method = paste0(Method, "-reported TC")))
+pk_vori <- pk_vori %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
+  bind_rows(pk_vori_rep %>% mutate(Method = paste0(Method, "-reported TC")))
+pk_art <- pk_art %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
+  bind_rows(pk_art_rep %>% mutate(Method = paste0(Method, "-reported TC")))
+pk_nev <- pk_nev %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
+  bind_rows(pk_nev_rep %>% mutate(Method = paste0(Method, "-reported TC")))
+pk_nif <- pk_nif %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
+  bind_rows(pk_nif_rep %>% mutate(Method = paste0(Method, "-reported TC")))
+pk_mid <- pk_mid %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
+  bind_rows(pk_mid_rep %>% mutate(Method = paste0(Method, "-reported TC")))
+pk_thio_R <- pk_thio_R %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
+  bind_rows(pk_thio_R_rep %>% mutate(Method = paste0(Method, "-reported TC")))
+pk_thio_S <- pk_thio_S %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
+  bind_rows(pk_thio_S_rep %>% mutate(Method = paste0(Method, "-reported TC")))
+pk_dig <- pk_dig %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
+  bind_rows(pk_dig_rep %>% mutate(Method = paste0(Method, "-reported TC")))
+pk_oflo <- pk_oflo %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
+  bind_rows(pk_oflo_rep %>% mutate(Method = paste0(Method, "-reported TC")))
+pk_caf <- pk_caf %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
+  bind_rows(pk_caf_rep %>% mutate(Method = paste0(Method, "-reported TC")))
+pk_met <- pk_met %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
+  bind_rows(pk_met_rep %>% mutate(Method = paste0(Method, "-reported TC")))
 # Make a figure, but could also convert to table
 size <- 2.5
 stroke <- 0.5
 
 
+# # RelRMSE = scale the root mean square error by the range of the observations
+# fig7a <- ggplot() +
+#   geom_point(data=pk_met, aes(x=1, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_caf, aes(x=2, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_vori, aes(x=4, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_alf, aes(x=5, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_nev, aes(x=6, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_mid, aes(x=7, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_thio_S, aes(x=9, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_thio_R, aes(x=10, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_nif, aes(x=11, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_dig, aes(x=13, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_art, aes(x=14, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_oflo, aes(x=16, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+#   scale_x_continuous(breaks=c(1,2,4,5,6,7,9,10,11,13,14,16),
+#                      labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
+#                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
+#                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
+#   #ylim(0,18) + #Using error
+#   #ylim(0, 1500) +
+#   scale_y_log10(limits = c(1e-1,1e6)) +
+#   xlab("") +
+#   ylab("Percent error") +
+#   ggtitle("RMSE") +
+#   #ggtitle("RMSE") +
+#   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
+#   th7
+# fig7a
+
 # RelRMSE = scale the root mean square error by the range of the observations
 fig7a <- ggplot() +
-  geom_point(data=pk_met, aes(x=1, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_caf, aes(x=2, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_vori, aes(x=4, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_alf, aes(x=5, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_nev, aes(x=6, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_mid, aes(x=7, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_thio_S, aes(x=9, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_thio_R, aes(x=10, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_nif, aes(x=11, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_dig, aes(x=13, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_art, aes(x=14, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_oflo, aes(x=16, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_met, aes(x=1, y=RelRMSE, col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_caf, aes(x=2, y=RelRMSE, col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_vori, aes(x=4, y=RelRMSE, col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_alf, aes(x=5, y=RelRMSE, col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_nev, aes(x=6, y=RelRMSE, col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_mid, aes(x=7, y=RelRMSE, col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_thio_S, aes(x=9, y=RelRMSE, col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_thio_R, aes(x=10, y=RelRMSE, col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_nif, aes(x=11, y=RelRMSE, col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_dig, aes(x=13, y=RelRMSE, col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_art, aes(x=14, y=RelRMSE, col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_oflo, aes(x=16, y=RelRMSE, col=Method),size=size, stroke=stroke) +
   scale_x_continuous(breaks=c(1,2,4,5,6,7,9,10,11,13,14,16),
                      labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
@@ -1700,20 +1776,47 @@ fig7a <- ggplot() +
 fig7a
 
 
+# ### Half-life (semi-log plot)
+# fig7b <- ggplot() +
+#   geom_point(data=pk_met, aes(x=1, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_caf, aes(x=2, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_vori, aes(x=4, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_alf, aes(x=5, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_nev, aes(x=6, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_mid, aes(x=7, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_thio_S, aes(x=9, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_thio_R, aes(x=10, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_nif, aes(x=11, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_dig, aes(x=13, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_art, aes(x=14, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+#   geom_point(data=pk_oflo, aes(x=16, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+#   scale_x_continuous(breaks=c(1,2,4,5,6,7,9,10,11,13,14,16),
+#                      labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
+#                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
+#                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
+#   scale_y_log10(limits = c(1e-1,1e6)) +
+#   xlab("") +
+#   ylab("Percent error") +
+#   ggtitle("Half-life error") +
+#   #ggtitle("Half-life error") +
+#   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
+#   th7
+# fig7b
+
 ### Half-life (semi-log plot)
 fig7b <- ggplot() +
-  geom_point(data=pk_met, aes(x=1, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_caf, aes(x=2, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_vori, aes(x=4, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_alf, aes(x=5, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_nev, aes(x=6, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_mid, aes(x=7, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_thio_S, aes(x=9, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_thio_R, aes(x=10, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_nif, aes(x=11, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_dig, aes(x=13, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_art, aes(x=14, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_oflo, aes(x=16, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_met, aes(x=1, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_caf, aes(x=2, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_vori, aes(x=4, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_alf, aes(x=5, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_nev, aes(x=6, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_mid, aes(x=7, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_thio_S, aes(x=9, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_thio_R, aes(x=10, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_nif, aes(x=11, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_dig, aes(x=13, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_art, aes(x=14, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_oflo, aes(x=16, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
   scale_x_continuous(breaks=c(1,2,4,5,6,7,9,10,11,13,14,16),
                      labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
@@ -1839,15 +1942,46 @@ pk_avg <-  colMeans(pk_mod_avg) %>%
   t() %>%
   'rownames<-'("Mean")
 
+# pk_mod_all <- rbind(pk_mod, pk_avg) %>%
+#    'colnames<-'(c("PT","Berez","RR","Schmitt","PK-Sim",
+#                   "PT","Berez","RR","Schmitt","PK-Sim"))
+
 pk_mod_all <- rbind(pk_mod, pk_avg) %>%
-   'colnames<-'(c("PT","Berez","RR","Schmitt","PK-Sim",
-                  "PT","Berez","RR","Schmitt","PK-Sim"))
+  'colnames<-'(c("PT-unified TC","Berez-unified TC","RR-unified TC","Schmitt-unified TC","PK-Sim-unified TC",
+                 "PT-reported TC","Berez-reported TC","RR-reported TC","Schmitt-reported TC","PK-Sim-reported TC",
+                 "PT-unified TC","Berez-unified TC","RR-unified TC","Schmitt-unified TC","PK-Sim-unified TC",
+                 "PT-reported TC","Berez-reported TC","RR-reported TC","Schmitt-reported TC","PK-Sim-reported TC"))
+
+pk_mod_all <- rbind(pk_mod, pk_avg) %>%
+  'colnames<-'(c("PT","Berez","RR","Schmitt","PK-Sim",
+                 "PT","Berez","RR","Schmitt","PK-Sim",
+                 "PT","Berez","RR","Schmitt","PK-Sim",
+                 "PT","Berez","RR","Schmitt","PK-Sim"))
+
+# table1 <- kable(pk_mod_all,"html") %>%
+#   kable_styling(full_width=F) %>%
+#   add_header_above(c("","Relative percent RMSE"=5, "Half-life percent error"=5)) %>%
+#   group_rows("Strong bases", 1, 2) %>%
+#   group_rows("Weak bases", 3, 6) %>%
+#   group_rows("Acids", 7, 9) %>%
+#   group_rows("Neutrals", 10, 11) %>%
+#   group_rows("Zwitterion", 12, 12) 
 
 table1 <- kable(pk_mod_all,"html") %>%
   kable_styling(full_width=F) %>%
-  add_header_above(c("","Relative percent RMSE"=5, "Half-life percent error"=5)) %>%
+  add_header_above(c("",
+                     "Unified TC"=5, 
+                     "Reported TC"=5,
+                     "Unified TC"=5, 
+                     "Reported TC"=5)) %>%
+  add_header_above(c("","Relative percent RMSE"=10, 
+                     "Half-life percent error"=10)) %>%
   group_rows("Strong bases", 1, 2) %>%
   group_rows("Weak bases", 3, 6) %>%
   group_rows("Acids", 7, 9) %>%
   group_rows("Neutrals", 10, 11) %>%
   group_rows("Zwitterion", 12, 12) 
+
+# uncomment if you want to save csv version of table
+#write.csv(pk_mod_all, file = "../deliv/table/ErrorSummTab.csv", quote = F, row.names = F)
+

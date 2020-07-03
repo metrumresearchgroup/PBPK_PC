@@ -1,30 +1,25 @@
 ######################################################################################################
-######################################### Artemether - neutral #######################################
+######################################### Nevirapine (weak base) #####################################
 ######################################################################################################
-# Reference: https://jpharmsci.org/article/S0022-3549(16)41525-X/fulltext
+# Reference: https://link.springer.com/article/10.1007%2Fs40262-016-0457-5
 # Compile model
-mod <- mread("../model/artemetherPBPK_adult")
+mod <- mread("../model/nevirapinePBPK_Adult")
 
 # Load data
-df <- read.csv("../data/obs_artemether.csv")
-
-# Convert output and data to common units: ng/mL -> mg/L
-df <- df %>%
-  mutate(conc = conc*(10^-6)*10^3) %>%
-  mutate(max_sd = max_sd*(10^-6)*10^3)
+df <- read.csv("../data/obs_nevirapine.csv")
 
 # Calculate Kps
-type <- 1  #neutral
-logP <- 3.28
-pKa <- 0  
-fup <- 0.046
-BP <- 0.8  
+type <- 3  #acid
+logP <- 1.93
+pKa <- 2.8   
+fup <- 0.4
+BP <- 1.04  
 
-Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_uni)
-Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_uni)
-Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_uni)
-Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_uni)
-Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_uni)
+Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_PT)
+Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_Berez)
+Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_RR)
+Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_Schmitt_rep)
+Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_pksim)
 
 # ICRP parameters for men
 men <- list(BW = 73, Vad = 18.2, Vbo = 10.5, Vbl = 5.6, Vlu = 0.5, Vbr = 1.45, 
@@ -39,17 +34,16 @@ pars3 <- c(Kps3, men)
 pars4 <- c(Kps4, men)
 pars5 <- c(Kps5, men)
 
-# 2 doses of 80 mg each, the second at t = 8
-e <- ev(amt = 80, ii = 8, addl = 1, cmt= "D")
+e <- ev(amt = 15, cmt = "VEN")
 
 outFun <- function(pars){
   out <- as.data.frame(out <- mod %>%
                          ev(e) %>%
                          param(pars) %>%
-                         mrgsim(end = 16, delta = 0.01) %>%
+                         mrgsim(end = 96.56, delta = 0.01) %>%
                          #mutate(Cplasma = Cplasma * 1000) %>%
                          as.data.frame() %>%
-                         dplyr::filter(dplyr::row_number() > 2))
+                         dplyr::filter(dplyr::row_number() > 11)) # remove all rows until the first observation time
   return(out)
 }
 
@@ -65,10 +59,10 @@ out5 <- outFun(pars5) %>%
   mutate(Method = "PK-Sim")
 
 # Bind all outputs into one matrix
-out_all <- rbind(out1,out2,out3,out4,out5,out5)
+out_all <- rbind(out1,out2,out3,out4,out5)
 
 # Select outputs every num_pts rows to add the geom_point shapes layer over the geom_line
-num_pts <- 60  # num_pts indicates the number of rows to skip, this influences the density of the points in the plot
+num_pts <- 400
 out1_reduced <- out1[seq(1, nrow(out1), num_pts), ]
 out2_reduced <- out2[seq(1, nrow(out2), num_pts), ]
 out3_reduced <- out3[seq(1, nrow(out3), num_pts), ]
@@ -77,15 +71,17 @@ out5_reduced <- out5[seq(1, nrow(out5), num_pts), ]
 out_reduced <- rbind(out1_reduced,out2_reduced,out3_reduced,out4_reduced,out5_reduced)
 
 
+# Extract prediction at the time points in the data set
+
 # Time points from observed data
 sample <- df$time
+
 
 outFun_new <- function(pars){
   out <- as.data.frame(out <- mod %>%
                          param(pars) %>%
                          ev(e) %>%
                          mrgsim(end=-1, add=sample) %>%
-                         # mutate(Cplasma = Cplasma * 1000) %>%
                          as.data.frame() %>%
                          dplyr::filter(dplyr::row_number() > 1))
   return(out)
@@ -96,8 +92,10 @@ out3_new <- outFun_new(pars3)
 out4_new <- outFun_new(pars4)
 out5_new <- outFun_new(pars5)
 
+
 #---------------
-# Calculate the relative root mean square error for each method
+# Calculate the root mean square error for each method
+
 rmse <- function(pred,obs){
   rmsd <- sqrt(mean((pred - obs)^2))/(max(obs)-min(obs))
   return(rmsd)
@@ -110,17 +108,18 @@ rmse_Schmitt <- rmse(out4_new$Cplasma,df$conc)
 rmse_pksim <- rmse(out5_new$Cplasma,df$conc)
 
 rel_rmse <- c(rmse_PT,rmse_Berez,rmse_RR,rmse_Schmitt,rmse_pksim)*100
-rel_rmse
+
+
 
 #---------------------
 # Calculate AUC for each curve
 
-auc_obs <- pk.calc.auc(df$conc,sample, interval=c(sample[1],last(sample)))
-auc_PT <- pk.calc.auc(out1$Cplasma,out1$time,interval=c(sample[1],last(sample)))
-auc_Berez <-pk.calc.auc(out2$Cplasma,out2$time,interval=c(sample[1],last(sample)))
-auc_RR <- pk.calc.auc(out3$Cplasma,out3$time,interval=c(sample[1],last(sample)))
-auc_Schmitt <- pk.calc.auc(out4$Cplasma,out4$time,interval=c(sample[1],last(sample)))
-auc_pksim <- pk.calc.auc(out5$Cplasma,out5$time,interval=c(sample[1],last(sample)))
+auc_obs <- pk.calc.auc(df$conc,df$time, interval=c(min(df$time),max(df$time)))
+auc_PT <- pk.calc.auc(out1$Cplasma,out1$time,interval=c(min(df$time),max(df$time)))
+auc_Berez <-pk.calc.auc(out2$Cplasma,out2$time,interval=c(min(sample),max(sample)))
+auc_RR <- pk.calc.auc(out3$Cplasma,out3$time,interval=c(min(sample),max(sample)))
+auc_Schmitt <- pk.calc.auc(out4$Cplasma,out4$time,interval=c(min(sample),max(sample)))
+auc_pksim <- pk.calc.auc(out5$Cplasma,out5$time,interval=c(min(sample),max(sample)))
 
 auc_all <- c(auc_PT,auc_Berez,auc_RR,auc_Schmitt,auc_pksim)
 
@@ -131,7 +130,7 @@ auc_all <- c(auc_PT,auc_Berez,auc_RR,auc_Schmitt,auc_pksim)
 auc_error <- (abs(auc_obs - auc_all)/auc_obs)*100
 
 # # Combine in data frame
-auc_art <- cbind(auc_obs,auc_all,auc_error)
+auc_nev <- cbind(auc_obs,auc_all,auc_error)
 
 
 #---------------------
@@ -152,13 +151,10 @@ hl_all <- c(hl_PT$half.life,hl_Berez$half.life,hl_RR$half.life,hl_Schmitt$half.l
 # Relative error
 hl_error <- (abs(hl_obs$half.life - hl_all)/hl_obs$half.life)*100
 
-hl_art <- cbind(hl_obs$half.life,hl_all,hl_error)
 
+pk_nev <- cbind(rel_rmse,auc_nev,hl_obs$half.life,hl_all,hl_error)
+colnames(pk_nev) <- c("RelRMSE","AUCobs","AUCpred", "AUCerror", "hlobs", "hlpred", "hlerror")
+pk_nev <- mutate(as.data.frame(pk_nev), Method=c("PT", "Berez", "RR", "Schmitt", "PK-Sim"))
 
-#---------------------
-# Combine PK info in data frame and store as csv file
-pk_art <- cbind(rel_rmse,auc_art,hl_art)
-colnames(pk_art) <- c("RelRMSE","AUCobs","AUCpred", "AUCerror", "hlobs", "hlpred", "hlerror")
-pk_art <- mutate(as.data.frame(pk_art), Method=c("PT", "Berez", "RR", "Schmitt", "PK-Sim"))
-
-pk_art <- pk_art %>% mutate(Type="Neutral")
+# Store the PK info
+pk_nev <- pk_nev %>% mutate(Type="Acid")

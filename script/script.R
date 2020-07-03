@@ -5,6 +5,7 @@ rm(list=ls())
 # Load libraries
 .libPaths("lib")
 library(dplyr)
+library(tidyr)
 library(ggplot2)
 library(mrgsolve)
 library(gridExtra)
@@ -43,14 +44,14 @@ select <- dplyr::select
 
 # Set figure default themes
 #, hjust = 0.5
-# Theme 1 used for Fig. 2, 3 and 4
+# Theme 1 used for Fig. 3, 4 and 5
 th1 <- theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
              panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size = 10),
              legend.justification=c(0.025,0.95), legend.position=c(0.025,0.95), legend.key=element_blank(), 
              legend.title = element_blank(),
              plot.title = element_text(face="bold", size=15))
 
-# Theme 5 used for Fig. 5
+# Theme 5 used for Fig. 6
 th5 <- theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
               panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size = 10),
               legend.justification=c(1,1), legend.position=c(1,1), legend.key=element_blank(), 
@@ -58,20 +59,26 @@ th5 <- theme(panel.grid.major = element_blank(), panel.grid.minor = element_blan
               plot.title = element_text(face="bold", size=15),
               axis.text.x  = element_text(angle=45, vjust=0.5))
 
-# Theme 6 used for Fig. 6
+# Theme 6 used for Fig. 7
 th6 <- theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                panel.background = element_blank(), axis.line = element_line(colour = "black"), text = element_text(size = 10),
                legend.justification=c(1,1), legend.position=c(1,1.05), legend.key=element_blank(),
                plot.title = element_text(face="bold", size=15))
 
-# Theme 7 used for Fig. 7
+# Theme 7 used for Fig. 8
 th7 <- theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-               panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size = 10),
-               legend.justification=c(1,1), legend.position=c(1,1), legend.key=element_blank(), legend.title = element_blank(),
-               axis.text.x = element_text(angle = 90, hjust = 1),plot.title = element_text(face="bold", size=15))
+               panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size = 7),
+               legend.key=element_blank(), legend.title = element_blank(), legend.position = "top",
+               axis.text.x = element_text(angle = 90, hjust = 1),plot.title = element_text(face="bold", size=10))
+
+# Theme 8 used for Fig. 9
+th8 <- theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+             panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size = 7),
+             legend.key=element_blank(), legend.title = element_blank(), legend.position = "top",
+             plot.title = element_text(face="bold", size=10))
 
 #########################################################################################################
-######################################## CHUNK 1: Figure 2 ##############################################
+######################################## CHUNK 1: Figure 3 ##############################################
 #########################################################################################################
 ## This figure validates our code by comparing our Vss/Kp predictions (using literature tissue composition) 
 ## to the reported values in literature
@@ -141,7 +148,7 @@ drug_all_PT <- rbind(sbase,wbase,acid,neut,zwit)
 corr_coeff_PT <- round(cor(drug_all_PT$pred,drug_all_PT$rep_pred,method='pearson'), digits=2)
 corr_coeff_PT <- paste("italic(r) %~~%", corr_coeff_PT)
 
-fig2a <- ggplot() +
+fig3a <- ggplot() +
   geom_point(data=drug_all_PT, aes(x=pred, y=rep_pred, shape=Drug_class), size=3) +
   scale_shape_discrete(solid=F) +
   geom_abline(intercept = 0, slope = 1) +
@@ -196,7 +203,7 @@ drug_all_Berez <- rbind(ace,alp,phen,dig,oflo)
 corr_coeff_Berez <- round(cor(drug_all_Berez$pred,drug_all_Berez$rep_pred,method='pearson'), digits=2)
 corr_coeff_Berez <- paste("italic(r) %~~%", corr_coeff_Berez)
 
-fig2b <- ggplot() +
+fig3b <- ggplot() +
   geom_point(data=drug_all_Berez, aes(x=pred, y=rep_pred, shape=Drug_class), size=3) +
   scale_shape_discrete(solid=F) +
   geom_abline(intercept = 0, slope = 1) +
@@ -271,7 +278,7 @@ drug_all_RR <- rbind(alf,ace,bis,phen,cef,etho,eno)
 corr_coeff_RR <- round(cor(drug_all_RR$pred,drug_all_RR$rep,method='pearson'), digits=2)
 corr_coeff_RR <- paste("italic(r) %~~%", corr_coeff_RR)
 
-fig2c <- ggplot() +
+fig3c <- ggplot() +
   geom_point(data=drug_all_RR, aes(x=pred, y=rep, shape=Drug_class), size=3) +
   scale_shape_discrete(solid=F) +
   geom_abline(intercept = 0, slope = 1) +
@@ -333,7 +340,7 @@ drug_all_Schmitt <- rbind(quin,ace,alp,phen,dig,oflo)
 corr_coeff_Schmitt <- round(cor(drug_all_Schmitt$pred,drug_all_Schmitt$pksim_pred,method='pearson'), digits=2)
 corr_coeff_Schmitt <- paste("italic(r) %~~%", corr_coeff_Schmitt)
 
-fig2d <- ggplot() +
+fig3d <- ggplot() +
   geom_point(data=drug_all_Schmitt, aes(x=pred, y=pksim_pred, shape=Drug_class), size=3) +
   scale_shape_discrete(solid=F) +
   geom_abline(intercept = 0, slope = 1) +
@@ -389,7 +396,7 @@ drug_all_pksim <- rbind(ace,alp,phen,dig,eno)
 corr_coeff_pksim <- round(cor(drug_all_pksim$pred,drug_all_pksim$pksim_pred,method='pearson'), digits=2)
 corr_coeff_pksim <- paste("italic(r) %~~%", corr_coeff_pksim)
 
-fig2e <- ggplot() +
+fig3e <- ggplot() +
   geom_point(data=drug_all_pksim, aes(x=pred, y=pksim_pred, shape=Drug_class), size=3) +
   scale_shape_discrete(solid=F) +
   geom_abline(intercept = 0, slope = 1) +
@@ -402,14 +409,14 @@ fig2e <- ggplot() +
   geom_text(aes(x=max(drug_all_pksim[1:2])*pcc_x, y=max(drug_all_pksim[1:2])*pcc_y, label=corr_coeff_pksim), parse=TRUE)
 
 
-fig2 <- grid.arrange(fig2a, fig2b, fig2c, fig2d, fig2e, ncol=2, nrow=3)
-#ggsave(file="../deliv/figure/fig2.png", fig2, width=8, height=12)
+fig3 <- grid.arrange(fig3a, fig3b, fig3c, fig3d, fig3e, ncol=2, nrow=3)
+ggsave(file="../deliv/figure/fig3.png", fig3, width=8, height=12)
 
 #########################################################################################################
 #########################################################################################################
 
 #########################################################################################################
-######################################## CHUNK 2: Figure 3 ##############################################
+######################################## CHUNK 2: Figure 4 ##############################################
 #########################################################################################################
 ## This figure swaps physiologies between calculation methods to see impact on Kp/Vss predictions
 
@@ -490,7 +497,7 @@ drug_all_PT <- rbind(met,ace,vori,alp,thio,phen,dig,etho,oflo,eno)
 corr_coeff_PT <- round(cor(drug_all_PT$rep_pred,drug_all_PT$swap_pred,method='pearson'), digits=2)
 corr_coeff_PT <- paste("italic(r) %~~%", corr_coeff_PT)
 
-fig3a <- ggplot() +
+fig4a <- ggplot() +
   geom_point(data=drug_all_PT, aes(x=swap_pred, y=rep_pred, shape=Drug_class), size=3) +
   scale_shape_discrete(solid=F) +
   geom_abline(intercept = 0, slope = 1) +
@@ -573,7 +580,7 @@ drug_all_Berez <- rbind(met,ace,vori,alp,thio,phen,dig,etho,oflo,eno)
 corr_coeff_Berez <- round(cor(drug_all_Berez$rep_pred,drug_all_Berez$swap_pred,method='pearson'), digits=2)
 corr_coeff_Berez <- paste("italic(r) %~~%", corr_coeff_Berez)
 
-fig3b <- ggplot() +
+fig4b <- ggplot() +
   geom_point(data=drug_all_Berez, aes(x=swap_pred, y=rep_pred, shape=Drug_class), size=3) +
   scale_shape_discrete(solid=F) +
   geom_abline(intercept = 0, slope = 1) +
@@ -658,7 +665,7 @@ drug_all_Schmitt <- rbind(met,ace,vori,alp,thio,phen,dig,etho,oflo,eno)
 corr_coeff_Schmitt <- round(cor(drug_all_Schmitt$rep_pred,drug_all_Schmitt$swap_pred,method='pearson'), digits=2)
 corr_coeff_Schmitt <- paste("italic(r) %~~%", corr_coeff_Schmitt)
 
-fig3c <- ggplot() +
+fig4c <- ggplot() +
   geom_point(data=drug_all_Schmitt, aes(x=swap_pred, y=rep_pred, shape=Drug_class), size=3) +
   scale_shape_discrete(solid=F) +
   geom_abline(intercept = 0, slope = 1) +
@@ -742,7 +749,7 @@ drug_all_pksim <- rbind(met,ace,vori,alp,thio,phen,dig,etho,oflo,eno)
 corr_coeff_pksim <- round(cor(drug_all_pksim$rep_pred,drug_all_pksim$swap_pred,method='pearson'), digits=2)
 corr_coeff_pksim <- paste("italic(r) %~~%", corr_coeff_pksim)
 
-fig3d <- ggplot() +
+fig4d <- ggplot() +
   geom_point(data=drug_all_pksim, aes(x=swap_pred, y=rep_pred, shape=Drug_class), size=3) +
   scale_shape_discrete(solid=F) +
   geom_abline(intercept = 0, slope = 1) +
@@ -757,14 +764,14 @@ fig3d <- ggplot() +
   geom_text(aes(x=max(drug_all_pksim[1:2])*pcc_x, y=max(drug_all_pksim[1:2])*pcc_y, label=corr_coeff_pksim), parse=TRUE)
 
 
-fig3 <- grid.arrange(fig3a, fig3b, fig3c, fig3d, ncol=2, nrow=2)
-#ggsave(file="../deliv/figure/fig3.png", fig3, width=8, height=8)
+fig4 <- grid.arrange(fig4a, fig4b, fig4c, fig4d, ncol=2, nrow=2)
+ggsave(file="../deliv/figure/fig4.png", fig4, width=8, height=8)
 
 #########################################################################################################
 #########################################################################################################
 
 #########################################################################################################
-######################################## CHUNK 3: Figure 4 ##############################################
+######################################## CHUNK 3: Figure 5 ##############################################
 #########################################################################################################
 ## This figure compares Kp predictions using the unified tissue composition vs the reported tissue composition
 
@@ -859,7 +866,7 @@ drug_all_PT <- rbind(met,ace,vori,alp,thio,phen,dig,etho,oflo,eno)
 corr_coeff_PT <- round(cor(drug_all_PT$uni_pred,drug_all_PT$pred,method='pearson'), digits=2)
 corr_coeff_PT <- paste("italic(r) %~~%", corr_coeff_PT)
 
-fig4a <- ggplot() +
+fig5a <- ggplot() +
   geom_point(data=drug_all_PT, aes(x=uni_pred, y=pred, shape=Drug_class), size=3) +
   scale_shape_discrete(solid=F) +
   geom_abline(intercept = 0, slope = 1) +
@@ -929,7 +936,7 @@ drug_all_Berez <- rbind(met,ace,vori,alp,thio,phen,dig,etho,oflo,eno)
 corr_coeff_Berez <- round(cor(drug_all_Berez$uni_pred,drug_all_Berez$pred,method='pearson'),digits=2)
 corr_coeff_Berez <- paste("italic(r) %~~%", corr_coeff_Berez)
 
-fig4b <- ggplot() +
+fig5b <- ggplot() +
   geom_point(data=drug_all_Berez, aes(x=uni_pred, y=pred, shape=Drug_class), size=3) +
   scale_shape_discrete(solid=F) +
   geom_abline(intercept = 0, slope = 1) +
@@ -997,7 +1004,7 @@ drug_all_RR <- rbind(met,ace,vori,alp,thio,phen,dig,etho,oflo,eno)
 corr_coeff_RR <- round(cor(drug_all_RR$uni_pred,drug_all_RR$pred,method='pearson'), digits=2)
 corr_coeff_RR <- paste("italic(r) %~~%", corr_coeff_RR)
 
-fig4c <- ggplot() +
+fig5c <- ggplot() +
   geom_point(data=drug_all_RR, aes(x=uni_pred, y=pred, shape=Drug_class), size=3) +
   scale_shape_discrete(solid=F) +
   geom_abline(intercept = 0, slope = 1) +
@@ -1064,7 +1071,7 @@ drug_all_schmitt <- rbind(met,ace,vori,alp,thio,phen,dig,etho,oflo,eno)
 corr_coeff_Schmitt <- round(cor(drug_all_schmitt$uni_pred,drug_all_schmitt$pred,method='pearson'), digits=2)
 corr_coeff_Schmitt <- paste("italic(r) %~~%", corr_coeff_Schmitt)
 
-fig4d <- ggplot() +
+fig5d <- ggplot() +
   geom_point(data=drug_all_schmitt, aes(x=uni_pred, y=pred, shape=Drug_class), size=3) +
   scale_shape_discrete(solid=F) +
   geom_abline(intercept = 0, slope = 1) +
@@ -1131,7 +1138,7 @@ drug_all_pksim <- rbind(met,ace,vori,alp,thio,phen,dig,etho,oflo,eno)
 corr_coeff_pksim <- round(cor(drug_all_pksim$uni_pred,drug_all_pksim$pred,method='pearson'), digits=2)
 corr_coeff_pksim <- paste("italic(r) %~~%", corr_coeff_pksim)
 
-fig4e <- ggplot() +
+fig5e <- ggplot() +
   geom_point(data=drug_all_pksim, aes(x=uni_pred, y=pred, shape=Drug_class), size=3) +
   scale_shape_discrete(solid=F) +
   geom_abline(intercept = 0, slope = 1) +
@@ -1147,17 +1154,14 @@ fig4e <- ggplot() +
   geom_text(aes(x=max(drug_all_pksim[1:2])*pcc_x, y=max(drug_all_pksim[1:2])*pcc_y, label=corr_coeff_pksim), parse=TRUE)
 
 
-fig4 <- grid.arrange(fig4a, fig4b, fig4c, fig4d, fig4e, ncol=2, nrow=3)
-#ggsave(file="../deliv/figure/fig4.png", fig4, width=8, height=12)
-
-#fig4_test <- grid.arrange(fig4a, fig4b, fig4c, fig4d, fig4e, ncol=5, nrow=1)
-#ggsave(file="../deliv/figure/fig4_test.pdf", fig4_test, width=20, height=4)
+fig5 <- grid.arrange(fig5a, fig5b, fig5c, fig5d, fig5e, ncol=2, nrow=3)
+ggsave(file="../deliv/figure/fig5.png", fig5, width=8, height=12)
 
 #########################################################################################################
 #########################################################################################################
 
 #########################################################################################################
-######################################## CHUNK 4: Figure 5 ##############################################
+######################################## CHUNK 4: Figure 6 ##############################################
 #########################################################################################################
 ## This figure shows the range of Kp predictions for each drug class for each tissue using different 
 ## calculation methods
@@ -1209,7 +1213,7 @@ kp_pred_comp <- function(logP, pKa, fup, BP, type, dat_uni){
 ### Strong Bases ###
 # Metoprolol
 met_kp <- kp_pred_comp(2.15, 9.7, 0.8, BP=1.52, type=3, dat_uni)
-fig5_met <- ggplot(data=met_kp, aes(x=Tissue, y=Kp)) +
+fig6_met <- ggplot(data=met_kp, aes(x=Tissue, y=Kp)) +
   geom_point(data=met_kp, aes(x=Tissue, y=Kp, shape=Method),size=2.5, stroke=0.5) +
   scale_x_continuous(breaks=c(1,2,3,4,5,6,7,8,9,10,11),labels = c("Adipose","Bone","Brain","Heart","Kidney","Gut","Liver","Lung","Muscle","Skin","Spleen")) +
   ylim(0,max(met_kp$Kp)) +
@@ -1223,7 +1227,7 @@ fig5_met <- ggplot(data=met_kp, aes(x=Tissue, y=Kp)) +
 
 # Caffeine
 caf_kp <- kp_pred_comp(-0.07, 10.4, 0.681, BP=0.98, type=3, dat_uni)
-fig5_caf <- ggplot(data=caf_kp, aes(x=Tissue, y=Kp)) +
+fig6_caf <- ggplot(data=caf_kp, aes(x=Tissue, y=Kp)) +
   geom_point(data=caf_kp, aes(x=Tissue, y=Kp, shape=Method),size=2.5, stroke=0.5) +
   scale_x_continuous(breaks=c(1,2,3,4,5,6,7,8,9,10,11),labels = c("Adipose","Bone","Brain","Heart","Kidney","Gut","Liver","Lung","Muscle","Skin","Spleen")) +
   ylim(0,max(caf_kp$Kp)) +
@@ -1239,7 +1243,7 @@ fig5_caf <- ggplot(data=caf_kp, aes(x=Tissue, y=Kp)) +
 ### Weak Bases ###
 # Voriconazole
 vori_kp <- kp_pred_comp(2.56, 1.76, 0.42, BP=1, type=3, dat_uni)
-fig5_vori <- ggplot(data=vori_kp, aes(x=Tissue, y=Kp)) +
+fig6_vori <- ggplot(data=vori_kp, aes(x=Tissue, y=Kp)) +
   geom_point(data=vori_kp, aes(x=Tissue, y=Kp, shape=Method),size=2.5, stroke=0.5) +
   scale_x_continuous(breaks=c(1,2,3,4,5,6,7,8,9,10,11),labels = c("Adipose","Bone","Brain","Heart","Kidney","Gut","Liver","Lung","Muscle","Skin","Spleen")) +
   ylim(0,max(vori_kp$Kp)) +
@@ -1253,7 +1257,7 @@ fig5_vori <- ggplot(data=vori_kp, aes(x=Tissue, y=Kp)) +
 
 # Alfentanil
 alf_kp <- kp_pred_comp(2.2, 6.5, 0.11, BP=0.63, type=3, dat_uni)
-fig5_alf <- ggplot(data=alf_kp, aes(x=Tissue, y=Kp)) +
+fig6_alf <- ggplot(data=alf_kp, aes(x=Tissue, y=Kp)) +
   geom_point(data=alf_kp, aes(x=Tissue, y=Kp, shape=Method),size=2.5, stroke=0.5) +
   scale_x_continuous(breaks=c(1,2,3,4,5,6,7,8,9,10,11),labels = c("Adipose","Bone","Brain","Heart","Kidney","Gut","Liver","Lung","Muscle","Skin","Spleen")) +
   ylim(0,max(alf_kp$Kp)) +
@@ -1264,11 +1268,11 @@ fig5_alf <- ggplot(data=alf_kp, aes(x=Tissue, y=Kp)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +
   th5
-fig5_alf
+fig6_alf
 
 # Midazolam
 mid_kp <- kp_pred_comp(3.1, 6, 0.059, BP=1, type=3, dat_uni)
-fig5_mid <- ggplot(data=mid_kp, aes(x=Tissue, y=Kp)) +
+fig6_mid <- ggplot(data=mid_kp, aes(x=Tissue, y=Kp)) +
   geom_point(data=mid_kp, aes(x=Tissue, y=Kp, shape=Method),size=2.5, stroke=0.5) +
   scale_x_continuous(breaks=c(1,2,3,4,5,6,7,8,9,10,11),labels = c("Adipose","Bone","Brain","Heart","Kidney","Gut","Liver","Lung","Muscle","Skin","Spleen")) +
   ylim(0,max(mid_kp$Kp)) +
@@ -1282,7 +1286,7 @@ fig5_mid <- ggplot(data=mid_kp, aes(x=Tissue, y=Kp)) +
 
 # Nevirapine
 nev_kp <- kp_pred_comp(1.93, 2.8, 0.4, BP=1.04, type=3, dat_uni)
-fig5_nev <- ggplot(data=nev_kp, aes(x=Tissue, y=Kp)) +
+fig6_nev <- ggplot(data=nev_kp, aes(x=Tissue, y=Kp)) +
   geom_point(data=nev_kp, aes(x=Tissue, y=Kp, shape=Method),size=2.5, stroke=0.5) +
   scale_x_continuous(breaks=c(1,2,3,4,5,6,7,8,9,10,11),labels = c("Adipose","Bone","Brain","Heart","Kidney","Gut","Liver","Lung","Muscle","Skin","Spleen")) +
   ylim(0,max(nev_kp$Kp)) +
@@ -1298,7 +1302,7 @@ fig5_nev <- ggplot(data=nev_kp, aes(x=Tissue, y=Kp)) +
 ### Acid ###
 # Thiopental
 thio_kp <- kp_pred_comp(2.9, 7.5, 0.13, BP=1, type=2, dat_uni)
-fig5_thio <- ggplot(data=thio_kp, aes(x=Tissue, y=Kp)) +
+fig6_thio <- ggplot(data=thio_kp, aes(x=Tissue, y=Kp)) +
   geom_point(data=thio_kp, aes(x=Tissue, y=Kp, shape=Method),size=2.5, stroke=0.5) +
   scale_x_continuous(breaks=c(1,2,3,4,5,6,7,8,9,10,11),labels = c("Adipose","Bone","Brain","Heart","Kidney","Gut","Liver","Lung","Muscle","Skin","Spleen")) +
   ylim(0,max(thio_kp$Kp)) +
@@ -1312,7 +1316,7 @@ fig5_thio <- ggplot(data=thio_kp, aes(x=Tissue, y=Kp)) +
 
 # Nifedipine
 nif_kp <- kp_pred_comp(2.2, 3.93, 0.04, BP=0.73, type=2, dat_uni)
-fig5_nif <- ggplot(data=nif_kp, aes(x=Tissue, y=Kp)) +
+fig6_nif <- ggplot(data=nif_kp, aes(x=Tissue, y=Kp)) +
   geom_point(data=nif_kp, aes(x=Tissue, y=Kp, shape=Method),size=2.5, stroke=0.5) +
   scale_x_continuous(breaks=c(1,2,3,4,5,6,7,8,9,10,11),labels = c("Adipose","Bone","Brain","Heart","Kidney","Gut","Liver","Lung","Muscle","Skin","Spleen")) +
   ylim(0,max(nif_kp$Kp)) +
@@ -1328,7 +1332,7 @@ fig5_nif <- ggplot(data=nif_kp, aes(x=Tissue, y=Kp)) +
 ### Neutral ###
 # Digoxin
 dig_kp <- kp_pred_comp(1.48, 0, 0.87, BP=1, type=1, dat_uni)
-fig5_dig <- ggplot(data=dig_kp, aes(x=Tissue, y=Kp)) +
+fig6_dig <- ggplot(data=dig_kp, aes(x=Tissue, y=Kp)) +
   geom_point(data=dig_kp, aes(x=Tissue, y=Kp, shape=Method),size=2.5, stroke=0.5) +
   scale_x_continuous(breaks=c(1,2,3,4,5,6,7,8,9,10,11),labels = c("Adipose","Bone","Brain","Heart","Kidney","Gut","Liver","Lung","Muscle","Skin","Spleen")) +
   ylim(0,max(dig_kp$Kp)) +
@@ -1342,7 +1346,7 @@ fig5_dig <- ggplot(data=dig_kp, aes(x=Tissue, y=Kp)) +
 
 # Artemether
 art_kp <- kp_pred_comp(3.28, 0, 0.046, BP=0.8, type=1, dat_uni)
-fig5_art <- ggplot(data=art_kp, aes(x=Tissue, y=Kp)) +
+fig6_art <- ggplot(data=art_kp, aes(x=Tissue, y=Kp)) +
   geom_point(data=art_kp, aes(x=Tissue, y=Kp, shape=Method),size=2.5, stroke=0.5) +
   scale_x_continuous(breaks=c(1,2,3,4,5,6,7,8,9,10,11),labels = c("Adipose","Bone","Brain","Heart","Kidney","Gut","Liver","Lung","Muscle","Skin","Spleen")) +
   ylim(0,max(art_kp$Kp)) +
@@ -1358,7 +1362,7 @@ fig5_art <- ggplot(data=art_kp, aes(x=Tissue, y=Kp)) +
 ### Zwitterion ###
 # Ofloxacin
 oflo_kp <- kp_pred_comp(-0.4, c(5.97,9.28), 0.77, BP=0.92, type=6, dat_uni) 
-fig5_oflo <- ggplot(data=oflo_kp, aes(x=Tissue, y=Kp)) +
+fig6_oflo <- ggplot(data=oflo_kp, aes(x=Tissue, y=Kp)) +
   geom_point(data=oflo_kp, aes(x=Tissue, y=Kp, shape=Method),size=2.5, stroke=0.5) +
   scale_x_continuous(breaks=c(1,2,3,4,5,6,7,8,9,10,11),labels = c("Adipose","Bone","Brain","Heart","Kidney","Gut","Liver","Lung","Muscle","Skin","Spleen")) +
   ylim(0,max(oflo_kp$Kp)+1.4) +
@@ -1370,17 +1374,17 @@ fig5_oflo <- ggplot(data=oflo_kp, aes(x=Tissue, y=Kp)) +
                geom = "crossbar", width = 0.5, fatten=0.1) +
   th5 
 
-fig5 <- grid.arrange(fig5_met, fig5_vori, fig5_nif, fig5_dig, fig5_oflo, ncol=2, nrow=3)
-#ggsave(file="../deliv/figure/fig5.png", fig5, width=8, height=12)
+fig6 <- grid.arrange(fig6_met, fig6_vori, fig6_nif, fig6_dig, fig6_oflo, ncol=2, nrow=3)
+ggsave(file="../deliv/figure/fig6.png", fig6, width=8, height=12)
 
-figS1 <- grid.arrange(fig5_caf, fig5_alf, fig5_mid, fig5_nev, fig5_thio, fig5_art, ncol=2, nrow=3)
-#ggsave(file="../deliv/figure/figS1.png", figS1, width=8, height=12)
-
-#########################################################################################################
-#########################################################################################################
+figS1 <- grid.arrange(fig6_caf, fig6_alf, fig6_mid, fig6_nev, fig6_thio, fig6_art, ncol=2, nrow=3)
+ggsave(file="../deliv/figure/figS1.png", figS1, width=8, height=12)
 
 #########################################################################################################
-######################################## CHUNK 5: Figure 6 ##############################################
+#########################################################################################################
+
+#########################################################################################################
+######################################## CHUNK 5: Figure 7 ##############################################
 #########################################################################################################
 ## This figure shows the impact of calculation methods on the model predictions from each drug class 
 ## representative
@@ -1603,25 +1607,23 @@ plot_oflo <- ggplot() +
   scale_color_manual("", values=c('grey60','grey60','grey60','grey60','grey60','grey60')) +
   th6
 
-legend_fig6 <- get_legend(
+legend_fig7 <- get_legend(
   # create some space to the left of the legend
   plot_met + theme(legend.position = "top",
                    legend.justification = "center")
 )
 
-fig6 <- plot_grid(plot_met + theme(legend.position = "none"), 
+fig7 <- plot_grid(plot_met + theme(legend.position = "none"), 
                      plot_vori + theme(legend.position = "none"),
                      plot_nif + theme(legend.position = "none"),
                      plot_dig + theme(legend.position = "none"),
                      plot_oflo + theme(legend.position = "none"), 
                      ncol=3, nrow=2)
 
-fig6 <- plot_grid(legend_fig6, fig6, ncol = 1, rel_heights = c(.1, 1))
-fig6
-#ggsave(file="../deliv/figure/fig6.png", fig6, width=8, height=12)
+fig7 <- plot_grid(legend_fig7, fig7, ncol = 1, rel_heights = c(.1, 1))
+fig7
+ggsave(file="../deliv/figure/fig7.png", fig7, width=12, height=10)
 
-#fig6_test <- grid.arrange(plot_met, plot_vori, plot_nif, plot_dig, plot_oflo, ncol=5, nrow=1)
-#ggsave(file="../deliv/figure/fig6_poster_test.pdf", fig6_test, width=20, height=4)
 
 legend_figS2 <- get_legend(
   # create some space to the left of the legend
@@ -1640,282 +1642,454 @@ figS2 <- plot_grid(plot_caf + theme(legend.position = "none"),
 
 figS2 <- plot_grid(legend_figS2, figS2, ncol = 1, rel_heights = c(.1, 1)) 
 figS2
-#ggsave(file="../deliv/figure/figS2.png", figS2, width=8, height=16)
+ggsave(file="../deliv/figure/figS2.png", figS2, width=16, height=16)
 
 
 #########################################################################################################
 #########################################################################################################
 
 #########################################################################################################
-######################################## CHUNK 7: Table 1 and Figure 7 ##################################
+################################# CHUNK 7: Table 1 and Figures 8 and 9 ##################################
 #########################################################################################################
 ## This table shows the error estimates for half-life and RMSE from the model 
 ## predictions from each drug class representative
 
+source("PBPK_sim_voriconazole_reported.R") # pk_vori
+pk_vori_rep <- pk_vori
 source("PBPK_sim_voriconazole.R") # pk_vori
-pk_vori <- getVorPK(unified = T)
-pk_vori_rep <- getVorPK(unified = F)
-source("PBPK_sim_alfentanil.R")   # pk_alf
-pk_alf <- getAlfPK(unified = T)
-pk_alf_rep <- getAlfPK(unified = F)
-source("PBPK_sim_nevirapine.R")   # pk_nev
-pk_nev <- getNevPK(unified = T)
-pk_nev_rep <- getNevPK(unified = F)
-source("PBPK_sim_midazolam.R")    # pk_mid
-pk_mid <- getMidPK(unified = T)
-pk_mid_rep <- getMidPK(unified = F)
-source("PBPK_sim_metoprolol.R")   # pk_met
-pk_met <- getMetPK(unified = T)
-pk_met_rep <- getMetPK(unified = F)
-source("PBPK_sim_caffeine.R")     # pk_caf
-pk_caf <- getCafPK(unified = T)
-pk_caf_rep <- getCafPK(unified = F)
-source("PBPK_sim_thiopental.R")   # pk_thio_S and pk_thio_R
-pk_thio_S <- getThiPK(unified = T, config = "S")
-pk_thio_S_rep <- getThiPK(unified = F, config = "S")
-pk_thio_R <- getThiPK(unified = T, config = "R")
-pk_thio_R_rep <- getThiPK(unified = F, config = "R")
-source("PBPK_sim_nifedipine.R")   # pk_nif
-pk_nif <- getNifPK(unified = T)
-pk_nif_rep <- getNifPK(unified = F)
-source("PBPK_sim_digoxin.R")      # pk_dig
-pk_dig <- getDigPK(unified = T)
-pk_dig_rep <- getDigPK(unified = F)
-source("PBPK_sim_artemether.R")   # pk_art
-pk_art <- getArtPK(unified = T)
-pk_art_rep <- getArtPK(unified = F)
-source("PBPK_sim_ofloxacin.R")    # pk_oflo
-pk_oflo <- getOflPK(unified = T)
-pk_oflo_rep <- getOflPK(unified = F)
 
-pk_alf <- pk_alf %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
-  bind_rows(pk_alf_rep %>% mutate(Method = paste0(Method, "-reported TC")))
-pk_vori <- pk_vori %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
-  bind_rows(pk_vori_rep %>% mutate(Method = paste0(Method, "-reported TC")))
-pk_art <- pk_art %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
-  bind_rows(pk_art_rep %>% mutate(Method = paste0(Method, "-reported TC")))
-pk_nev <- pk_nev %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
-  bind_rows(pk_nev_rep %>% mutate(Method = paste0(Method, "-reported TC")))
-pk_nif <- pk_nif %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
-  bind_rows(pk_nif_rep %>% mutate(Method = paste0(Method, "-reported TC")))
-pk_mid <- pk_mid %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
-  bind_rows(pk_mid_rep %>% mutate(Method = paste0(Method, "-reported TC")))
-pk_thio_R <- pk_thio_R %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
-  bind_rows(pk_thio_R_rep %>% mutate(Method = paste0(Method, "-reported TC")))
-pk_thio_S <- pk_thio_S %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
-  bind_rows(pk_thio_S_rep %>% mutate(Method = paste0(Method, "-reported TC")))
-pk_dig <- pk_dig %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
-  bind_rows(pk_dig_rep %>% mutate(Method = paste0(Method, "-reported TC")))
-pk_oflo <- pk_oflo %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
-  bind_rows(pk_oflo_rep %>% mutate(Method = paste0(Method, "-reported TC")))
-pk_caf <- pk_caf %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
-  bind_rows(pk_caf_rep %>% mutate(Method = paste0(Method, "-reported TC")))
-pk_met <- pk_met %>% mutate(Method = paste0(Method, "-unified TC")) %>% 
-  bind_rows(pk_met_rep %>% mutate(Method = paste0(Method, "-reported TC")))
+source("PBPK_sim_alfentanil_reported.R")   # pk_alf
+pk_alf_rep <- pk_alf
+source("PBPK_sim_alfentanil.R")   # pk_alf
+
+source("PBPK_sim_nevirapine_reported.R")   # pk_nev
+pk_nev_rep <- pk_nev
+source("PBPK_sim_nevirapine.R")   # pk_nev
+
+source("PBPK_sim_midazolam_reported.R")    # pk_mid
+pk_mid_rep <- pk_mid
+source("PBPK_sim_midazolam.R")    # pk_mid
+
+source("PBPK_sim_metoprolol_reported.R")   # pk_met
+pk_met_rep <- pk_met
+source("PBPK_sim_metoprolol.R")   # pk_met
+
+source("PBPK_sim_caffeine_reported.R")     # pk_caf
+pk_caf_rep <- pk_caf
+source("PBPK_sim_caffeine.R")     # pk_caf
+
+source("PBPK_sim_thiopental_reported.R")   # pk_thio_S and pk_thio_R
+pk_thio_R_rep <- pk_thio_R
+pk_thio_S_rep <- pk_thio_S
+source("PBPK_sim_thiopental.R")   # pk_thio_S and pk_thio_R
+
+source("PBPK_sim_nifedipine_reported.R")   # pk_nif
+pk_nif_rep <- pk_nif
+source("PBPK_sim_nifedipine.R")   # pk_nif
+
+source("PBPK_sim_digoxin_reported.R")      # pk_dig
+pk_dig_rep <- pk_dig
+source("PBPK_sim_digoxin.R")      # pk_dig
+
+source("PBPK_sim_artemether_reported.R")   # pk_art
+pk_art_rep <- pk_art
+source("PBPK_sim_artemether.R")   # pk_art
+
+source("PBPK_sim_ofloxacin_reported.R")    # pk_oflo
+pk_oflo_rep <- pk_oflo
+source("PBPK_sim_ofloxacin.R")    # pk_oflo
+
+pk_alf_all <- pk_alf %>% mutate(TC = paste0("standardized TC")) %>% 
+  bind_rows(pk_alf_rep %>% mutate(TC = paste0("reported TC")))
+pk_vori_all <- pk_vori %>% mutate(TC = paste0("standardized TC")) %>% 
+  bind_rows(pk_vori_rep %>% mutate(TC = paste0("reported TC")))
+pk_art_all <- pk_art %>% mutate(TC = paste0("standardized TC")) %>% 
+  bind_rows(pk_art_rep %>% mutate(TC = paste0("reported TC")))
+pk_nev_all <- pk_nev %>% mutate(TC = paste0("standardized TC")) %>% 
+  bind_rows(pk_nev_rep %>% mutate(TC = paste0("reported TC")))
+pk_nif_all <- pk_nif %>% mutate(TC = paste0("standardized TC")) %>% 
+  bind_rows(pk_nif_rep %>% mutate(TC = paste0("reported TC")))
+pk_mid_all <- pk_mid %>% mutate(TC = paste0("standardized TC")) %>% 
+  bind_rows(pk_mid_rep %>% mutate(TC = paste0("reported TC")))
+pk_thio_R_all <- pk_thio_R %>% mutate(TC = paste0("standardized TC")) %>% 
+  bind_rows(pk_thio_R_rep %>% mutate(TC = paste0("reported TC")))
+pk_thio_S_all <- pk_thio_S %>% mutate(TC = paste0("standardized TC")) %>% 
+  bind_rows(pk_thio_S_rep %>% mutate(TC = paste0("reported TC")))
+pk_dig_all <- pk_dig %>% mutate(TC = paste0("standardized TC")) %>% 
+  bind_rows(pk_dig_rep %>% mutate(TC = paste0("reported TC")))
+pk_oflo_all <- pk_oflo %>% mutate(TC = paste0("standardized TC")) %>% 
+  bind_rows(pk_oflo_rep %>% mutate(TC = paste0("reported TC")))
+pk_caf_all <- pk_caf %>% mutate(TC = paste0("standardized TC")) %>% 
+  bind_rows(pk_caf_rep %>% mutate(TC = paste0("reported TC")))
+pk_met_all <- pk_met %>% mutate(TC = paste0("standardized TC")) %>% 
+  bind_rows(pk_met_rep %>% mutate(TC = paste0("reported TC")))
+
+# compute delta error between reported and standardized TC-based predictions
+# rmse
+pk_delta_met_rmse <- pk_met_all %>% filter(TC == "reported TC") %>% select(RelRMSE, Method) %>% rename(RelRMSE_reported=RelRMSE) %>%
+  bind_cols(pk_met_all %>% filter(TC == "standardized TC") %>% select(RelRMSE) %>% rename(RelRMSE_standardized=RelRMSE)) %>%
+  mutate(delta = RelRMSE_reported - RelRMSE_standardized)
+pk_delta_caf_rmse <- pk_caf_all %>% filter(TC == "reported TC") %>% select(RelRMSE, Method) %>% rename(RelRMSE_reported=RelRMSE) %>%
+  bind_cols(pk_caf_all %>% filter(TC == "standardized TC") %>% select(RelRMSE) %>% rename(RelRMSE_standardized=RelRMSE)) %>%
+  mutate(delta = RelRMSE_reported - RelRMSE_standardized)
+pk_delta_vori_rmse <- pk_vori_all %>% filter(TC == "reported TC") %>% select(RelRMSE, Method) %>% rename(RelRMSE_reported=RelRMSE) %>%
+  bind_cols(pk_vori_all %>% filter(TC == "standardized TC") %>% select(RelRMSE) %>% rename(RelRMSE_standardized=RelRMSE)) %>%
+  mutate(delta = RelRMSE_reported - RelRMSE_standardized)
+pk_delta_alf_rmse <- pk_alf_all %>% filter(TC == "reported TC") %>% select(RelRMSE, Method) %>% rename(RelRMSE_reported=RelRMSE) %>%
+  bind_cols(pk_alf_all %>% filter(TC == "standardized TC") %>% select(RelRMSE) %>% rename(RelRMSE_standardized=RelRMSE)) %>%
+  mutate(delta = RelRMSE_reported - RelRMSE_standardized)
+pk_delta_nev_rmse <- pk_nev_all %>% filter(TC == "reported TC") %>% select(RelRMSE, Method) %>% rename(RelRMSE_reported=RelRMSE) %>%
+  bind_cols(pk_nev_all %>% filter(TC == "standardized TC") %>% select(RelRMSE) %>% rename(RelRMSE_standardized=RelRMSE)) %>%
+  mutate(delta = RelRMSE_reported - RelRMSE_standardized)
+pk_delta_mid_rmse <- pk_mid_all %>% filter(TC == "reported TC") %>% select(RelRMSE, Method) %>% rename(RelRMSE_reported=RelRMSE) %>%
+  bind_cols(pk_mid_all %>% filter(TC == "standardized TC") %>% select(RelRMSE) %>% rename(RelRMSE_standardized=RelRMSE)) %>%
+  mutate(delta = RelRMSE_reported - RelRMSE_standardized)
+pk_delta_thio_S_rmse <- pk_thio_S_all %>% filter(TC == "reported TC") %>% select(RelRMSE, Method) %>% rename(RelRMSE_reported=RelRMSE) %>%
+  bind_cols(pk_thio_S_all %>% filter(TC == "standardized TC") %>% select(RelRMSE) %>% rename(RelRMSE_standardized=RelRMSE)) %>%
+  mutate(delta = RelRMSE_reported - RelRMSE_standardized)
+pk_delta_thio_R_rmse <- pk_thio_R_all %>% filter(TC == "reported TC") %>% select(RelRMSE, Method) %>% rename(RelRMSE_reported=RelRMSE) %>%
+  bind_cols(pk_thio_R_all %>% filter(TC == "standardized TC") %>% select(RelRMSE) %>% rename(RelRMSE_standardized=RelRMSE)) %>%
+  mutate(delta = RelRMSE_reported - RelRMSE_standardized)
+pk_delta_nif_rmse <- pk_nif_all %>% filter(TC == "reported TC") %>% select(RelRMSE, Method) %>% rename(RelRMSE_reported=RelRMSE) %>%
+  bind_cols(pk_nif_all %>% filter(TC == "standardized TC") %>% select(RelRMSE) %>% rename(RelRMSE_standardized=RelRMSE)) %>%
+  mutate(delta = RelRMSE_reported - RelRMSE_standardized)
+pk_delta_dig_rmse <- pk_dig_all %>% filter(TC == "reported TC") %>% select(RelRMSE, Method) %>% rename(RelRMSE_reported=RelRMSE) %>%
+  bind_cols(pk_dig_all %>% filter(TC == "standardized TC") %>% select(RelRMSE) %>% rename(RelRMSE_standardized=RelRMSE)) %>%
+  mutate(delta = RelRMSE_reported - RelRMSE_standardized)
+pk_delta_art_rmse <- pk_art_all %>% filter(TC == "reported TC") %>% select(RelRMSE, Method) %>% rename(RelRMSE_reported=RelRMSE) %>%
+  bind_cols(pk_art_all %>% filter(TC == "standardized TC") %>% select(RelRMSE) %>% rename(RelRMSE_standardized=RelRMSE)) %>%
+  mutate(delta = RelRMSE_reported - RelRMSE_standardized)
+pk_delta_oflo_rmse <- pk_oflo_all %>% filter(TC == "reported TC") %>% select(RelRMSE, Method) %>% rename(RelRMSE_reported=RelRMSE) %>%
+  bind_cols(pk_oflo_all %>% filter(TC == "standardized TC") %>% select(RelRMSE) %>% rename(RelRMSE_standardized=RelRMSE)) %>%
+  mutate(delta = RelRMSE_reported - RelRMSE_standardized)
+
+#pk_delta_nif_rmse <- pk_delta_nif_rmse %>% filter(delta > -400)  #remove very large delta for plotting purposes
+
+# hl
+pk_delta_met_hl <- pk_met_all %>% filter(TC == "reported TC") %>% select(hlerror, Method) %>% rename(hlerror_reported=hlerror) %>%
+  bind_cols(pk_met_all %>% filter(TC == "standardized TC") %>% select(hlerror) %>% rename(hlerror_standardized=hlerror)) %>%
+  mutate(delta = hlerror_reported - hlerror_standardized)
+pk_delta_caf_hl <- pk_caf_all %>% filter(TC == "reported TC") %>% select(hlerror, Method) %>% rename(hlerror_reported=hlerror) %>%
+  bind_cols(pk_caf_all %>% filter(TC == "standardized TC") %>% select(hlerror) %>% rename(hlerror_standardized=hlerror)) %>%
+  mutate(delta = hlerror_reported - hlerror_standardized)
+pk_delta_vori_hl <- pk_vori_all %>% filter(TC == "reported TC") %>% select(hlerror, Method) %>% rename(hlerror_reported=hlerror) %>%
+  bind_cols(pk_vori_all %>% filter(TC == "standardized TC") %>% select(hlerror) %>% rename(hlerror_standardized=hlerror)) %>%
+  mutate(delta = hlerror_reported - hlerror_standardized)
+pk_delta_alf_hl <- pk_alf_all %>% filter(TC == "reported TC") %>% select(hlerror, Method) %>% rename(hlerror_reported=hlerror) %>%
+  bind_cols(pk_alf_all %>% filter(TC == "standardized TC") %>% select(hlerror) %>% rename(hlerror_standardized=hlerror)) %>%
+  mutate(delta = hlerror_reported - hlerror_standardized)
+pk_delta_nev_hl <- pk_nev_all %>% filter(TC == "reported TC") %>% select(hlerror, Method) %>% rename(hlerror_reported=hlerror) %>%
+  bind_cols(pk_nev_all %>% filter(TC == "standardized TC") %>% select(hlerror) %>% rename(hlerror_standardized=hlerror)) %>%
+  mutate(delta = hlerror_reported - hlerror_standardized)
+pk_delta_mid_hl <- pk_mid_all %>% filter(TC == "reported TC") %>% select(hlerror, Method) %>% rename(hlerror_reported=hlerror) %>%
+  bind_cols(pk_mid_all %>% filter(TC == "standardized TC") %>% select(hlerror) %>% rename(hlerror_standardized=hlerror)) %>%
+  mutate(delta = hlerror_reported - hlerror_standardized)
+pk_delta_thio_S_hl <- pk_thio_S_all %>% filter(TC == "reported TC") %>% select(hlerror, Method) %>% rename(hlerror_reported=hlerror) %>%
+  bind_cols(pk_thio_S_all %>% filter(TC == "standardized TC") %>% select(hlerror) %>% rename(hlerror_standardized=hlerror)) %>%
+  mutate(delta = hlerror_reported - hlerror_standardized)
+pk_delta_thio_R_hl <- pk_thio_R_all %>% filter(TC == "reported TC") %>% select(hlerror, Method) %>% rename(hlerror_reported=hlerror) %>%
+  bind_cols(pk_thio_R_all %>% filter(TC == "standardized TC") %>% select(hlerror) %>% rename(hlerror_standardized=hlerror)) %>%
+  mutate(delta = hlerror_reported - hlerror_standardized)
+pk_delta_nif_hl <- pk_nif_all %>% filter(TC == "reported TC") %>% select(hlerror, Method) %>% rename(hlerror_reported=hlerror) %>%
+  bind_cols(pk_nif_all %>% filter(TC == "standardized TC") %>% select(hlerror) %>% rename(hlerror_standardized=hlerror)) %>%
+  mutate(delta = hlerror_reported - hlerror_standardized)
+pk_delta_dig_hl <- pk_dig_all %>% filter(TC == "reported TC") %>% select(hlerror, Method) %>% rename(hlerror_reported=hlerror) %>%
+  bind_cols(pk_dig_all %>% filter(TC == "standardized TC") %>% select(hlerror) %>% rename(hlerror_standardized=hlerror)) %>%
+  mutate(delta = hlerror_reported - hlerror_standardized)
+pk_delta_art_hl <- pk_art_all %>% filter(TC == "reported TC") %>% select(hlerror, Method) %>% rename(hlerror_reported=hlerror) %>%
+  bind_cols(pk_art_all %>% filter(TC == "standardized TC") %>% select(hlerror) %>% rename(hlerror_standardized=hlerror)) %>%
+  mutate(delta = hlerror_reported - hlerror_standardized)
+pk_delta_oflo_hl <- pk_oflo_all %>% filter(TC == "reported TC") %>% select(hlerror, Method) %>% rename(hlerror_reported=hlerror) %>%
+  bind_cols(pk_oflo_all %>% filter(TC == "standardized TC") %>% select(hlerror) %>% rename(hlerror_standardized=hlerror)) %>%
+  mutate(delta = hlerror_reported - hlerror_standardized)
+
+
 # Make a figure, but could also convert to table
-size <- 2.5
+size <- 2
 stroke <- 0.5
 
 
-# # RelRMSE = scale the root mean square error by the range of the observations
-# fig7a <- ggplot() +
-#   geom_point(data=pk_met, aes(x=1, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_caf, aes(x=2, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_vori, aes(x=4, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_alf, aes(x=5, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_nev, aes(x=6, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_mid, aes(x=7, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_thio_S, aes(x=9, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_thio_R, aes(x=10, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_nif, aes(x=11, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_dig, aes(x=13, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_art, aes(x=14, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_oflo, aes(x=16, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
-#   scale_x_continuous(breaks=c(1,2,4,5,6,7,9,10,11,13,14,16),
-#                      labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
-#                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
-#                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
-#   #ylim(0,18) + #Using error
-#   #ylim(0, 1500) +
-#   scale_y_log10(limits = c(1e-1,1e6)) +
-#   xlab("") +
-#   ylab("Percent error") +
-#   ggtitle("RMSE") +
-#   #ggtitle("RMSE") +
-#   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
-#   th7
-# fig7a
-
 # RelRMSE = scale the root mean square error by the range of the observations
-fig7a <- ggplot() +
-  geom_point(data=pk_met, aes(x=1, y=RelRMSE, col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_caf, aes(x=2, y=RelRMSE, col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_vori, aes(x=4, y=RelRMSE, col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_alf, aes(x=5, y=RelRMSE, col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_nev, aes(x=6, y=RelRMSE, col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_mid, aes(x=7, y=RelRMSE, col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_thio_S, aes(x=9, y=RelRMSE, col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_thio_R, aes(x=10, y=RelRMSE, col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_nif, aes(x=11, y=RelRMSE, col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_dig, aes(x=13, y=RelRMSE, col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_art, aes(x=14, y=RelRMSE, col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_oflo, aes(x=16, y=RelRMSE, col=Method),size=size, stroke=stroke) +
+fig8a <- ggplot() +
+  geom_point(data=pk_met_all%>%filter(TC=="standardized TC"), aes(x=1, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_caf_all%>%filter(TC=="standardized TC"), aes(x=2, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_vori_all%>%filter(TC=="standardized TC"), aes(x=4, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_alf_all%>%filter(TC=="standardized TC"), aes(x=5, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_nev_all%>%filter(TC=="standardized TC"), aes(x=6, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_mid_all%>%filter(TC=="standardized TC"), aes(x=7, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_thio_S_all%>%filter(TC=="standardized TC"), aes(x=9, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_thio_R_all%>%filter(TC=="standardized TC"), aes(x=10, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_nif_all%>%filter(TC=="standardized TC"), aes(x=11, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_dig_all%>%filter(TC=="standardized TC"), aes(x=13, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_art_all%>%filter(TC=="standardized TC"), aes(x=14, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_oflo_all%>%filter(TC=="standardized TC"), aes(x=16, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
   scale_x_continuous(breaks=c(1,2,4,5,6,7,9,10,11,13,14,16),
                      labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
-  #ylim(0,18) + #Using error
-  #ylim(0, 1500) +
-  scale_y_log10(limits = c(1e-1,1e6)) +
+  scale_y_log10(limits = c(1e-1,1e4)) +
   xlab("") +
   ylab("Percent error") +
-  ggtitle("RMSE") +
-  #ggtitle("RMSE") +
+  scale_shape_manual("", values=c(0,2,3,4,5,8)) +
+  ggtitle("RMSE (standardized TC)") +
+  th7
+#fig8a
+
+fig8b <- ggplot() +
+  geom_point(data=pk_met_all%>%filter(TC=="reported TC"), aes(x=1, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_caf_all%>%filter(TC=="reported TC"), aes(x=2, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_vori_all%>%filter(TC=="reported TC"), aes(x=4, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_alf_all%>%filter(TC=="reported TC"), aes(x=5, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_nev_all%>%filter(TC=="reported TC"), aes(x=6, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_mid_all%>%filter(TC=="reported TC"), aes(x=7, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_thio_S_all%>%filter(TC=="reported TC"), aes(x=9, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_thio_R_all%>%filter(TC=="reported TC"), aes(x=10, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_nif_all%>%filter(TC=="reported TC"), aes(x=11, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_dig_all%>%filter(TC=="reported TC"), aes(x=13, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_art_all%>%filter(TC=="reported TC"), aes(x=14, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_oflo_all%>%filter(TC=="reported TC"), aes(x=16, y=RelRMSE, shape=Method),size=size, stroke=stroke) +
+  scale_x_continuous(breaks=c(1,2,4,5,6,7,9,10,11,13,14,16),
+                     labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
+                                "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
+                                "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
+  scale_y_log10(limits = c(1e-1,1e4)) +
+  xlab("") +
+  ylab("Percent error") +
+  ggtitle("RMSE (reported TC)") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
-fig7a
-
+#fig8b
 
 # ### Half-life (semi-log plot)
-# fig7b <- ggplot() +
-#   geom_point(data=pk_met, aes(x=1, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_caf, aes(x=2, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_vori, aes(x=4, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_alf, aes(x=5, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_nev, aes(x=6, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_mid, aes(x=7, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_thio_S, aes(x=9, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_thio_R, aes(x=10, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_nif, aes(x=11, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_dig, aes(x=13, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_art, aes(x=14, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_oflo, aes(x=16, y=abs(hlerror), shape=Method),size=size, stroke=stroke) +
-#   scale_x_continuous(breaks=c(1,2,4,5,6,7,9,10,11,13,14,16),
-#                      labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
-#                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
-#                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
-#   scale_y_log10(limits = c(1e-1,1e6)) +
-#   xlab("") +
-#   ylab("Percent error") +
-#   ggtitle("Half-life error") +
-#   #ggtitle("Half-life error") +
-#   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
-#   th7
-# fig7b
-
-### Half-life (semi-log plot)
-fig7b <- ggplot() +
-  geom_point(data=pk_met, aes(x=1, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_caf, aes(x=2, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_vori, aes(x=4, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_alf, aes(x=5, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_nev, aes(x=6, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_mid, aes(x=7, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_thio_S, aes(x=9, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_thio_R, aes(x=10, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_nif, aes(x=11, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_dig, aes(x=13, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_art, aes(x=14, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
-  geom_point(data=pk_oflo, aes(x=16, y=abs(hlerror), col=Method),size=size, stroke=stroke) +
+fig8c <- ggplot() +
+  geom_point(data=pk_met_all%>%filter(TC=="standardized TC"), aes(x=1, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_caf_all%>%filter(TC=="standardized TC"), aes(x=2, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_vori_all%>%filter(TC=="standardized TC"), aes(x=4, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_alf_all%>%filter(TC=="standardized TC"), aes(x=5, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_nev_all%>%filter(TC=="standardized TC"), aes(x=6, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_mid_all%>%filter(TC=="standardized TC"), aes(x=7, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_thio_S_all%>%filter(TC=="standardized TC"), aes(x=9, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_thio_R_all%>%filter(TC=="standardized TC"), aes(x=10, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_nif_all%>%filter(TC=="standardized TC"), aes(x=11, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_dig_all%>%filter(TC=="standardized TC"), aes(x=13, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_art_all%>%filter(TC=="standardized TC"), aes(x=14, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_oflo_all%>%filter(TC=="standardized TC"), aes(x=16, y=hlerror, shape=Method),size=size, stroke=stroke) +
   scale_x_continuous(breaks=c(1,2,4,5,6,7,9,10,11,13,14,16),
                      labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
-  scale_y_log10(limits = c(1e-1,1e6)) +
+  scale_y_log10(limits = c(1e-1,1e4)) +
   xlab("") +
   ylab("Percent error") +
-  ggtitle("Half-life error") +
-  #ggtitle("Half-life error") +
+  ggtitle("Half-life error (standardized TC)") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   th7
-fig7b
+#fig8c
 
-fig7 <- plot_grid(fig7a, fig7b, ncol=2, nrow=1, labels=c("A","B"))
-#ggsave(file="../deliv/figure/fig7.png", fig7, width=8, height=6)
-#ggsave(file="../deliv/figure/fig7_poster_new.pdf", fig7, width=8, height=8)
+fig8d <- ggplot() +
+  geom_point(data=pk_met_all%>%filter(TC=="reported TC"), aes(x=1, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_caf_all%>%filter(TC=="reported TC"), aes(x=2, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_vori_all%>%filter(TC=="reported TC"), aes(x=4, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_alf_all%>%filter(TC=="reported TC"), aes(x=5, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_nev_all%>%filter(TC=="reported TC"), aes(x=6, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_mid_all%>%filter(TC=="reported TC"), aes(x=7, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_thio_S_all%>%filter(TC=="reported TC"), aes(x=9, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_thio_R_all%>%filter(TC=="reported TC"), aes(x=10, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_nif_all%>%filter(TC=="reported TC"), aes(x=11, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_dig_all%>%filter(TC=="reported TC"), aes(x=13, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_art_all%>%filter(TC=="reported TC"), aes(x=14, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  geom_point(data=pk_oflo_all%>%filter(TC=="reported TC"), aes(x=16, y=hlerror, shape=Method),size=size, stroke=stroke) +
+  scale_x_continuous(breaks=c(1,2,4,5,6,7,9,10,11,13,14,16),
+                     labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
+                                "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
+                                "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
+  scale_y_log10(limits = c(1e-1,1e4)) +
+  xlab("") +
+  ylab("Percent error") +
+  ggtitle("Half-life error (reported TC)") +
+  scale_shape_manual("", values=c(0,2,3,4,5,8)) +
+  th7
+#fig8d
 
-### Half-life
-# fig7c_no_log <- ggplot() +
-#   geom_point(data=pk_met, aes(x=1, y=hlerror, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_caf, aes(x=2, y=hlerror, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_vori, aes(x=4, y=hlerror, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_alf, aes(x=5, y=hlerror, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_nev, aes(x=6, y=hlerror, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_mid, aes(x=7, y=hlerror, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_thio_S, aes(x=9, y=hlerror, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_thio_R, aes(x=10, y=hlerror, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_nif, aes(x=11, y=hlerror, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_dig, aes(x=13, y=hlerror, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_art, aes(x=14, y=hlerror, shape=Method),size=size, stroke=stroke) +
-#   geom_point(data=pk_oflo, aes(x=16, y=hlerror, shape=Method),size=size, stroke=stroke) +
-#   geom_abline(intercept = 0, slope = 0) +
-#   scale_x_continuous(breaks=c(1,2,4,5,6,7,9,10,11,13,14,16),
-#                      labels = c("Metoprolol","Caffeine","Voriconazole","Alfentanil",
-#                                 "Nevirapine","Midazolam","S-Thiopental","R-Thiopental",
-#                                 "Nifedipine","Digoxin","Artemether","Ofloxacin")) +
-#   ylim(-80,80) +
-#   xlab("") +
-#   ylab("Residual error") +
-#   ggtitle("c  Half-life error") +
-#   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
-#   th7
-# 
-# fig7_no_log <- grid.arrange(fig7a, fig7b, fig7c_no_log, ncol=3, nrow=1)
-# ggsave(file="../deliv/figure/fig7_no_log.png", fig7_no_log, width=8, height=6)
+legend <- get_legend(
+  # create some space to the left of the legend
+  fig8a + theme(legend.box.margin = margin(0, 0, 0, 12))
+)
+
+fig8Star <- plot_grid(fig8a + theme(legend.position = "none"), 
+                      fig8b + theme(legend.position = "none"), 
+                      fig8c + theme(legend.position = "none"), 
+                      fig8d + theme(legend.position = "none"), 
+                      ncol=2, nrow=2, labels=c("A","B","C","D"))
+fig8 <- plot_grid(legend, fig8Star, ncol=1, rel_heights = c(.1,1))
+fig8
+
+ggsave(file="../deliv/figure/fig8.png", fig8, width=8, height=6)
 
 
+## Figure 9
+pk_alf_2 <- pk_alf %>% select(Method, RelRMSE_st = RelRMSE, hlerror_st=hlerror) %>% 
+  bind_cols(pk_alf_rep %>% select(RelRMSE_rep=RelRMSE, hlerror_rep=hlerror))
+pk_nif_2 <- pk_nif %>% select(Method, RelRMSE_st = RelRMSE, hlerror_st=hlerror) %>% 
+  bind_cols(pk_nif_rep %>% select(RelRMSE_rep=RelRMSE, hlerror_rep=hlerror))
+pk_met_2 <- pk_met %>% select(Method, RelRMSE_st = RelRMSE, hlerror_st=hlerror) %>% 
+  bind_cols(pk_met_rep %>% select(RelRMSE_rep=RelRMSE, hlerror_rep=hlerror))
+pk_caf_2 <- pk_caf %>% select(Method, RelRMSE_st = RelRMSE, hlerror_st=hlerror) %>% 
+  bind_cols(pk_caf_rep %>% select(RelRMSE_rep=RelRMSE, hlerror_rep=hlerror))
+pk_vori_2 <- pk_vori %>% select(Method, RelRMSE_st = RelRMSE, hlerror_st=hlerror) %>% 
+  bind_cols(pk_vori_rep %>% select(RelRMSE_rep=RelRMSE, hlerror_rep=hlerror))
+pk_nev_2 <- pk_nev %>% select(Method, RelRMSE_st = RelRMSE, hlerror_st=hlerror) %>% 
+  bind_cols(pk_nev_rep %>% select(RelRMSE_rep=RelRMSE, hlerror_rep=hlerror))
+pk_mid_2 <- pk_mid %>% select(Method, RelRMSE_st = RelRMSE, hlerror_st=hlerror) %>% 
+  bind_cols(pk_mid_rep %>% select(RelRMSE_rep=RelRMSE, hlerror_rep=hlerror))
+pk_thio_R_2 <- pk_thio_R %>% select(Method, RelRMSE_st = RelRMSE, hlerror_st=hlerror) %>% 
+  bind_cols(pk_thio_R_rep %>% select(RelRMSE_rep=RelRMSE, hlerror_rep=hlerror))
+pk_thio_S_2 <- pk_thio_S %>% select(Method, RelRMSE_st = RelRMSE, hlerror_st=hlerror) %>% 
+  bind_cols(pk_thio_S_rep %>% select(RelRMSE_rep=RelRMSE, hlerror_rep=hlerror))
+pk_dig_2 <- pk_dig %>% select(Method, RelRMSE_st = RelRMSE, hlerror_st=hlerror) %>% 
+  bind_cols(pk_dig_rep %>% select(RelRMSE_rep=RelRMSE, hlerror_rep=hlerror))
+pk_art_2 <- pk_art %>% select(Method, RelRMSE_st = RelRMSE, hlerror_st=hlerror) %>% 
+  bind_cols(pk_art_rep %>% select(RelRMSE_rep=RelRMSE, hlerror_rep=hlerror))
+pk_oflo_2 <- pk_oflo %>% select(Method, RelRMSE_st = RelRMSE, hlerror_st=hlerror) %>% 
+  bind_cols(pk_oflo_rep %>% select(RelRMSE_rep=RelRMSE, hlerror_rep=hlerror))
 
+fig9a <- ggplot() + 
+  geom_point(data=pk_met_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_caf_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_vori_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_alf_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_nev_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_mid_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_thio_S_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_thio_R_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_nif_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_dig_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_art_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_oflo_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_abline(slope=1, intercept = 0) +
+  scale_shape_manual("", values=c(0,2,3,4,5,8)) +
+  labs(x="Percent RMSE (standardized TC)", y="Percent RMSE (reported TC)") +
+  th8
+
+fig9b <- ggplot() + 
+  geom_point(data=pk_met_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_caf_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_vori_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_alf_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_nev_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_mid_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_thio_S_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_thio_R_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_nif_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_dig_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_art_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_oflo_2, aes(x=RelRMSE_st, y=RelRMSE_rep, shape=Method), size=size, stroke=stroke) +
+  geom_abline(slope=1, intercept = 0) +
+  scale_y_continuous(trans = "log10") +
+  scale_x_continuous(trans = "log10") +
+  scale_shape_manual("", values=c(0,2,3,4,5,8)) +
+  labs(x="Percent RMSE (standardized TC)", y="Percent RMSE (reported TC)") +
+  th8
+
+fig9c <- ggplot() + 
+  geom_point(data=pk_met_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_caf_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_vori_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_alf_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_nev_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_mid_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_thio_S_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_thio_R_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_nif_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_dig_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_art_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_oflo_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_abline(slope=1, intercept = 0) +
+  xlim(c(0,3000)) + ylim(c(0,3000)) +
+  scale_shape_manual("", values=c(0,2,3,4,5,8)) +
+  labs(x="Half-life error percent (standardized TC)", y="Half-life error percent (reported TC)") +
+  th8
+
+fig9d <- ggplot() + 
+  geom_point(data=pk_met_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_caf_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_vori_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_alf_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_nev_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_mid_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_thio_S_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_thio_R_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_nif_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_dig_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_art_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_point(data=pk_oflo_2, aes(x=hlerror_st, y=hlerror_rep, shape=Method), size=size, stroke=stroke) +
+  geom_abline(slope=1, intercept = 0) +
+  scale_x_continuous(trans = "log10", limits = c(0.1,10000)) +
+  scale_y_continuous(trans = "log10", limits = c(0.1,10000)) +
+  scale_shape_manual("", values=c(0,2,3,4,5,8)) +
+  labs(x="Half-life error percent (standardized TC)", y="Half-life error percent (reported TC)") +
+  th8
+
+fig9Star <- plot_grid(fig9a + theme(legend.position = "none"), 
+                      fig9b + theme(legend.position = "none"), 
+                      fig9c + theme(legend.position = "none"), 
+                      fig9d + theme(legend.position = "none"),
+                      ncol=2, nrow=2, labels=c("A","B","C","D"))
+fig9 <- plot_grid(legend, fig9Star, ncol=1, rel_heights = c(.1,1))
+fig9
+
+ggsave(file="../deliv/figure/fig9.png", fig9, width=8, height=6)
 
 ### Generate table (drugs in the rows, columns of RMSE and half-life error)
-pk_met_mod <- c(pk_met$RelRMSE,pk_met$hlerror) %>%
+pk_met_mod <- c(pk_met_all$RelRMSE,pk_met_all$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Metoprolol")
-pk_caf_mod <- c(pk_caf$RelRMSE,pk_caf$hlerror) %>%
+pk_caf_mod <- c(pk_caf_all$RelRMSE,pk_caf_all$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Caffeine")
 
-pk_vori_mod <- c(pk_vori$RelRMSE,pk_vori$hlerror) %>%
+pk_vori_mod <- c(pk_vori_all$RelRMSE,pk_vori_all$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Voriconazole")
-pk_alf_mod <- c(pk_alf$RelRMSE,pk_alf$hlerror) %>%
+pk_alf_mod <- c(pk_alf_all$RelRMSE,pk_alf_all$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Alfentanil")
-pk_nev_mod <- c(pk_nev$RelRMSE,pk_nev$hlerror) %>%
+pk_nev_mod <- c(pk_nev_all$RelRMSE,pk_nev_all$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Nevirapine")
-pk_mid_mod <- c(pk_mid$RelRMSE,pk_mid$hlerror) %>%
+pk_mid_mod <- c(pk_mid_all$RelRMSE,pk_mid_all$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Midazolam")
 
-pk_thio_S_mod <- c(pk_thio_S$RelRMSE,pk_thio_S$hlerror) %>%
+pk_thio_S_mod <- c(pk_thio_S_all$RelRMSE,pk_thio_S_all$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("S-Thiopental")
-pk_thio_R_mod <- c(pk_thio_R$RelRMSE,pk_thio_R$hlerror) %>%
+pk_thio_R_mod <- c(pk_thio_R_all$RelRMSE,pk_thio_R_all$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("R-Thiopental")
-pk_nif_mod <- c(pk_nif$RelRMSE,pk_nif$hlerror) %>%
+pk_nif_mod <- c(pk_nif_all$RelRMSE,pk_nif_all$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Nifedipine")
 
-pk_dig_mod <- c(pk_dig$RelRMSE,pk_dig$hlerror) %>%
+pk_dig_mod <- c(pk_dig_all$RelRMSE,pk_dig_all$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Digoxin")
-pk_art_mod <- c(pk_art$RelRMSE,pk_art$hlerror) %>%
+pk_art_mod <- c(pk_art_all$RelRMSE,pk_art_all$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Artemether")
 
-pk_oflo_mod <- c(pk_oflo$RelRMSE,pk_oflo$hlerror) %>%
+pk_oflo_mod <- c(pk_oflo_all$RelRMSE,pk_oflo_all$hlerror) %>%
   sig() %>%
   t() %>%
   'rownames<-'("Ofloxacin")
@@ -1930,12 +2104,12 @@ pk_mod <- rbind(pk_met_mod, pk_caf_mod, pk_vori_mod, pk_alf_mod, pk_nev_mod, pk_
 #                  "PT","Berez","RR","Schmitt","PK-Sim"))
 
 # Include row of average values for each method (over all drugs)
-pk_mod_avg <- rbind(c(pk_met$RelRMSE,pk_met$hlerror), c(pk_caf$RelRMSE,pk_caf$hlerror),
-                    c(pk_vori$RelRMSE,pk_vori$hlerror), c(pk_alf$RelRMSE,pk_alf$hlerror),
-                    c(pk_nev$RelRMSE,pk_nev$hlerror), c(pk_mid$RelRMSE,pk_mid$hlerror),
-                    c(pk_thio_S$RelRMSE,pk_thio_S$hlerror), c(pk_thio_R$RelRMSE,pk_thio_R$hlerror),
-                    c(pk_nif$RelRMSE,pk_nif$hlerror), c(pk_dig$RelRMSE,pk_dig$hlerror),
-                    c(pk_art$RelRMSE,pk_art$hlerror), c(pk_oflo$RelRMSE,pk_oflo$hlerror))
+pk_mod_avg <- rbind(c(pk_met_all$RelRMSE,pk_met_all$hlerror), c(pk_caf_all$RelRMSE,pk_caf_all$hlerror),
+                    c(pk_vori_all$RelRMSE,pk_vori_all$hlerror), c(pk_alf_all$RelRMSE,pk_alf_all$hlerror),
+                    c(pk_nev_all$RelRMSE,pk_nev_all$hlerror), c(pk_mid_all$RelRMSE,pk_mid_all$hlerror),
+                    c(pk_thio_S_all$RelRMSE,pk_thio_S_all$hlerror), c(pk_thio_R_all$RelRMSE,pk_thio_R_all$hlerror),
+                    c(pk_nif_all$RelRMSE,pk_nif_all$hlerror), c(pk_dig_all$RelRMSE,pk_dig_all$hlerror),
+                    c(pk_art_all$RelRMSE,pk_art_all$hlerror), c(pk_oflo_all$RelRMSE,pk_oflo_all$hlerror))
 
 pk_avg <-  colMeans(pk_mod_avg) %>%
   sig() %>%
@@ -1947,9 +2121,9 @@ pk_avg <-  colMeans(pk_mod_avg) %>%
 #                   "PT","Berez","RR","Schmitt","PK-Sim"))
 
 pk_mod_all <- rbind(pk_mod, pk_avg) %>%
-  'colnames<-'(c("PT-unified TC","Berez-unified TC","RR-unified TC","Schmitt-unified TC","PK-Sim-unified TC",
+  'colnames<-'(c("PT-standardized TC","Berez-standardized TC","RR-standardized TC","Schmitt-standardized TC","PK-Sim-standardized TC",
                  "PT-reported TC","Berez-reported TC","RR-reported TC","Schmitt-reported TC","PK-Sim-reported TC",
-                 "PT-unified TC","Berez-unified TC","RR-unified TC","Schmitt-unified TC","PK-Sim-unified TC",
+                 "PT-standardized TC","Berez-standardized TC","RR-standardized TC","Schmitt-standardized TC","PK-Sim-standardized TC",
                  "PT-reported TC","Berez-reported TC","RR-reported TC","Schmitt-reported TC","PK-Sim-reported TC"))
 
 pk_mod_all <- rbind(pk_mod, pk_avg) %>%
@@ -1958,21 +2132,12 @@ pk_mod_all <- rbind(pk_mod, pk_avg) %>%
                  "PT","Berez","RR","Schmitt","PK-Sim",
                  "PT","Berez","RR","Schmitt","PK-Sim"))
 
-# table1 <- kable(pk_mod_all,"html") %>%
-#   kable_styling(full_width=F) %>%
-#   add_header_above(c("","Relative percent RMSE"=5, "Half-life percent error"=5)) %>%
-#   group_rows("Strong bases", 1, 2) %>%
-#   group_rows("Weak bases", 3, 6) %>%
-#   group_rows("Acids", 7, 9) %>%
-#   group_rows("Neutrals", 10, 11) %>%
-#   group_rows("Zwitterion", 12, 12) 
-
-table1 <- kable(pk_mod_all,"html") %>%
+table2 <- kable(pk_mod_all,"html") %>%
   kable_styling(full_width=F) %>%
   add_header_above(c("",
-                     "Unified TC"=5, 
+                     "Standardized TC"=5, 
                      "Reported TC"=5,
-                     "Unified TC"=5, 
+                     "Standardized TC"=5, 
                      "Reported TC"=5)) %>%
   add_header_above(c("","Relative percent RMSE"=10, 
                      "Half-life percent error"=10)) %>%
@@ -1981,7 +2146,8 @@ table1 <- kable(pk_mod_all,"html") %>%
   group_rows("Acids", 7, 9) %>%
   group_rows("Neutrals", 10, 11) %>%
   group_rows("Zwitterion", 12, 12) 
+table2
 
 # uncomment if you want to save csv version of table
-#write.csv(pk_mod_all, file = "../deliv/table/ErrorSummTab.csv", quote = F, row.names = F)
+# write.csv(pk_mod_all, file = "../deliv/table/ErrorSummTab.csv", quote = F, row.names = F)
 

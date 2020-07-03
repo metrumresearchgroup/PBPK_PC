@@ -9,8 +9,6 @@ mod <- mread("../model/digoxinPBPK_Adult")
 # Load data
 df <- read.csv("../data/obs_iv_digoxin")
 
-getDigPK <- function(unified = T){
-
 # Convert from %dose/L to mg/L
 #df$conc <- df$conc*0.013/100 #df$conc * (dose/100)
 
@@ -21,19 +19,11 @@ pKa <- 0  #neutral
 fup <- 0.61
 BP <- 0.94  #https://link.springer.com/content/pdf/10.1208%2Fs12248-016-0009-9.pdf
 
-if(unified){
-  Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_uni)
-  Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_uni)
-  Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_uni)
-  Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_uni)
-  Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_uni) 
-}else{
-  Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_PT)
-  Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_Berez)
-  Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_RR)
-  Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_Schmitt_rep)
-  Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_pksim)
-}
+Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_uni)
+Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_uni)
+Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_uni)
+Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_uni)
+Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_uni)
 
 # Simulate 0.013 mg IV dose
 cmt <- "VEN"
@@ -164,7 +154,3 @@ pk_dig <- mutate(as.data.frame(pk_dig), Method=c("PT", "Berez", "RR", "Schmitt",
 
 # Store the PK info
 pk_dig <- pk_dig %>% mutate(Type="Neutral")
-
-return(pk_dig)
-
-}

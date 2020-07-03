@@ -24,7 +24,7 @@ Qc = 354 // L/hr
 
 //organ volumes (L)
 Vad = 22.5
-Vbo = 4
+Vbo = 7.8
 Vbr = 1.3
 Vgu = 1.03
 Vhe = 2.50

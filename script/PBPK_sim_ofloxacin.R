@@ -8,8 +8,6 @@ mod <- mread("../model/ofloxacinPBPK_Adult")
 # Load data
 df <- read.csv("../data/obs_iv_ofloxacin")
 
-getOflPK <- function(unified = T){
-
 # Calculate Kps
 type <- 6  #zwitterion (one base and one acid)
 logP <- -0.4
@@ -17,20 +15,11 @@ pKa <- c(5.97, 9.28)  #Pubchem
 fup <- 0.77
 BP <- 0.92
 
-
-if(unified){
-  Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_uni)
-  Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_uni)
-  Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_uni)
-  Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_uni)
-  Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_uni) 
-}else{
-  Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_PT)
-  Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_Berez)
-  Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_RR)
-  Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_Schmitt_rep)
-  Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_pksim)
-}
+Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_uni)
+Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_uni)
+Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_uni)
+Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_uni)
+Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_uni)
 
 # Simulate 400 mg multiple IV doses every 12 hours for 4 days then just one dose on day 5
 cmt <- "VEN"
@@ -163,7 +152,3 @@ pk_oflo <- mutate(as.data.frame(pk_oflo), Method=c("PT", "Berez", "RR", "Schmitt
 
 # Store the PK info
 pk_oflo <- pk_oflo %>% mutate(Type="Zwitterion")
-
-return(pk_oflo)
-
-}

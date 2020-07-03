@@ -8,8 +8,6 @@ mod <- mread("../model/nevirapinePBPK_Adult")
 # Load data
 df <- read.csv("../data/obs_nevirapine.csv")
 
-getNevPK <- function(unified = T){
-
 # Calculate Kps
 type <- 3  #acid
 logP <- 1.93
@@ -17,20 +15,11 @@ pKa <- 2.8
 fup <- 0.4
 BP <- 1.04  
 
-
-if(unified){
-  Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_uni)
-  Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_uni)
-  Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_uni)
-  Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_uni)
-  Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_uni) 
-}else{
-  Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_PT)
-  Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_Berez)
-  Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_RR)
-  Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_Schmitt_rep)
-  Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_pksim)
-}
+Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_uni)
+Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_uni)
+Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_uni)
+Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_uni)
+Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_uni)
 
 # ICRP parameters for men
 men <- list(BW = 73, Vad = 18.2, Vbo = 10.5, Vbl = 5.6, Vlu = 0.5, Vbr = 1.45, 
@@ -169,7 +158,3 @@ pk_nev <- mutate(as.data.frame(pk_nev), Method=c("PT", "Berez", "RR", "Schmitt",
 
 # Store the PK info
 pk_nev <- pk_nev %>% mutate(Type="Acid")
-
-return(pk_nev)
-
-}

@@ -7,8 +7,6 @@ mod <- mread("../model/nifedipinePBPK_Adult")
 
 # Load data and convert units to mg/L
 df <- read.csv("../data/obs_nifedipine.csv")
-
-getNifPK <- function(unified = T){
 df <- df %>%
   mutate(conc = conc*(10^-3)) %>%
   mutate(max_sd = max_sd*(10^-3))
@@ -20,20 +18,11 @@ pKa <- 3.93
 fup <- 0.04
 BP <- 0.73
 
-
-if(unified){
-  Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_uni)
-  Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_uni)
-  Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_uni)
-  Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_uni)
-  Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_uni) 
-}else{
-  Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_PT)
-  Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_Berez)
-  Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_RR)
-  Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_Schmitt_rep)
-  Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_pksim)
-}
+Kps1 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="P&T", dat_uni)
+Kps2 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Berez", dat_uni)
+Kps3 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="R&R", dat_uni)
+Kps4 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="Schmitt", dat_uni)
+Kps5 <- pcoeffs(logP=logP, pKa=pKa, fup=fup, BP=BP, type=type, pred="pksim", dat_uni)
 
 e <- ev(amt = 10, cmt = "D", ii = 6, addl = 8)
 
@@ -161,8 +150,4 @@ colnames(pk_nif) <- c("RelRMSE","AUCobs","AUCpred", "AUCerror", "hlobs", "hlpred
 pk_nif <- mutate(as.data.frame(pk_nif), Method=c("PT", "Berez", "RR", "Schmitt", "PK-Sim"))
 
 pk_nif <- pk_nif %>% mutate(Type="Acid")
-
-return(pk_nif)
-
-}
 

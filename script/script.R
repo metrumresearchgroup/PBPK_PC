@@ -1308,7 +1308,7 @@ fig6_thio <- ggplot(data=thio_kp, aes(x=Tissue, y=Kp)) +
   ylim(0,max(thio_kp$Kp)) +
   xlab("Tissue") +
   ylab("Predicted Kp") +
-  ggtitle("E    S-Thiopental") +
+  ggtitle("E    Thiopental") +
   scale_shape_manual("", values=c(0,2,3,4,5,8)) +
   stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median,
                geom = "crossbar", width = 0.5, fatten=0.1) +

@@ -7,15 +7,6 @@ library(dplyr)
 
 calcKp_Berez <- function(logP, pKa, fup, BP=1, type=1, dat){
   
-  #dat <- read.csv("/data/internship-summer-2018/data/tissue_comp_P&T.csv")
-  #dat <- read.csv("../../data/PKSim_tissue_comp_PT_Berez.csv")
-  #dat <- read.csv("/data/internship-summer-2018/data/tissue_comp_P&T_rat.csv")
-  #dat <- read.csv("/data/internship-summer-2018/data/tissue_comp_Ruark_rat_for_R&R.csv") #Rat physiology from Ruark et al.
-  
-  #dat <- read.csv("/data/internship-summer-2018/data/unified_tissue_comp.csv") # Unified physiology from Ruark, P&T, R&R, and PK-Sim
-  
-  #dat <- read.csv("../data/unified_tissue_comp.csv")
-  
   dat_all <- dat %>% filter(!tissue %in% c("Plasma","Adipose","RBCs"))
   
   n <- length(dat$tissue)

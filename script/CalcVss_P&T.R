@@ -5,8 +5,6 @@ library(dplyr)
 
 calcVss_PT <- function(logP, pKa, fup, BP=1, type=1, dat){
   
-  ##dat <- read.csv("/data/internship-summer-2018/data/tissue_comp_P&T.csv")
-  #dat <- read.csv("/data/internship-summer-2018/data/PKSim_tissue_comp_PT_Berez.csv")
   n <- length(dat$tissue)
   Kp_all <- vector(mode = "numeric", length = n)
   

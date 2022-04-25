@@ -57,3 +57,6 @@
 1. Make the folder: `script` your working directory
 2. Run `pkgSetup.R` to install required packages
 3. Run each section of `script.R` to reproduce **Figures 2-7** and **Table 2** 
+
+## Update (April 25, 2022):
+`CalcKp_Schmitt.R` was updated to correct a typo in the calculation of K_n_l for diprotic bases.

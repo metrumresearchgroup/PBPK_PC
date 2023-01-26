@@ -24,7 +24,7 @@ calcKp_RR <- function(logP, pKa=0, fup, BP=1, type=1, dat){
 
   
   #Calculate Kp values
-  Kpu_bc <- (HCT - 1 + BP)/(HCT)
+  Kpu_bc <- (HCT - 1 + BP)/(HCT*fup)
   
   X <- switch(type,
               #1-neutral

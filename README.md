@@ -60,3 +60,6 @@
 
 ## Update (April 25, 2022):
 `CalcKp_Schmitt.R` was updated to correct a typo in the calculation of K_n_l for diprotic bases.
+
+## Update (January 26, 2023):
+`CalcKp_R&R.R` was updated to correct a typo in the calculation of Kpu_bc, which impacts the calculation of Kp values for moderate to strong bases. 
